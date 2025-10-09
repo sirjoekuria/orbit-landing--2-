@@ -1,0 +1,49 @@
+[
+  {
+    "riderId": "SYSTEM",
+    "riderName": "System",
+    "type": "status_change",
+    "description": "Daily automated payments completed: 2/3 successful (KES 21,440)",
+    "amount": 21440,
+    "metadata": {
+      "totalRiders": 3,
+      "successfulPayments": 2,
+      "failedPayments": 1,
+      "successRate": "66.7"
+    },
+    "id": "ACT-003",
+    "timestamp": "2025-10-01T20:00:59.372Z"
+  },
+  {
+    "riderId": "RD-002",
+    "riderName": "Peter Kimani",
+    "type": "payment_received",
+    "description": "Automated daily payment of KES 8,960 sent via M-Pesa",
+    "amount": 8960,
+    "metadata": {
+      "paymentMethod": "automated_mpesa",
+      "transactionId": "MP1759348854345907",
+      "balanceChange": -8960,
+      "newBalance": 0,
+      "paymentType": "automated_daily"
+    },
+    "id": "ACT-002",
+    "timestamp": "2025-10-01T20:00:54.345Z"
+  },
+  {
+    "riderId": "RD-001",
+    "riderName": "John Mwangi",
+    "type": "payment_received",
+    "description": "Automated daily payment of KES 12,480 sent via M-Pesa",
+    "amount": 12480,
+    "metadata": {
+      "paymentMethod": "automated_mpesa",
+      "transactionId": "MP1759348851309750",
+      "balanceChange": -12480,
+      "newBalance": 0,
+      "paymentType": "automated_daily"
+    },
+    "id": "ACT-001",
+    "timestamp": "2025-10-01T20:00:51.309Z"
+  }
+]

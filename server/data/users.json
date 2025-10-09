@@ -1,0 +1,32 @@
+[
+  {
+    "id": "USR-001",
+    "fullName": "John Customer",
+    "email": "john@customer.com",
+    "phone": "+254 712 345 678",
+    "password": "password123",
+    "userType": "customer",
+    "isActive": true,
+    "createdAt": "2025-08-31T19:11:38.128Z"
+  },
+  {
+    "id": "USR-002",
+    "fullName": "Joseph Kuria",
+    "email": "kuriajoe85@gmail.com",
+    "phone": "+254750810490",
+    "password": "december25J",
+    "userType": "customer",
+    "isActive": true,
+    "createdAt": "2025-09-30T19:29:49.267Z"
+  },
+  {
+    "id": "USR-003",
+    "fullName": "joe kuria",
+    "email": "sirjoekuria@gmail.com",
+    "phone": "+254700898950",
+    "password": "$2b$10$qBTa9boINIz7KlBxmaQpau6sCwo6yZSSAb.xPwgNo8ef4jFhIP4P6",
+    "userType": "customer",
+    "isActive": true,
+    "createdAt": "2025-10-01T18:40:02.002Z"
+  }
+]

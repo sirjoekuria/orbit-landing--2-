@@ -1,0 +1,6 @@
+{
+  "command": "pnpm dev",
+  "serverUrl": "http://localhost:808/0",
+  "authenticateProxy": false,
+  "commitMode": "commits"
+}
