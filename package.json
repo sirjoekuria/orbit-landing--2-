@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.1.2",
+    "@supabase/supabase-js": "^2.75.1",
     "@types/multer": "^2.0.0",
     "@types/nodemailer": "^7.0.0",
     "dotenv": "^17.2.1",
