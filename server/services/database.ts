@@ -1,9 +1,16 @@
 import { supabase, User, Rider, Order, Activity, Location, ResetToken, Payment, Withdrawal, PartnershipRequest, Message } from '../lib/supabase';
 
 export class DatabaseService {
+  private static checkSupabase() {
+    if (!supabase) {
+      throw new Error('Supabase is not configured. Please run "npm run setup:supabase" to configure your database.');
+    }
+  }
+
   // Users
   static async getUsers(): Promise<User[]> {
-    const { data, error } = await supabase
+    this.checkSupabase();
+    const { data, error } = await supabase!
       .from('users')
       .select('*')
       .order('created_at', { ascending: false });
@@ -13,7 +20,8 @@ export class DatabaseService {
   }
 
   static async getUserById(id: string): Promise<User | null> {
-    const { data, error } = await supabase
+    this.checkSupabase();
+    const { data, error } = await supabase!
       .from('users')
       .select('*')
       .eq('id', id)

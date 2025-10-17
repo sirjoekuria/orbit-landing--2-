@@ -1,13 +1,18 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseKey) {
+let supabase: SupabaseClient | null = null;
+
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} else {
   console.warn('⚠️  Supabase credentials not found. Please set SUPABASE_URL and SUPABASE_ANON_KEY environment variables.');
+  console.warn('   Run "npm run setup:supabase" to configure Supabase credentials.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export { supabase };
 
 // Database types
 export interface User {
