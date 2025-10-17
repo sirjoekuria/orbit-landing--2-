@@ -544,8 +544,23 @@ WhatsApp: +254 712 345 678
 export const sendPasswordResetEmail = async (email: string, token: string, origin?: string): Promise<boolean> => {
   try {
     // Build absolute reset URL using provided origin or environment fallback
-    const base = origin ? origin.replace(/\/$/, '') : process.env.APP_URL || `http://localhost:${process.env.PORT || '8080'}`;
+    // For development, use the correct port (8081) or the provided origin
+    let base: string;
+    if (origin) {
+      base = origin.replace(/\/$/, '');
+    } else if (process.env.APP_URL) {
+      base = process.env.APP_URL.replace(/\/$/, '');
+    } else {
+      // In development, Vite typically runs on 8081, in production use PORT
+      const isDev = process.env.NODE_ENV === 'development';
+      const port = isDev ? '8081' : (process.env.PORT || '3000');
+      base = `http://localhost:${port}`;
+    }
+    
     const resetUrl = `${base}/reset-password?token=${encodeURIComponent(token)}`;
+    
+    console.log(`🔗 Password reset URL generated: ${resetUrl}`);
+    
     const mailOptions = {
       from: {
         name: 'Rocs Crew Support',
@@ -554,13 +569,21 @@ export const sendPasswordResetEmail = async (email: string, token: string, origi
       to: email,
       subject: 'Password Reset Request - Rocs Crew',
       html: `
-        <p>Hi,</p>
-        <p>We received a request to reset your password. Click the link below to set a new password. This link will expire in 1 hour.</p>
-        <p><a href="${resetUrl}">Reset your password</a></p>
-        <p>If you didn't request this, please ignore this email.</p>
-        <p>— Rocs Crew Support</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Password Reset Request</h2>
+          <p>Hi,</p>
+          <p>We received a request to reset your password for your Rocs Crew account. Click the button below to set a new password.</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Your Password</a>
+          </div>
+          <p><strong>This link will expire in 1 hour.</strong></p>
+          <p>If you didn't request this password reset, please ignore this email. Your password will remain unchanged.</p>
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+          <p style="color: #666; font-size: 14px;">— Rocs Crew Support Team</p>
+          <p style="color: #999; font-size: 12px;">If the button doesn't work, copy and paste this link into your browser: ${resetUrl}</p>
+        </div>
       `,
-      text: `Reset your password: ${resetUrl}`
+      text: `Reset your password: ${resetUrl}\n\nThis link will expire in 1 hour. If you didn't request this, please ignore this email.`
     };
 
     const transporter = await getTransporter();

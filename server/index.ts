@@ -46,7 +46,7 @@ import {
   deleteUser,
   forgotPassword,
   resetPassword,
-} from "./routes/auth";
+} from "./routes/auth-hybrid";
 import {
   submitPartnershipRequest,
   getPartnershipRequests,
