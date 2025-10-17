@@ -35,18 +35,9 @@ import {
   addRiderEarning,
   processRiderPayment,
   uploadRiderDocuments,
-} from "./routes/riders";
-import {
-  userSignup,
-  login,
-  getProfile,
-  updateProfile,
-  getAllUsers,
-  toggleUserStatus,
-  deleteUser,
-  forgotPassword,
-  resetPassword,
-} from "./routes/auth";
+import { 
+  userSignup, login, ... 
+} from "./routes/auth-supabase";
 import {
   submitPartnershipRequest,
   getPartnershipRequests,
@@ -81,6 +72,17 @@ import {
 } from "./routes/withdrawals";
 import { initializeScheduler } from "./services/cronScheduler";
 import { getLocations, updateLocation, addLocation, deleteLocation } from "./routes/locations";
+import {
+  aiHealthCheck,
+  optimizeRoutes,
+  predictDemand,
+  aiCustomerSupport,
+  calculateDynamicPrice,
+  detectFraud,
+  analyzeSentiment,
+  bulkSentimentAnalysis,
+  getAIInsights,
+} from "./routes/ai";
 
 export function createServer() {
   const app = express();
@@ -198,6 +200,17 @@ export function createServer() {
   app.post("/api/admin/payment-scheduler/start", startScheduler);
   app.post("/api/admin/payment-scheduler/stop", stopScheduler);
   app.get("/api/withdrawal-fee-calculator", calculateFee);
+
+  // AI Routes
+  app.get("/api/ai/health", aiHealthCheck);
+  app.post("/api/ai/optimize-routes", optimizeRoutes);
+  app.post("/api/ai/predict-demand", predictDemand);
+  app.post("/api/ai/customer-support", aiCustomerSupport);
+  app.post("/api/ai/dynamic-pricing", calculateDynamicPrice);
+  app.post("/api/ai/detect-fraud", detectFraud);
+  app.post("/api/ai/analyze-sentiment", analyzeSentiment);
+  app.post("/api/ai/bulk-sentiment-analysis", bulkSentimentAnalysis);
+  app.get("/api/ai/insights", getAIInsights);
 
   // Initialize the automated payment scheduler
   initializeScheduler();
