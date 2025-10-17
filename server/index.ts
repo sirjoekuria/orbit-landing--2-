@@ -35,9 +35,18 @@ import {
   addRiderEarning,
   processRiderPayment,
   uploadRiderDocuments,
-import { 
-  userSignup, login, ... 
-} from "./routes/auth-supabase";
+} from "./routes/riders";
+import {
+  userSignup,
+  login,
+  getProfile,
+  updateProfile,
+  getAllUsers,
+  toggleUserStatus,
+  deleteUser,
+  forgotPassword,
+  resetPassword,
+} from "./routes/auth";
 import {
   submitPartnershipRequest,
   getPartnershipRequests,
