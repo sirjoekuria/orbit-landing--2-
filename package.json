@@ -18,6 +18,8 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "fetch:locations": "node scripts/fetch-osm-locations.js",
+    "setup:supabase": "node scripts/setup-supabase.js",
+    "migrate:supabase": "node scripts/migrate-to-supabase.js",
     "format.fix": "prettier --write .",
     "typecheck": "tsc"
   },
