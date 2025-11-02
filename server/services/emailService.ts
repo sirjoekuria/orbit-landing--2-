@@ -3,6 +3,9 @@ import * as nodemailer from 'nodemailer';
 // Email configuration - support both EMAIL_PASSWORD and EMAIL_PASS for compatibility
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || process.env.EMAIL_PASS;
+const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.gmail.com'; // Default to Gmail, can be changed to Outlook
+const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587');
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || 'gmail'; // 'gmail' or 'outlook'
 
 // Transporter factory with fallback to Ethereal for development when credentials are not provided
 let transporterPromise: Promise<nodemailer.Transporter> | null = null;
@@ -21,10 +24,29 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
 
       if (hasValidCredentials) {
         console.log('✅ Email credentials found. Configuring SMTP transporter...');
+        console.log(`📧 Using email provider: ${EMAIL_PROVIDER.toUpperCase()}`);
+        
+        // Configure SMTP based on provider
+        let smtpHost: string;
+        let smtpPort: number;
+        let smtpSecure: boolean;
+        
+        if (EMAIL_PROVIDER.toLowerCase() === 'outlook' || EMAIL_USER?.includes('@outlook') || EMAIL_USER?.includes('@hotmail') || EMAIL_USER?.includes('@live')) {
+          smtpHost = EMAIL_HOST || 'smtp-mail.outlook.com';
+          smtpPort = EMAIL_PORT || 587;
+          smtpSecure = false;
+          console.log('📧 Configuring Outlook/Hotmail SMTP...');
+        } else {
+          smtpHost = EMAIL_HOST || 'smtp.gmail.com';
+          smtpPort = EMAIL_PORT || 587;
+          smtpSecure = false;
+          console.log('📧 Configuring Gmail SMTP...');
+        }
+        
         const SMTP_CONFIG = {
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false,
+          host: smtpHost,
+          port: smtpPort,
+          secure: smtpSecure,
           auth: {
             user: EMAIL_USER,
             pass: EMAIL_PASSWORD
