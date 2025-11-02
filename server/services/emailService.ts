@@ -57,7 +57,8 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
         const t = nodemailer.createTransport(SMTP_CONFIG);
         // Verify transporter connectivity
         await t.verify();
-        console.log('✅ Email transporter verified successfully (SMTP Gmail).');
+        const providerName = EMAIL_PROVIDER.toLowerCase() === 'outlook' || EMAIL_USER?.includes('@outlook') || EMAIL_USER?.includes('@hotmail') || EMAIL_USER?.includes('@live') ? 'Outlook' : 'Gmail';
+        console.log(`✅ Email transporter verified successfully (SMTP ${providerName}).`);
         console.log(`📧 Email will be sent from: ${EMAIL_USER}`);
         return t;
       } else {
