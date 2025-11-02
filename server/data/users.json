@@ -28,5 +28,15 @@
     "userType": "customer",
     "isActive": true,
     "createdAt": "2025-10-01T18:40:02.002Z"
+  },
+  {
+    "id": "USR-004",
+    "fullName": "Joseph Kuria",
+    "email": "Kuriajoe85@gmail.com",
+    "phone": "kuriajoe85@gmail.com",
+    "password": "$2b$10$qXGtJECTnxKyF.yxCwXWLuNSJ.A7QL3uP1OgHO4033QGTcOSQ3c3q",
+    "userType": "customer",
+    "isActive": true,
+    "createdAt": "2025-11-02T19:14:03.948Z"
   }
 ]
