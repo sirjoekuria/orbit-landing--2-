@@ -1,8 +1,8 @@
 import * as nodemailer from 'nodemailer';
 
-// Email configuration
+// Email configuration - support both EMAIL_PASSWORD and EMAIL_PASS for compatibility
 const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || process.env.EMAIL_PASS;
 
 // Transporter factory with fallback to Ethereal for development when credentials are not provided
 let transporterPromise: Promise<nodemailer.Transporter> | null = null;
@@ -544,59 +544,115 @@ WhatsApp: +254 712 345 678
 export const sendPasswordResetEmail = async (email: string, token: string, origin?: string): Promise<boolean> => {
   try {
     // Build absolute reset URL using provided origin or environment fallback
-    // For development, use the correct port (8081) or the provided origin
     let base: string;
     if (origin) {
       base = origin.replace(/\/$/, '');
     } else if (process.env.APP_URL) {
       base = process.env.APP_URL.replace(/\/$/, '');
+    } else if (process.env.NETLIFY_URL) {
+      // Netlify automatically provides this
+      base = process.env.NETLIFY_URL.replace(/\/$/, '');
+    } else if (process.env.URL) {
+      // Netlify also provides URL
+      base = process.env.URL.replace(/\/$/, '');
     } else {
-      // In development, Vite typically runs on 8081, in production use PORT
+      // Fallback for local development
       const isDev = process.env.NODE_ENV === 'development';
-      const port = isDev ? '8081' : (process.env.PORT || '3000');
+      const port = isDev ? '8080' : (process.env.PORT || '3000');
       base = `http://localhost:${port}`;
+      console.warn('⚠️ No APP_URL, NETLIFY_URL, or URL env var found. Using localhost fallback:', base);
     }
     
     const resetUrl = `${base}/reset-password?token=${encodeURIComponent(token)}`;
     
     console.log(`🔗 Password reset URL generated: ${resetUrl}`);
+    console.log(`📧 Sending password reset email to: ${email}`);
+    
+    // Check if email credentials are configured
+    if (!EMAIL_USER || !EMAIL_PASSWORD || EMAIL_PASSWORD === 'your-email-app-password' || EMAIL_PASSWORD === 'your-gmail-app-password') {
+      console.error('❌ EMAIL_USER or EMAIL_PASSWORD not configured properly!');
+      console.error('📝 Email will not be sent. Please configure EMAIL_USER and EMAIL_PASSWORD environment variables.');
+      console.error('💡 For development, check Ethereal test account messages.');
+      // Still try to send (will use Ethereal in dev)
+    }
     
     const mailOptions = {
       from: {
         name: 'Rocs Crew Support',
-        address: process.env.EMAIL_USER || 'Kuriajoe85@gmail.com'
+        address: EMAIL_USER || 'Kuriajoe85@gmail.com'
       },
       to: email,
       subject: 'Password Reset Request - Rocs Crew',
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Password Reset Request</h2>
-          <p>Hi,</p>
-          <p>We received a request to reset your password for your Rocs Crew account. Click the button below to set a new password.</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Your Password</a>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 24px;">🏍️ ROCS CREW</h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.9;">Password Reset Request</p>
           </div>
-          <p><strong>This link will expire in 1 hour.</strong></p>
-          <p>If you didn't request this password reset, please ignore this email. Your password will remain unchanged.</p>
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-          <p style="color: #666; font-size: 14px;">— Rocs Crew Support Team</p>
-          <p style="color: #999; font-size: 12px;">If the button doesn't work, copy and paste this link into your browser: ${resetUrl}</p>
+          <div style="background: white; border: 2px solid #10b981; border-radius: 8px; padding: 20px;">
+            <h2 style="color: #333; margin-top: 0;">Password Reset Request</h2>
+            <p>Hi,</p>
+            <p>We received a request to reset your password for your Rocs Crew account. Click the button below to set a new password.</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="background-color: #10b981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">Reset Your Password</a>
+            </div>
+            <p style="color: #dc2626; font-weight: bold;"><strong>⚠️ This link will expire in 1 hour.</strong></p>
+            <p style="color: #666;">If you didn't request this password reset, please ignore this email. Your password will remain unchanged.</p>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 14px; margin-bottom: 5px;">— Rocs Crew Support Team</p>
+            <p style="color: #999; font-size: 12px; word-break: break-all;">If the button doesn't work, copy and paste this link into your browser:<br>${resetUrl}</p>
+          </div>
         </div>
       `,
-      text: `Reset your password: ${resetUrl}\n\nThis link will expire in 1 hour. If you didn't request this, please ignore this email.`
+      text: `Password Reset Request - Rocs Crew
+
+Hi,
+
+We received a request to reset your password for your Rocs Crew account.
+
+Reset your password by clicking this link:
+${resetUrl}
+
+⚠️ This link will expire in 1 hour.
+
+If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
+
+— Rocs Crew Support Team`
     };
 
     const transporter = await getTransporter();
     try {
       const result = await sendMailVerbose(transporter, mailOptions, 'PasswordReset');
-      console.log('Password reset email sent to', email);
+      
+      // Check if using Ethereal (test account)
+      const testUrl = (nodemailer as any).getTestMessageUrl(result);
+      if (testUrl) {
+        console.log('⚠️ Using Ethereal test account. Email NOT sent to real inbox.');
+        console.log('📬 View test email at:', testUrl);
+        console.log('💡 Configure EMAIL_USER and EMAIL_PASSWORD to send real emails.');
+        return false; // Return false so caller knows email wasn't actually sent
+      }
+      
+      console.log('✅ Password reset email sent successfully to', email);
+      console.log('📧 Message ID:', (result as any)?.messageId);
       return true;
-    } catch (err) {
-      console.error('Error sending password reset email:', err);
+    } catch (err: any) {
+      console.error('❌ Error sending password reset email:', err.message || err);
+      console.error('🔍 Full error:', err);
+      
+      // Provide helpful error messages
+      if (err.code === 'EAUTH') {
+        console.error('🔐 Authentication failed. Check EMAIL_USER and EMAIL_PASSWORD.');
+      } else if (err.code === 'ECONNECTION') {
+        console.error('🌐 Connection failed. Check internet and SMTP settings.');
+      } else if (err.code === 'ETIMEDOUT') {
+        console.error('⏱️ Connection timeout. Check firewall/SMTP port settings.');
+      }
+      
       return false;
     }
-  } catch (error) {
-    console.error('Error sending password reset email:', error);
+  } catch (error: any) {
+    console.error('❌ Fatal error in sendPasswordResetEmail:', error.message || error);
     return false;
   }
 };

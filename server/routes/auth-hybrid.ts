@@ -271,12 +271,35 @@ export const forgotPassword: RequestHandler = async (req, res) => {
     saveResetTokens(tokens);
 
     // Send reset email
+    let emailSent = false;
     try {
-      // Get the correct origin for the reset link
-      const origin = process.env.APP_URL ? process.env.APP_URL.replace(/\/$/, '') : (req.protocol + '://' + req.get('host'));
-      await sendPasswordResetEmail(email, token, origin);
-    } catch (emailError) {
-      console.error('Failed to send reset email:', emailError);
+      // Get the correct origin for the reset link - prioritize Netlify URL
+      let origin: string | undefined;
+      if (process.env.APP_URL) {
+        origin = process.env.APP_URL.replace(/\/$/, '');
+      } else if (process.env.NETLIFY_URL) {
+        origin = process.env.NETLIFY_URL.replace(/\/$/, '');
+      } else if (process.env.URL) {
+        origin = process.env.URL.replace(/\/$/, '');
+      } else {
+        // Fallback to request origin (might be localhost in dev)
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+        const host = req.headers['x-forwarded-host'] || req.get('host') || 'localhost:8080';
+        origin = `${protocol}://${host}`;
+      }
+      
+      console.log(`📧 Attempting to send password reset email to: ${email}`);
+      console.log(`🔗 Using origin URL: ${origin}`);
+      
+      emailSent = await sendPasswordResetEmail(email, token, origin);
+      
+      if (!emailSent) {
+        console.error('⚠️ Password reset email was NOT sent successfully');
+        console.error('💡 Check server logs above for details');
+      }
+    } catch (emailError: any) {
+      console.error('❌ Failed to send reset email:', emailError.message || emailError);
+      console.error('🔍 Full error:', emailError);
       // Continue anyway - token is still valid
     }
 
