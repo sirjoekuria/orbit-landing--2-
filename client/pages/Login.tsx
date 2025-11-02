@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { LogIn, Mail, Lock, Eye, EyeOff, User, Bike } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -8,12 +8,45 @@ import { Label } from '../components/ui/label';
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userType, setUserType] = useState<'customer' | 'rider'>('customer');
+  const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
   const [showForgotModal, setShowForgotModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Check if user is already logged in and redirect
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.isAuthenticated) {
+          // User is already logged in, redirect based on type
+          if (user.userType === 'rider') {
+            navigate('/rider-dashboard');
+          } else {
+            navigate('/book-delivery');
+          }
+        }
+      } catch (error) {
+        localStorage.removeItem('user');
+      }
+    }
+  }, [navigate]);
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      setFormData(prev => ({ ...prev, email: savedEmail }));
+      setRememberMe(true);
+    }
+  }, []);
 
   function ForgotPasswordModal({ onClose }: { onClose?: () => void }) {
     const [email, setEmail] = useState('');
@@ -78,11 +111,26 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userType: userType === 'rider' ? 'rider' : undefined
+        }),
       });
 
       if (response.ok) {
         const result = await response.json();
+        
+        // Verify user type matches selection if rider was selected
+        if (userType === 'rider' && result.user.userType !== 'rider') {
+          throw new Error('This account is not registered as a rider. Please select Customer or sign up as a rider.');
+        }
+        
+        // Store email if "Remember Me" is checked
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', formData.email);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+        }
         
         // Store user session
         localStorage.setItem('user', JSON.stringify({
@@ -90,7 +138,8 @@ export default function Login() {
           name: result.user.fullName,
           email: result.user.email,
           userType: result.user.userType,
-          isAuthenticated: true
+          isAuthenticated: true,
+          loginTime: Date.now() // Store login time for session management
         }));
         
         // Redirect based on user type and intended destination
@@ -98,9 +147,9 @@ export default function Login() {
         localStorage.removeItem('intendedPath');
         
         if (result.user.userType === 'rider') {
-          window.location.href = '/rider-dashboard';
+          navigate('/rider-dashboard');
         } else {
-          window.location.href = intendedPath;
+          navigate(intendedPath);
         }
       } else {
         const error = await response.json();
@@ -125,6 +174,35 @@ export default function Login() {
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8">
+          {/* User Type Selection */}
+          <div className="mb-6">
+            <div className="flex rounded-lg bg-gray-100 p-1">
+              <button
+                type="button"
+                onClick={() => setUserType('customer')}
+                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${
+                  userType === 'customer'
+                    ? 'bg-white text-rocs-green shadow-sm'
+                    : 'text-gray-600 hover:text-rocs-green'
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span className="font-medium">Customer</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType('rider')}
+                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${
+                  userType === 'rider'
+                    ? 'bg-white text-rocs-green shadow-sm'
+                    : 'text-gray-600 hover:text-rocs-green'
+                }`}
+              >
+                <Bike className="w-4 h-4" />
+                <span className="font-medium">Rider</span>
+              </button>
+            </div>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Label htmlFor="email" className="text-gray-700 font-medium">
@@ -136,6 +214,7 @@ export default function Login() {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email username"
                   required
                   value={formData.email}
                   onChange={handleInputChange}
@@ -155,6 +234,7 @@ export default function Login() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   required
                   value={formData.password}
                   onChange={handleInputChange}
@@ -177,6 +257,8 @@ export default function Login() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 text-rocs-green focus:ring-rocs-green border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
@@ -204,37 +286,21 @@ export default function Login() {
               ) : (
                 <span className="flex items-center justify-center">
                   <LogIn className="w-4 h-4 mr-2" />
-                  Sign In
+                  Sign In as {userType === 'rider' ? 'Rider' : 'Customer'}
                 </span>
               )}
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-rocs-green hover:text-rocs-green-dark font-medium">
-                Sign up here
-              </Link>
-            </p>
-          </div>
-
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="text-center">
-              <p className="text-sm text-gray-500 mb-3">Quick Access</p>
-              <div className="flex justify-center space-x-4">
+              <p className="text-sm text-gray-500 mb-3">Don't have an account?</p>
+              <div className="flex justify-center">
                 <Link
                   to="/signup"
                   className="text-rocs-green hover:text-rocs-green-dark text-sm font-medium"
                 >
-                  Sign up as Customer
-                </Link>
-                <span className="text-gray-300">|</span>
-                <Link
-                  to="/signup"
-                  className="text-rocs-green hover:text-rocs-green-dark text-sm font-medium"
-                >
-                  Join as Rider
+                  {userType === 'rider' ? 'Join as Rider' : 'Sign up as Customer'}
                 </Link>
               </div>
             </div>

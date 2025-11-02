@@ -172,6 +172,9 @@ export default function Signup() {
 
       if (response.ok) {
         const result = await response.json();
+        // Store email for "Remember Me" functionality
+        localStorage.setItem('rememberedEmail', formData.email);
+        
         // Store user session
         localStorage.setItem(
           "user",
@@ -181,6 +184,7 @@ export default function Signup() {
             email: formData.email,
             userType,
             isAuthenticated: true,
+            loginTime: Date.now() // Store login time for session management
           }),
         );
 
@@ -336,6 +340,7 @@ export default function Signup() {
                     id="fullName"
                     name="fullName"
                     type="text"
+                    autoComplete="name"
                     required
                     value={formData.fullName}
                     onChange={handleInputChange}
@@ -352,6 +357,7 @@ export default function Signup() {
                     id="email"
                     name="email"
                     type="email"
+                    autoComplete="email username"
                     required
                     value={formData.email}
                     onChange={handleInputChange}
@@ -370,6 +376,7 @@ export default function Signup() {
                     id="phone"
                     name="phone"
                     type="tel"
+                    autoComplete="tel"
                     required
                     value={formData.phone}
                     onChange={handleInputChange}
@@ -414,6 +421,7 @@ export default function Signup() {
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
                       required
                       value={formData.password}
                       onChange={handleInputChange}
@@ -445,6 +453,7 @@ export default function Signup() {
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
+                    autoComplete="new-password"
                     required
                     value={formData.confirmPassword}
                     onChange={handleInputChange}

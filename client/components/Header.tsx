@@ -56,9 +56,6 @@ export default function Header() {
             <Link to="/signup" className="text-gray-700 hover:text-rocs-green transition-colors">
               Join as Rider
             </Link>
-            <Link to="/rider-login" className="text-gray-700 hover:text-rocs-green transition-colors">
-              Rider Sign In
-            </Link>
             <Link to="/admin" className="text-gray-700 hover:text-rocs-green transition-colors">
               Admin
             </Link>
@@ -92,7 +89,7 @@ export default function Header() {
                 <Link to="/login">
                   <Button variant="outline" size="sm" className="border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white">
                     <LogIn className="w-4 h-4 mr-1" />
-                    Login
+                    Sign In
                   </Button>
                 </Link>
                 <Link to="/signup">
@@ -158,13 +155,6 @@ export default function Header() {
               >
                 Join as Rider
               </Link>
-              <Link
-                to="/rider-login"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Rider Sign In
-              </Link>
               
               {user ? (
                 <div className="space-y-3">
@@ -192,7 +182,7 @@ export default function Header() {
                     <Link to="/login">
                       <Button variant="outline" size="sm" className="border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white">
                         <LogIn className="w-4 h-4 mr-1" />
-                        Login
+                        Sign In
                       </Button>
                     </Link>
                     <Link to="/signup">
