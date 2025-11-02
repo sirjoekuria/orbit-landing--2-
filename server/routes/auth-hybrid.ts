@@ -272,40 +272,71 @@ export const forgotPassword: RequestHandler = async (req, res) => {
 
     // Send reset email
     let emailSent = false;
+    let emailError: string | null = null;
+    let testEmailUrl: string | null = null;
+    
     try {
       // Get the correct origin for the reset link - prioritize Netlify URL
       let origin: string | undefined;
       if (process.env.APP_URL) {
         origin = process.env.APP_URL.replace(/\/$/, '');
+        console.log('🔗 Using APP_URL for reset link:', origin);
       } else if (process.env.NETLIFY_URL) {
         origin = process.env.NETLIFY_URL.replace(/\/$/, '');
+        console.log('🔗 Using NETLIFY_URL for reset link:', origin);
       } else if (process.env.URL) {
         origin = process.env.URL.replace(/\/$/, '');
+        console.log('🔗 Using URL for reset link:', origin);
       } else {
-        // Fallback to request origin (might be localhost in dev)
+        // Fallback to request origin
         const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
         const host = req.headers['x-forwarded-host'] || req.get('host') || 'localhost:8080';
         origin = `${protocol}://${host}`;
+        console.warn('⚠️ No APP_URL/NETLIFY_URL/URL found. Using request origin:', origin);
       }
       
       console.log(`📧 Attempting to send password reset email to: ${email}`);
-      console.log(`🔗 Using origin URL: ${origin}`);
+      console.log(`🔗 Reset link will point to: ${origin}/reset-password?token=...`);
       
-      emailSent = await sendPasswordResetEmail(email, token, origin);
+      const result = await sendPasswordResetEmail(email, token, origin);
+      emailSent = result.success;
       
-      if (!emailSent) {
-        console.error('⚠️ Password reset email was NOT sent successfully');
-        console.error('💡 Check server logs above for details');
+      if (result.testUrl) {
+        testEmailUrl = result.testUrl;
+        console.error('⚠️⚠️⚠️ EMAIL NOT SENT TO REAL INBOX ⚠️⚠️⚠️');
+        console.error('📬 This is a TEST email (Ethereal). View it at:', result.testUrl);
+        console.error('💡 Configure EMAIL_USER and EMAIL_PASSWORD in Netlify to send real emails!');
+        emailError = 'Email credentials not configured. Using test account. Check server logs for preview URL.';
+      } else if (emailSent) {
+        console.log('✅ Password reset email sent successfully to:', email);
+      } else {
+        console.error('❌ Password reset email was NOT sent successfully');
+        emailError = 'Failed to send email. Check server logs for details.';
       }
-    } catch (emailError: any) {
-      console.error('❌ Failed to send reset email:', emailError.message || emailError);
-      console.error('🔍 Full error:', emailError);
-      // Continue anyway - token is still valid
+    } catch (err: any) {
+      console.error('❌ Failed to send reset email:', err.message || err);
+      console.error('🔍 Full error:', err);
+      emailError = `Email sending failed: ${err.message}`;
     }
 
-    res.json({ 
-      message: 'If the email exists, a password reset link has been sent' 
-    });
+    // Always return success message for security (don't reveal if email exists)
+    // But include error info in logs
+    const response: any = { 
+      message: 'If the email exists, a password reset link has been sent',
+      tokenSaved: true
+    };
+    
+    // In development or if credentials are missing, include helpful info
+    if (process.env.NODE_ENV === 'development' || testEmailUrl || emailError) {
+      response.debug = {
+        emailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD),
+        emailSent,
+        testUrl: testEmailUrl,
+        error: emailError
+      };
+    }
+    
+    res.json(response);
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).json({ 

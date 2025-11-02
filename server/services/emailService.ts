@@ -12,7 +12,15 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
 
   transporterPromise = (async () => {
     try {
-      if (EMAIL_USER && EMAIL_PASSWORD && EMAIL_PASSWORD !== 'your-email-app-password') {
+      // Check if credentials are properly configured
+      const hasValidCredentials = EMAIL_USER && 
+                                  EMAIL_PASSWORD && 
+                                  EMAIL_PASSWORD !== 'your-email-app-password' &&
+                                  EMAIL_PASSWORD !== 'your-gmail-app-password' &&
+                                  EMAIL_PASSWORD.trim().length > 0;
+
+      if (hasValidCredentials) {
+        console.log('✅ Email credentials found. Configuring SMTP transporter...');
         const SMTP_CONFIG = {
           host: 'smtp.gmail.com',
           port: 587,
@@ -27,10 +35,18 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
         const t = nodemailer.createTransport(SMTP_CONFIG);
         // Verify transporter connectivity
         await t.verify();
-        console.log('Email transporter verified (SMTP).');
+        console.log('✅ Email transporter verified successfully (SMTP Gmail).');
+        console.log(`📧 Email will be sent from: ${EMAIL_USER}`);
         return t;
       } else {
-        // Fallback: create ethereal test account for development
+        // No valid credentials - use Ethereal for development
+        console.warn('⚠️ EMAIL_USER or EMAIL_PASSWORD not configured!');
+        console.warn('📝 Email credentials missing or invalid:');
+        console.warn(`   EMAIL_USER: ${EMAIL_USER ? '✓ Set' : '✗ Missing'}`);
+        console.warn(`   EMAIL_PASSWORD: ${EMAIL_PASSWORD ? (EMAIL_PASSWORD.length > 0 ? '✓ Set' : '✗ Empty') : '✗ Missing'}`);
+        console.warn('💡 Using Ethereal test account (emails will NOT be sent to real inbox)');
+        console.warn('💡 Configure EMAIL_USER and EMAIL_PASSWORD in Netlify environment variables to send real emails');
+        
         const testAccount = await nodemailer.createTestAccount();
         const t = nodemailer.createTransport({
           host: 'smtp.ethereal.email',
@@ -38,12 +54,26 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
           secure: false,
           auth: { user: testAccount.user, pass: testAccount.pass }
         });
-        console.log('Using Ethereal test account for emails. View sent messages at:', nodemailer.getTestMessageUrl);
+        console.log('📬 Ethereal test account created. Check console for test email preview URLs.');
         return t;
       }
-    } catch (err) {
-      console.error('Failed to create/verify SMTP transporter, falling back to Ethereal:', err?.message || err);
+    } catch (err: any) {
+      console.error('❌ Failed to create/verify SMTP transporter:', err.message || err);
+      
+      // If SMTP fails and we have credentials, don't fall back to Ethereal
+      if (EMAIL_USER && EMAIL_PASSWORD) {
+        console.error('🔐 SMTP authentication failed. Check your EMAIL_USER and EMAIL_PASSWORD.');
+        console.error('💡 Common issues:');
+        console.error('   - Gmail App Password incorrect');
+        console.error('   - 2-Step Verification not enabled');
+        console.error('   - "Less secure app access" needs to be enabled (not recommended)');
+        console.error('   - Wrong email address');
+        throw new Error(`SMTP authentication failed: ${err.message}`);
+      }
+      
+      // Fallback to Ethereal for development
       try {
+        console.warn('⚠️ Falling back to Ethereal test account...');
         const testAccount = await nodemailer.createTestAccount();
         const t = nodemailer.createTransport({
           host: 'smtp.ethereal.email',
@@ -51,12 +81,12 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
           secure: false,
           auth: { user: testAccount.user, pass: testAccount.pass }
         });
-        console.log('Falling back to Ethereal test account for emails.');
+        console.log('📬 Using Ethereal test account as fallback.');
         return t;
-      } catch (ethErr) {
+      } catch (ethErr: any) {
         transporterPromise = null;
-        console.error('Failed to create Ethereal transporter as fallback:', ethErr);
-        throw ethErr;
+        console.error('❌ Failed to create Ethereal transporter as fallback:', ethErr);
+        throw new Error(`Failed to create email transporter: ${ethErr.message}`);
       }
     }
   })();
@@ -541,7 +571,7 @@ WhatsApp: +254 712 345 678
   }
 };
 
-export const sendPasswordResetEmail = async (email: string, token: string, origin?: string): Promise<boolean> => {
+export const sendPasswordResetEmail = async (email: string, token: string, origin?: string): Promise<{ success: boolean; testUrl?: string }> => {
   try {
     // Build absolute reset URL using provided origin or environment fallback
     let base: string;
@@ -627,15 +657,16 @@ If you didn't request this password reset, please ignore this email. Your passwo
       // Check if using Ethereal (test account)
       const testUrl = (nodemailer as any).getTestMessageUrl(result);
       if (testUrl) {
-        console.log('⚠️ Using Ethereal test account. Email NOT sent to real inbox.');
-        console.log('📬 View test email at:', testUrl);
-        console.log('💡 Configure EMAIL_USER and EMAIL_PASSWORD to send real emails.');
-        return false; // Return false so caller knows email wasn't actually sent
+        console.error('⚠️⚠️⚠️ USING ETHEREAL TEST ACCOUNT ⚠️⚠️⚠️');
+        console.error('📬 Email NOT sent to real inbox!');
+        console.error('🔗 View test email preview at:', testUrl);
+        console.error('💡 Configure EMAIL_USER and EMAIL_PASSWORD in Netlify to send real emails.');
+        return { success: false, testUrl }; // Return with test URL so caller knows
       }
       
-      console.log('✅ Password reset email sent successfully to', email);
+      console.log('✅✅✅ Password reset email sent successfully to', email);
       console.log('📧 Message ID:', (result as any)?.messageId);
-      return true;
+      return { success: true };
     } catch (err: any) {
       console.error('❌ Error sending password reset email:', err.message || err);
       console.error('🔍 Full error:', err);
@@ -649,11 +680,11 @@ If you didn't request this password reset, please ignore this email. Your passwo
         console.error('⏱️ Connection timeout. Check firewall/SMTP port settings.');
       }
       
-      return false;
+      return { success: false };
     }
   } catch (error: any) {
     console.error('❌ Fatal error in sendPasswordResetEmail:', error.message || error);
-    return false;
+    return { success: false };
   }
 };
 
