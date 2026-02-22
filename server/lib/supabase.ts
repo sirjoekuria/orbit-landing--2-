@@ -23,6 +23,8 @@ export interface User {
   password: string;
   user_type: 'customer' | 'rider' | 'admin';
   is_active: boolean;
+  failed_login_attempts?: number;
+  lockout_until?: string;
   created_at: string;
   updated_at?: string;
 }
@@ -47,6 +49,8 @@ export interface Rider {
     vehicle_insurance?: string;
     vehicle_inspection?: string;
   };
+  failed_login_attempts?: number;
+  lockout_until?: string;
   created_at: string;
   updated_at?: string;
 }

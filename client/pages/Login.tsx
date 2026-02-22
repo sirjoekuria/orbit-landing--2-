@@ -2,17 +2,37 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Eye, EyeOff, User, Bike } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import RecaptchaWidget from '../components/RecaptchaWidget';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, forgotPasswordSchema } from '../../shared/validation';
+import { z } from 'zod';
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userType, setUserType] = useState<'customer' | 'rider'>('customer');
   const [rememberMe, setRememberMe] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+
+  const {
+    register,
+    handleSubmit: handleFormSubmit,
+    formState: { errors },
+    reset,
+    setValue
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+      recaptchaToken: ''
+    }
   });
 
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -43,27 +63,42 @@ export default function Login() {
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) {
-      setFormData(prev => ({ ...prev, email: savedEmail }));
+      setValue('email', savedEmail);
       setRememberMe(true);
     }
-  }, []);
+  }, [setValue]);
 
   function ForgotPasswordModal({ onClose }: { onClose?: () => void }) {
-    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
 
-    const submit = async () => {
+    const {
+      register,
+      handleSubmit: handleFpSubmit,
+      formState: { errors }
+    } = useForm<ForgotPasswordFormValues>({
+      resolver: zodResolver(forgotPasswordSchema),
+      mode: 'onChange',
+      defaultValues: { email: '' }
+    });
+
+    const submit = async (data: ForgotPasswordFormValues) => {
       setLoading(true);
       setMessage(null);
       try {
+        const csrfRes = await fetch('/api/csrf-token');
+        const { token } = await csrfRes.json();
+
         const res = await fetch('/api/auth/forgot-password', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': token
+          },
+          body: JSON.stringify(data)
         });
-        const data = await res.json();
-        setMessage(data.message || 'If the email exists, a reset link has been sent.');
+        const result = await res.json();
+        setMessage(result.message || 'If the email exists, a reset link has been sent.');
       } catch (err) {
         setMessage('Failed to send reset link. Try again later.');
       } finally {
@@ -77,80 +112,75 @@ export default function Login() {
         <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md">
           <h3 className="text-lg font-semibold mb-2">Forgot password</h3>
           <p className="text-sm text-gray-600 mb-4">Enter the email used during registration and we'll send a reset link.</p>
-          {message && <div className="mb-3 text-sm text-gray-700">{message}</div>}
-          <div className="mb-3">
-            <Label htmlFor="fp-email">Email address</Label>
-            <Input id="fp-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" />
-          </div>
-          <div className="flex justify-end space-x-2">
-            <button type="button" className="px-4 py-2 rounded-md" onClick={() => { setShowForgotModal(false); if (onClose) onClose(); }}>Cancel</button>
-            <Button type="button" onClick={submit} disabled={loading} className="bg-rocs-green">
-              {loading ? 'Sending...' : 'Send reset link'}
-            </Button>
-          </div>
+          {message && <div className={`mb-3 text-sm font-medium ${message.includes('Failed') ? 'text-red-600' : 'text-green-600'}`}>{message}</div>}
+          <form onSubmit={handleFpSubmit(submit)}>
+            <div className="mb-3">
+              <Label htmlFor="fp-email">Email address</Label>
+              <Input
+                id="fp-email"
+                type="email"
+                {...register('email')}
+                className={`mt-1 ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+                placeholder="your.email@example.com"
+              />
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+            </div>
+            <div className="flex justify-end space-x-2">
+              <button type="button" className="px-4 py-2 rounded-md" onClick={() => { setShowForgotModal(false); if (onClose) onClose(); }}>Cancel</button>
+              <Button type="submit" disabled={loading} className="bg-rocs-green">
+                {loading ? 'Sending...' : 'Send reset link'}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     );
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  // Removed handleInputChange as react-hook-form handles it
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
-
     try {
+      const csrfRes = await fetch('/api/csrf-token');
+      const { token } = await csrfRes.json();
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-csrf-token': token
         },
         body: JSON.stringify({
-          ...formData,
+          ...data,
           userType: userType === 'rider' ? 'rider' : undefined
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        
-        // Verify user type matches selection if rider was selected
         if (userType === 'rider' && result.user.userType !== 'rider') {
           throw new Error('This account is not registered as a rider. Please select Customer or sign up as a rider.');
         }
-        
-        // Store email if "Remember Me" is checked
+
         if (rememberMe) {
-          localStorage.setItem('rememberedEmail', formData.email);
+          localStorage.setItem('rememberedEmail', data.email);
         } else {
           localStorage.removeItem('rememberedEmail');
         }
-        
-        // Store user session
+
         localStorage.setItem('user', JSON.stringify({
           id: result.user.id,
           name: result.user.fullName,
           email: result.user.email,
           userType: result.user.userType,
           isAuthenticated: true,
-          loginTime: Date.now() // Store login time for session management
+          loginTime: Date.now()
         }));
-        
-        // Redirect based on user type and intended destination
+
         const intendedPath = localStorage.getItem('intendedPath') || '/book-delivery';
         localStorage.removeItem('intendedPath');
-        
-        if (result.user.userType === 'rider') {
-          navigate('/rider-dashboard');
-        } else {
-          navigate(intendedPath);
-        }
+        navigate(result.user.userType === 'rider' ? '/rider-dashboard' : intendedPath);
       } else {
         const error = await response.json();
         throw new Error(error.error || 'Invalid credentials');
@@ -180,11 +210,10 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setUserType('customer')}
-                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${
-                  userType === 'customer'
-                    ? 'bg-white text-rocs-green shadow-sm'
-                    : 'text-gray-600 hover:text-rocs-green'
-                }`}
+                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${userType === 'customer'
+                  ? 'bg-white text-rocs-green shadow-sm'
+                  : 'text-gray-600 hover:text-rocs-green'
+                  }`}
               >
                 <User className="w-4 h-4" />
                 <span className="font-medium">Customer</span>
@@ -192,18 +221,17 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setUserType('rider')}
-                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${
-                  userType === 'rider'
-                    ? 'bg-white text-rocs-green shadow-sm'
-                    : 'text-gray-600 hover:text-rocs-green'
-                }`}
+                className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-all ${userType === 'rider'
+                  ? 'bg-white text-rocs-green shadow-sm'
+                  : 'text-gray-600 hover:text-rocs-green'
+                  }`}
               >
                 <Bike className="w-4 h-4" />
                 <span className="font-medium">Rider</span>
               </button>
             </div>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
             <div>
               <Label htmlFor="email" className="text-gray-700 font-medium">
                 Email Address
@@ -212,16 +240,16 @@ export default function Login() {
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   id="email"
-                  name="email"
                   type="email"
                   autoComplete="email username"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="mt-1 pl-10"
+                  {...register('email')}
+                  className={`mt-1 pl-10 ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                   placeholder="your.email@example.com"
                 />
               </div>
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              )}
             </div>
 
             <div>
@@ -232,13 +260,10 @@ export default function Login() {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   id="password"
-                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  required
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="mt-1 pl-10 pr-10"
+                  {...register('password')}
+                  className={`mt-1 pl-10 pr-10 ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
                   placeholder="Enter your password"
                 />
                 <button
@@ -249,6 +274,9 @@ export default function Login() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              )}
             </div>
 
             <div className="flex items-center justify-between">
@@ -270,7 +298,18 @@ export default function Login() {
                 <button type="button" onClick={() => setShowForgotModal(true)} className="text-rocs-green hover:text-rocs-green-dark">Forgot your password?</button>
               </div>
 
-              {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} /> }
+              {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />}
+            </div>
+
+            {/* Bot Protection */}
+            <RecaptchaWidget
+              onChange={(token) => setValue('recaptchaToken', token || '')}
+            />
+
+            <div className="text-xs text-gray-500 text-center">
+              By signing in, you agree to our{" "}
+              <Link to="/terms" className="text-rocs-green hover:underline font-medium">Terms of Service</Link> and{" "}
+              <Link to="/privacy" className="text-rocs-green hover:underline font-medium">Privacy Policy</Link>.
             </div>
 
             <Button

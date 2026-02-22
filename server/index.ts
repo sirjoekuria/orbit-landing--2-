@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
@@ -93,12 +96,48 @@ import {
   getAIInsights,
 } from "./routes/ai";
 
+import cookieParser from "cookie-parser";
+import { globalLimiter, authLimiter } from "./middleware/rateLimiter";
+import {
+  invalidCsrfTokenError,
+  doubleCsrfProtection,
+  generateCsrfToken,
+} from "./middleware/csrf";
+import {
+  validate,
+  signupSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema
+} from "./middleware/validation";
+
 export function createServer() {
   const app = express();
 
   // Middleware
-  app.use(cors());
+  app.use(cookieParser());
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
   app.use(express.json());
+
+  // Apply global rate limiting
+  app.use(globalLimiter);
+
+  // CSRF Token endpoint
+  app.get("/api/csrf-token", (req, res) => {
+    if (typeof generateCsrfToken === 'function') {
+      const token = generateCsrfToken(req, res);
+      res.json({ token });
+    } else {
+      console.warn('CSRF generateCsrfToken is not a function');
+      res.status(500).json({ error: 'CSRF initialization failed' });
+    }
+  });
+
+  // Apply CSRF protection to all API routes except GET/HEAD/OPTIONS (configured in csrf.ts)
+  app.use("/api", doubleCsrfProtection);
 
   // Existing routes
   app.get("/api/ping", (req, res) => {
@@ -133,7 +172,7 @@ export function createServer() {
   app.patch("/api/payments/:id/status", updatePaymentStatus);
 
   // Rider routes
-  app.post("/api/riders/signup", uploadRiderDocuments, riderSignup);
+  app.post("/api/riders/signup", uploadRiderDocuments, validate(signupSchema), riderSignup);
   app.get("/api/admin/riders", getRiders);
   app.patch("/api/admin/riders/:id/status", updateRiderStatus);
   app.patch("/api/admin/riders/:id/active", toggleRiderActive);
@@ -144,10 +183,10 @@ export function createServer() {
   app.post("/api/admin/riders/:id/process-payment", processRiderPayment);
 
   // Auth routes
-  app.post("/api/users/signup", userSignup);
-  app.post("/api/auth/login", login);
-  app.post("/api/auth/forgot-password", forgotPassword);
-  app.post("/api/auth/reset-password", resetPassword);
+  app.post("/api/auth/signup", validate(signupSchema), userSignup);
+  app.post("/api/auth/login", validate(loginSchema), login);
+  app.post("/api/auth/forgot-password", validate(forgotPasswordSchema), forgotPassword);
+  app.post("/api/auth/reset-password", validate(resetPasswordSchema), resetPassword);
   app.get("/api/auth/profile/:userId", getProfile);
   app.patch("/api/auth/profile/:userId", updateProfile);
   app.get("/api/admin/users", getAllUsers);
@@ -223,6 +262,17 @@ export function createServer() {
 
   // Initialize the automated payment scheduler
   initializeScheduler();
+
+  // Error handling for CSRF
+  app.use((err: any, req: any, res: any, next: any) => {
+    if (err === invalidCsrfTokenError) {
+      res.status(403).json({
+        error: "Invalid CSRF token",
+      });
+    } else {
+      next(err);
+    }
+  });
 
   return app;
 }

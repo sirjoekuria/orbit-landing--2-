@@ -5,8 +5,12 @@ import fs from 'fs';
 import path from 'path';
 import { DatabaseService } from '../services/database';
 import { sendPasswordResetEmail } from '../services/emailService';
+import { verifyRecaptcha } from '../utils/security';
+import { generateToken, setAuthCookie } from '../utils/jwt';
 
 const SALT_ROUNDS = 10;
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 15 * 60 * 1000;
 
 // JSON file operations (fallback when Supabase is not available)
 const USERS_FILE = path.join(process.cwd(), 'server', 'data', 'users.json');
@@ -68,11 +72,17 @@ function isSupabaseAvailable(): boolean {
 // User signup
 export const userSignup: RequestHandler = async (req, res) => {
   try {
-    const { fullName, email, phone, password, userType = 'customer' } = req.body;
+    const { fullName, email, phone, password, userType = 'customer', recaptchaToken } = req.body;
+
+    // Verify reCAPTCHA
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+    if (!isHuman) {
+      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
+    }
 
     if (!fullName || !email || !phone || !password) {
-      return res.status(400).json({ 
-        error: 'Missing required fields: fullName, email, phone, password' 
+      return res.status(400).json({
+        error: 'Missing required fields: fullName, email, phone, password'
       });
     }
 
@@ -80,8 +90,8 @@ export const userSignup: RequestHandler = async (req, res) => {
       // Use Supabase
       const existingUser = await DatabaseService.getUserByEmail(email);
       if (existingUser) {
-        return res.status(409).json({ 
-          error: 'User with this email already exists' 
+        return res.status(409).json({
+          error: 'User with this email already exists'
         });
       }
 
@@ -105,8 +115,8 @@ export const userSignup: RequestHandler = async (req, res) => {
       const users = loadUsers();
       const existingUser = users.find(u => u.email === email);
       if (existingUser) {
-        return res.status(409).json({ 
-          error: 'User with this email already exists' 
+        return res.status(409).json({
+          error: 'User with this email already exists'
         });
       }
 
@@ -133,7 +143,7 @@ export const userSignup: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('User signup error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to create user',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -143,11 +153,17 @@ export const userSignup: RequestHandler = async (req, res) => {
 // User login
 export const login: RequestHandler = async (req, res) => {
   try {
-    const { email, password, userType } = req.body;
+    const { email, password, userType, recaptchaToken } = req.body;
+
+    // Verify reCAPTCHA
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+    if (!isHuman) {
+      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
+    }
 
     if (!email || !password) {
-      return res.status(400).json({ 
-        error: 'Email and password are required' 
+      return res.status(400).json({
+        error: 'Email and password are required'
       });
     }
 
@@ -155,31 +171,57 @@ export const login: RequestHandler = async (req, res) => {
       // Use Supabase
       const user = await DatabaseService.getUserByEmail(email);
       if (!user) {
-        return res.status(401).json({ 
-          error: 'Invalid email or password' 
+        return res.status(401).json({
+          error: 'Invalid email or password'
+        });
+      }
+
+      // Check for lockout
+      if (user.lockout_until && new Date(user.lockout_until) > new Date()) {
+        const remainingMinutes = Math.ceil((new Date(user.lockout_until).getTime() - Date.now()) / 60000);
+        return res.status(403).json({
+          error: `Account is temporarily locked. Try again in ${remainingMinutes} minutes.`
         });
       }
 
       if (!user.is_active) {
-        return res.status(401).json({ 
-          error: 'Account is deactivated' 
+        return res.status(401).json({
+          error: 'Account is deactivated'
         });
       }
 
       if (userType && user.user_type !== userType) {
-        return res.status(401).json({ 
-          error: 'Invalid user type for this account' 
+        return res.status(401).json({
+          error: 'Invalid user type for this account'
         });
       }
 
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(401).json({ 
-          error: 'Invalid email or password' 
+        const attempts = await DatabaseService.incrementFailedLoginAttempts(user.id, user.user_type);
+
+        if (attempts >= MAX_FAILED_ATTEMPTS) {
+          const lockoutUntil = new Date(Date.now() + LOCKOUT_DURATION_MS).toISOString();
+          await DatabaseService.setAccountLockout(user.id, user.user_type, lockoutUntil);
+          return res.status(403).json({
+            error: `Maximum login attempts exceeded. Account locked for 15 minutes.`
+          });
+        }
+
+        return res.status(401).json({
+          error: 'Invalid email or password'
         });
       }
 
+      // Reset attempts on successful login
+      await DatabaseService.resetFailedLoginAttempts(user.id, user.user_type);
+
       const { password: _, ...userResponse } = user;
+
+      // Generate token and set cookie
+      const token = generateToken({ id: user.id, email: user.email, userType: user.user_type });
+      setAuthCookie(res, token);
+
       res.json({
         message: 'Login successful',
         user: userResponse
@@ -187,33 +229,64 @@ export const login: RequestHandler = async (req, res) => {
     } else {
       // Use JSON fallback
       const users = loadUsers();
-      const user = users.find(u => u.email === email);
-      if (!user) {
-        return res.status(401).json({ 
-          error: 'Invalid email or password' 
+      const userIndex = users.findIndex(u => u.email === email);
+      if (userIndex === -1) {
+        return res.status(401).json({
+          error: 'Invalid email or password'
+        });
+      }
+
+      const user = users[userIndex];
+
+      // Check for lockout
+      if (user.lockoutUntil && new Date(user.lockoutUntil) > new Date()) {
+        const remainingMinutes = Math.ceil((new Date(user.lockoutUntil).getTime() - Date.now()) / 60000);
+        return res.status(403).json({
+          error: `Account is temporarily locked. Try again in ${remainingMinutes} minutes.`
         });
       }
 
       if (!user.isActive) {
-        return res.status(401).json({ 
-          error: 'Account is deactivated' 
+        return res.status(401).json({
+          error: 'Account is deactivated'
         });
       }
 
       if (userType && user.userType !== userType) {
-        return res.status(401).json({ 
-          error: 'Invalid user type for this account' 
+        return res.status(401).json({
+          error: 'Invalid user type for this account'
         });
       }
 
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(401).json({ 
-          error: 'Invalid email or password' 
+        user.failedAttempts = (user.failedAttempts || 0) + 1;
+
+        if (user.failedAttempts >= MAX_FAILED_ATTEMPTS) {
+          user.lockoutUntil = new Date(Date.now() + LOCKOUT_DURATION_MS).toISOString();
+          saveUsers(users);
+          return res.status(403).json({
+            error: `Maximum login attempts exceeded. Account locked for 15 minutes.`
+          });
+        }
+
+        saveUsers(users);
+        return res.status(401).json({
+          error: 'Invalid email or password'
         });
       }
 
+      // Reset attempts on successful login
+      user.failedAttempts = 0;
+      user.lockoutUntil = null;
+      saveUsers(users);
+
       const { password: _, ...userResponse } = user;
+
+      // Generate token and set cookie (JSON fallback)
+      const token = generateToken({ id: user.id, email: user.email, userType: user.userType });
+      setAuthCookie(res, token);
+
       res.json({
         message: 'Login successful',
         user: userResponse
@@ -221,7 +294,7 @@ export const login: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Login failed',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -234,8 +307,8 @@ export const forgotPassword: RequestHandler = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ 
-        error: 'Email is required' 
+      return res.status(400).json({
+        error: 'Email is required'
       });
     }
 
@@ -249,15 +322,16 @@ export const forgotPassword: RequestHandler = async (req, res) => {
         const user = await DatabaseService.getUserByEmail(email);
         if (!user) {
           // Don't reveal if email exists or not for security
-          return res.json({ 
-            message: 'If the email exists, a password reset link has been sent' 
+          return res.json({
+            message: 'If the email exists, a password reset link has been sent'
           });
         }
 
         await DatabaseService.createResetToken({
           token,
           email,
-          expires
+          expires,
+          created_at: new Date().toISOString()
         });
       } catch (error) {
         console.error('Supabase error in forgotPassword:', error);
@@ -274,7 +348,7 @@ export const forgotPassword: RequestHandler = async (req, res) => {
     let emailSent = false;
     let emailError: string | null = null;
     let testEmailUrl: string | null = null;
-    
+
     try {
       // Get the correct origin for the reset link - prioritize Netlify URL
       let origin: string | undefined;
@@ -294,13 +368,13 @@ export const forgotPassword: RequestHandler = async (req, res) => {
         origin = `${protocol}://${host}`;
         console.warn('⚠️ No APP_URL/NETLIFY_URL/URL found. Using request origin:', origin);
       }
-      
+
       console.log(`📧 Attempting to send password reset email to: ${email}`);
       console.log(`🔗 Reset link will point to: ${origin}/reset-password?token=...`);
-      
+
       const result = await sendPasswordResetEmail(email, token, origin);
       emailSent = result.success;
-      
+
       if (result.testUrl) {
         testEmailUrl = result.testUrl;
         console.error('⚠️⚠️⚠️ EMAIL NOT SENT TO REAL INBOX ⚠️⚠️⚠️');
@@ -321,11 +395,11 @@ export const forgotPassword: RequestHandler = async (req, res) => {
 
     // Always return success message for security (don't reveal if email exists)
     // But include error info in logs
-    const response: any = { 
+    const response: any = {
       message: 'If the email exists, a password reset link has been sent',
       tokenSaved: true
     };
-    
+
     // In development or if credentials are missing, include helpful info
     if (process.env.NODE_ENV === 'development' || testEmailUrl || emailError) {
       response.debug = {
@@ -335,11 +409,11 @@ export const forgotPassword: RequestHandler = async (req, res) => {
         error: emailError
       };
     }
-    
+
     res.json(response);
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to process password reset request',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -352,8 +426,8 @@ export const resetPassword: RequestHandler = async (req, res) => {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      return res.status(400).json({ 
-        error: 'Token and new password are required' 
+      return res.status(400).json({
+        error: 'Token and new password are required'
       });
     }
 
@@ -366,12 +440,12 @@ export const resetPassword: RequestHandler = async (req, res) => {
         resetToken = await DatabaseService.getResetToken(token);
         if (resetToken) {
           email = resetToken.email;
-          
+
           // Check if token is expired
           if (Date.now() > resetToken.expires) {
             await DatabaseService.deleteResetToken(token);
-            return res.status(400).json({ 
-              error: 'Reset token has expired' 
+            return res.status(400).json({
+              error: 'Reset token has expired'
             });
           }
         }
@@ -385,16 +459,16 @@ export const resetPassword: RequestHandler = async (req, res) => {
       const tokens = loadResetTokens();
       const entry = tokens[token];
       if (!entry || entry.expires < Date.now()) {
-        return res.status(400).json({ 
-          error: 'Invalid or expired reset token' 
+        return res.status(400).json({
+          error: 'Invalid or expired reset token'
         });
       }
       email = entry.email;
     }
 
     if (!email) {
-      return res.status(400).json({ 
-        error: 'Invalid or expired reset token' 
+      return res.status(400).json({
+        error: 'Invalid or expired reset token'
       });
     }
 
@@ -408,8 +482,8 @@ export const resetPassword: RequestHandler = async (req, res) => {
         if (user) {
           await DatabaseService.updateUser(user.id, { password: hashedPassword });
           await DatabaseService.deleteResetToken(token);
-          return res.json({ 
-            message: 'Password reset successfully' 
+          return res.json({
+            message: 'Password reset successfully'
           });
         }
       } catch (error) {
@@ -423,23 +497,23 @@ export const resetPassword: RequestHandler = async (req, res) => {
     if (userIndex !== -1) {
       users[userIndex].password = hashedPassword;
       saveUsers(users);
-      
+
       // Clean up token
       const tokens = loadResetTokens();
       delete tokens[token];
       saveResetTokens(tokens);
-      
-      return res.json({ 
-        message: 'Password reset successfully' 
+
+      return res.json({
+        message: 'Password reset successfully'
       });
     }
 
-    res.status(404).json({ 
-      error: 'User not found' 
+    res.status(404).json({
+      error: 'User not found'
     });
   } catch (error) {
     console.error('Reset password error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to reset password',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -454,8 +528,8 @@ export const getProfile: RequestHandler = async (req, res) => {
     if (isSupabaseAvailable()) {
       const user = await DatabaseService.getUserById(userId);
       if (!user) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
       const { password: _, ...userResponse } = user;
@@ -464,8 +538,8 @@ export const getProfile: RequestHandler = async (req, res) => {
       const users = loadUsers();
       const user = users.find(u => u.id === userId);
       if (!user) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
       const { password: _, ...userResponse } = user;
@@ -473,7 +547,7 @@ export const getProfile: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Get profile error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to get profile',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -489,16 +563,16 @@ export const updateProfile: RequestHandler = async (req, res) => {
     if (isSupabaseAvailable()) {
       const existingUser = await DatabaseService.getUserById(userId);
       if (!existingUser) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
       if (email && email !== existingUser.email) {
         const emailExists = await DatabaseService.getUserByEmail(email);
         if (emailExists) {
-          return res.status(409).json({ 
-            error: 'Email already in use' 
+          return res.status(409).json({
+            error: 'Email already in use'
           });
         }
       }
@@ -519,8 +593,8 @@ export const updateProfile: RequestHandler = async (req, res) => {
       const users = loadUsers();
       const userIndex = users.findIndex(u => u.id === userId);
       if (userIndex === -1) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
@@ -538,7 +612,7 @@ export const updateProfile: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Update profile error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to update profile',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -559,7 +633,7 @@ export const getAllUsers: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Get all users error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to get users',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -573,16 +647,16 @@ export const toggleUserStatus: RequestHandler = async (req, res) => {
     const { isActive } = req.body;
 
     if (typeof isActive !== 'boolean') {
-      return res.status(400).json({ 
-        error: 'isActive must be a boolean value' 
+      return res.status(400).json({
+        error: 'isActive must be a boolean value'
       });
     }
 
     if (isSupabaseAvailable()) {
       const user = await DatabaseService.getUserById(userId);
       if (!user) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
@@ -597,8 +671,8 @@ export const toggleUserStatus: RequestHandler = async (req, res) => {
       const users = loadUsers();
       const userIndex = users.findIndex(u => u.id === userId);
       if (userIndex === -1) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
@@ -613,7 +687,7 @@ export const toggleUserStatus: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Toggle user status error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to update user status',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -628,33 +702,33 @@ export const deleteUser: RequestHandler = async (req, res) => {
     if (isSupabaseAvailable()) {
       const user = await DatabaseService.getUserById(userId);
       if (!user) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
       await DatabaseService.deleteUser(userId);
-      res.json({ 
-        message: 'User deleted successfully' 
+      res.json({
+        message: 'User deleted successfully'
       });
     } else {
       const users = loadUsers();
       const userIndex = users.findIndex(u => u.id === userId);
       if (userIndex === -1) {
-        return res.status(404).json({ 
-          error: 'User not found' 
+        return res.status(404).json({
+          error: 'User not found'
         });
       }
 
       users.splice(userIndex, 1);
       saveUsers(users);
-      res.json({ 
-        message: 'User deleted successfully' 
+      res.json({
+        message: 'User deleted successfully'
       });
     }
   } catch (error) {
     console.error('Delete user error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to delete user',
       details: error instanceof Error ? error.message : 'Unknown error'
     });

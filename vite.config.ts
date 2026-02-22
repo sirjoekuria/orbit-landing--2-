@@ -1,6 +1,7 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 import { createServer } from "./server";
 
 // https://vitejs.dev/config/
@@ -8,15 +9,16 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    https: {},
     fs: {
-      allow: ["./client", "./shared"],
+      allow: [".", "./client", "./shared"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },
   build: {
     outDir: "dist/spa",
   },
-  plugins: [react(), expressPlugin()],
+  plugins: [react(), basicSsl(), expressPlugin()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
@@ -32,8 +34,13 @@ function expressPlugin(): Plugin {
     configureServer(server) {
       const app = createServer();
 
-      // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      // Add Express app as middleware to Vite dev server, targeting only /api routes
+      server.middlewares.use((req, res, next) => {
+        if (req.url?.startsWith("/api")) {
+          return app(req, res, next);
+        }
+        next();
+      });
     },
   };
 }

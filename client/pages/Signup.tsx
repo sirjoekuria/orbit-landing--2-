@@ -13,30 +13,48 @@ import {
   Camera,
   FileText,
 } from "lucide-react";
+import RecaptchaWidget from "../components/RecaptchaWidget";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "../../shared/validation";
+import { z } from "zod";
+
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function Signup() {
   const [userType, setUserType] = useState<"customer" | "rider">("customer");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    // Rider specific fields
-    nationalId: "",
-    motorcycleColor: "",
-    motorcycleModel: "",
-    experience: "",
-    area: "",
-    motivation: "",
-    drivingLicenseExpiry: "",
-    goodConductExpiry: "",
-    motorcycleInsuranceExpiry: "",
+  const {
+    register,
+    handleSubmit: handleFormSubmit,
+    formState: { errors },
+    reset,
+    watch,
+    setValue
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      nationalId: "",
+      motorcycleColor: "",
+      motorcycleModel: "",
+      experience: "",
+      area: "",
+      motivation: "",
+      drivingLicenseExpiry: "",
+      goodConductExpiry: "",
+      motorcycleInsuranceExpiry: "",
+      recaptchaToken: ""
+    }
   });
 
   const [fileUploads, setFileUploads] = useState({
@@ -49,17 +67,7 @@ export default function Signup() {
     motorcycleInsurance: null as File | null,
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // Removed handleInputChange as react-hook-form handles it
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,14 +82,7 @@ export default function Signup() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
+  const onSubmit = async (data: SignupFormValues) => {
     // Validate rider specific requirements
     if (userType === "rider") {
       const requiredFiles = [
@@ -105,16 +106,22 @@ export default function Signup() {
       }
 
       const requiredDates = [
+        "nationalId",
+        "motorcycleColor",
+        "motorcycleModel",
+        "experience",
+        "area",
+        "motivation",
         "drivingLicenseExpiry",
         "goodConductExpiry",
         "motorcycleInsuranceExpiry",
       ];
       const missingDates = requiredDates.filter(
-        (field) => !formData[field as keyof typeof formData],
+        (field) => !data[field as keyof typeof data],
       );
 
       if (missingDates.length > 0) {
-        alert(`Please provide expiry dates for: ${missingDates.join(", ")}`);
+        alert(`Please provide all required rider information.`);
         return;
       }
     }
@@ -122,6 +129,9 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
+      const csrfRes = await fetch('/api/csrf-token');
+      const { token: csrfToken } = await csrfRes.json();
+
       const endpoint =
         userType === "rider" ? "/api/riders/signup" : "/api/users/signup";
 
@@ -132,8 +142,8 @@ export default function Signup() {
         const submitData = new FormData();
 
         // Add text fields
-        Object.entries(formData).forEach(([key, value]) => {
-          submitData.append(key, value);
+        Object.entries(data).forEach(([key, value]) => {
+          if (value !== undefined) submitData.append(key, value);
         });
 
         submitData.append("userType", userType);
@@ -148,15 +158,15 @@ export default function Signup() {
 
         response = await fetch(endpoint, {
           method: "POST",
-          body: submitData, // Don't set Content-Type header, let browser set it for FormData
+          headers: {
+            'x-csrf-token': csrfToken
+          },
+          body: submitData,
         });
       } else {
         // Send JSON for customer signup
         const jsonData = {
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          password: formData.password,
+          ...data,
           userType,
           timestamp: new Date().toISOString()
         };
@@ -165,6 +175,7 @@ export default function Signup() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'x-csrf-token': csrfToken
           },
           body: JSON.stringify(jsonData),
         });
@@ -172,23 +183,20 @@ export default function Signup() {
 
       if (response.ok) {
         const result = await response.json();
-        // Store email for "Remember Me" functionality
-        localStorage.setItem('rememberedEmail', formData.email);
-        
-        // Store user session
+        localStorage.setItem('rememberedEmail', data.email);
+
         localStorage.setItem(
           "user",
           JSON.stringify({
             id: result.user?.id || result.rider?.id,
-            name: formData.fullName,
-            email: formData.email,
+            name: data.fullName,
+            email: data.email,
             userType,
             isAuthenticated: true,
-            loginTime: Date.now() // Store login time for session management
+            loginTime: Date.now()
           }),
         );
 
-        // Redirect based on user type
         if (userType === "rider") {
           alert(
             "Rider application submitted successfully! You will be notified once approved.",
@@ -282,11 +290,10 @@ export default function Signup() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={() => setUserType("customer")}
-              className={`p-6 rounded-lg border-2 transition-all ${
-                userType === "customer"
-                  ? "border-rocs-green bg-rocs-green/5"
-                  : "border-gray-200 hover:border-rocs-green/50"
-              }`}
+              className={`p-6 rounded-lg border-2 transition-all ${userType === "customer"
+                ? "border-rocs-green bg-rocs-green/5"
+                : "border-gray-200 hover:border-rocs-green/50"
+                }`}
             >
               <User
                 className={`w-8 h-8 mx-auto mb-3 ${userType === "customer" ? "text-rocs-green" : "text-gray-400"}`}
@@ -297,11 +304,10 @@ export default function Signup() {
 
             <button
               onClick={() => setUserType("rider")}
-              className={`p-6 rounded-lg border-2 transition-all ${
-                userType === "rider"
-                  ? "border-rocs-green bg-rocs-green/5"
-                  : "border-gray-200 hover:border-rocs-green/50"
-              }`}
+              className={`p-6 rounded-lg border-2 transition-all ${userType === "rider"
+                ? "border-rocs-green bg-rocs-green/5"
+                : "border-gray-200 hover:border-rocs-green/50"
+                }`}
             >
               <MapPin
                 className={`w-8 h-8 mx-auto mb-3 ${userType === "rider" ? "text-rocs-green" : "text-gray-400"}`}
@@ -322,7 +328,7 @@ export default function Signup() {
               : "Customer Registration"}
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-8">
             {/* Basic Information */}
             <div>
               <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
@@ -338,15 +344,15 @@ export default function Signup() {
                   </Label>
                   <Input
                     id="fullName"
-                    name="fullName"
                     type="text"
                     autoComplete="name"
-                    required
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    className="mt-1"
+                    {...register("fullName")}
+                    className={`mt-1 ${errors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
                     placeholder="Your full name"
                   />
+                  {errors.fullName && (
+                    <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -355,15 +361,15 @@ export default function Signup() {
                   </Label>
                   <Input
                     id="email"
-                    name="email"
                     type="email"
                     autoComplete="email username"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="mt-1"
+                    {...register("email")}
+                    className={`mt-1 ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                     placeholder="your.email@example.com"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -374,15 +380,15 @@ export default function Signup() {
                   </Label>
                   <Input
                     id="phone"
-                    name="phone"
                     type="tel"
                     autoComplete="tel"
-                    required
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="mt-1"
+                    {...register("phone")}
+                    className={`mt-1 ${errors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
                     placeholder="+254 7XX XXX XXX"
                   />
+                  {errors.phone && (
+                    <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                  )}
                 </div>
 
                 {userType === "rider" && (
@@ -395,14 +401,14 @@ export default function Signup() {
                     </Label>
                     <Input
                       id="nationalId"
-                      name="nationalId"
                       type="text"
-                      required
-                      value={formData.nationalId}
-                      onChange={handleInputChange}
-                      className="mt-1"
+                      {...register("nationalId")}
+                      className={`mt-1 ${errors.nationalId ? 'border-red-500 focus:ring-red-500' : ''}`}
                       placeholder="Your ID number"
                     />
+                    {errors.nationalId && (
+                      <p className="mt-1 text-sm text-red-600">{errors.nationalId.message}</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -419,13 +425,10 @@ export default function Signup() {
                   <div className="relative">
                     <Input
                       id="password"
-                      name="password"
                       type={showPassword ? "text" : "password"}
                       autoComplete="new-password"
-                      required
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="mt-1 pr-10"
+                      {...register("password")}
+                      className={`mt-1 pr-10 ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
                       placeholder="Create a strong password"
                     />
                     <button
@@ -440,6 +443,9 @@ export default function Signup() {
                       )}
                     </button>
                   </div>
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -451,15 +457,15 @@ export default function Signup() {
                   </Label>
                   <Input
                     id="confirmPassword"
-                    name="confirmPassword"
                     type="password"
                     autoComplete="new-password"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    className="mt-1"
+                    {...register("confirmPassword")}
+                    className={`mt-1 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : ''}`}
                     placeholder="Confirm your password"
                   />
+                  {errors.confirmPassword && (
+                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -482,14 +488,14 @@ export default function Signup() {
                       </Label>
                       <Input
                         id="motorcycleColor"
-                        name="motorcycleColor"
                         type="text"
-                        required
-                        value={formData.motorcycleColor}
-                        onChange={handleInputChange}
-                        className="mt-1"
+                        {...register("motorcycleColor")}
+                        className={`mt-1 ${errors.motorcycleColor ? 'border-red-500 focus:ring-red-500' : ''}`}
                         placeholder="e.g., Red, Blue, Black"
                       />
+                      {errors.motorcycleColor && (
+                        <p className="mt-1 text-sm text-red-600">{errors.motorcycleColor.message}</p>
+                      )}
                     </div>
 
                     <div>
@@ -501,14 +507,14 @@ export default function Signup() {
                       </Label>
                       <Input
                         id="motorcycleModel"
-                        name="motorcycleModel"
                         type="text"
-                        required
-                        value={formData.motorcycleModel}
-                        onChange={handleInputChange}
-                        className="mt-1"
+                        {...register("motorcycleModel")}
+                        className={`mt-1 ${errors.motorcycleModel ? 'border-red-500 focus:ring-red-500' : ''}`}
                         placeholder="e.g., Honda CB 150F, Yamaha FZ"
                       />
+                      {errors.motorcycleModel && (
+                        <p className="mt-1 text-sm text-red-600">{errors.motorcycleModel.message}</p>
+                      )}
                     </div>
                   </div>
 
@@ -522,17 +528,17 @@ export default function Signup() {
                       </Label>
                       <select
                         id="experience"
-                        name="experience"
-                        required
-                        value={formData.experience}
-                        onChange={handleInputChange}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green"
+                        {...register("experience")}
+                        className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green ${errors.experience ? 'border-red-500' : 'border-gray-300'}`}
                       >
                         <option value="">Select experience</option>
                         <option value="1-2 years">1-2 years</option>
                         <option value="3-5 years">3-5 years</option>
                         <option value="5+ years">5+ years</option>
                       </select>
+                      {errors.experience && (
+                        <p className="mt-1 text-sm text-red-600">{errors.experience.message}</p>
+                      )}
                     </div>
 
                     <div>
@@ -544,11 +550,8 @@ export default function Signup() {
                       </Label>
                       <select
                         id="area"
-                        name="area"
-                        required
-                        value={formData.area}
-                        onChange={handleInputChange}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green"
+                        {...register("area")}
+                        className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green ${errors.area ? 'border-red-500' : 'border-gray-300'}`}
                       >
                         <option value="">Select area</option>
                         <option value="CBD">CBD</option>
@@ -559,6 +562,9 @@ export default function Signup() {
                         <option value="Embakasi">Embakasi</option>
                         <option value="All areas">All areas</option>
                       </select>
+                      {errors.area && (
+                        <p className="mt-1 text-sm text-red-600">{errors.area.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -627,13 +633,13 @@ export default function Signup() {
                         </Label>
                         <Input
                           id="drivingLicenseExpiry"
-                          name="drivingLicenseExpiry"
                           type="date"
-                          required
-                          value={formData.drivingLicenseExpiry}
-                          onChange={handleInputChange}
-                          className="mt-1"
+                          {...register("drivingLicenseExpiry")}
+                          className={`mt-1 ${errors.drivingLicenseExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
                         />
+                        {errors.drivingLicenseExpiry && (
+                          <p className="mt-1 text-sm text-red-600">{errors.drivingLicenseExpiry.message}</p>
+                        )}
                       </div>
                     </div>
 
@@ -654,13 +660,13 @@ export default function Signup() {
                         </Label>
                         <Input
                           id="goodConductExpiry"
-                          name="goodConductExpiry"
                           type="date"
-                          required
-                          value={formData.goodConductExpiry}
-                          onChange={handleInputChange}
-                          className="mt-1"
+                          {...register("goodConductExpiry")}
+                          className={`mt-1 ${errors.goodConductExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
                         />
+                        {errors.goodConductExpiry && (
+                          <p className="mt-1 text-sm text-red-600">{errors.goodConductExpiry.message}</p>
+                        )}
                       </div>
                     </div>
 
@@ -681,13 +687,13 @@ export default function Signup() {
                         </Label>
                         <Input
                           id="motorcycleInsuranceExpiry"
-                          name="motorcycleInsuranceExpiry"
                           type="date"
-                          required
-                          value={formData.motorcycleInsuranceExpiry}
-                          onChange={handleInputChange}
-                          className="mt-1"
+                          {...register("motorcycleInsuranceExpiry")}
+                          className={`mt-1 ${errors.motorcycleInsuranceExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
                         />
+                        {errors.motorcycleInsuranceExpiry && (
+                          <p className="mt-1 text-sm text-red-600">{errors.motorcycleInsuranceExpiry.message}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -707,18 +713,29 @@ export default function Signup() {
                     </Label>
                     <textarea
                       id="motivation"
-                      name="motivation"
-                      required
-                      value={formData.motivation}
-                      onChange={handleInputChange}
+                      {...register("motivation")}
                       rows={4}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green resize-none"
+                      className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green resize-none ${errors.motivation ? 'border-red-500' : 'border-gray-300'}`}
                       placeholder="Tell us why you want to be part of our team..."
                     />
+                    {errors.motivation && (
+                      <p className="mt-1 text-sm text-red-600">{errors.motivation.message}</p>
+                    )}
                   </div>
                 </div>
               </>
             )}
+
+            {/* Bot Protection */}
+            <RecaptchaWidget
+              onChange={(token) => setValue('recaptchaToken', token || '')}
+            />
+
+            <div className="text-xs text-gray-500 text-center">
+              By clicking {userType === "rider" ? "Submit Application" : "Create Account"}, you agree to our{" "}
+              <Link to="/terms" className="text-rocs-green hover:underline font-medium">Terms of Service</Link> and{" "}
+              <Link to="/privacy" className="text-rocs-green hover:underline font-medium">Privacy Policy</Link>.
+            </div>
 
             <Button
               type="submit"

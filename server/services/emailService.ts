@@ -16,21 +16,21 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   transporterPromise = (async () => {
     try {
       // Check if credentials are properly configured
-      const hasValidCredentials = EMAIL_USER && 
-                                  EMAIL_PASSWORD && 
-                                  EMAIL_PASSWORD !== 'your-email-app-password' &&
-                                  EMAIL_PASSWORD !== 'your-gmail-app-password' &&
-                                  EMAIL_PASSWORD.trim().length > 0;
+      const hasValidCredentials = EMAIL_USER &&
+        EMAIL_PASSWORD &&
+        EMAIL_PASSWORD !== 'your-email-app-password' &&
+        EMAIL_PASSWORD !== 'your-gmail-app-password' &&
+        EMAIL_PASSWORD.trim().length > 0;
 
       if (hasValidCredentials) {
         console.log('✅ Email credentials found. Configuring SMTP transporter...');
         console.log(`📧 Using email provider: ${EMAIL_PROVIDER.toUpperCase()}`);
-        
+
         // Configure SMTP based on provider
         let smtpHost: string;
         let smtpPort: number;
         let smtpSecure: boolean;
-        
+
         if (EMAIL_PROVIDER.toLowerCase() === 'outlook' || EMAIL_USER?.includes('@outlook') || EMAIL_USER?.includes('@hotmail') || EMAIL_USER?.includes('@live')) {
           smtpHost = EMAIL_HOST || 'smtp-mail.outlook.com';
           smtpPort = EMAIL_PORT || 587;
@@ -42,7 +42,7 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
           smtpSecure = false;
           console.log('📧 Configuring Gmail SMTP...');
         }
-        
+
         const SMTP_CONFIG = {
           host: smtpHost,
           port: smtpPort,
@@ -69,7 +69,7 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
         console.warn(`   EMAIL_PASSWORD: ${EMAIL_PASSWORD ? (EMAIL_PASSWORD.length > 0 ? '✓ Set' : '✗ Empty') : '✗ Missing'}`);
         console.warn('💡 Using Ethereal test account (emails will NOT be sent to real inbox)');
         console.warn('💡 Configure EMAIL_USER and EMAIL_PASSWORD in Netlify environment variables to send real emails');
-        
+
         const testAccount = await nodemailer.createTestAccount();
         const t = nodemailer.createTransport({
           host: 'smtp.ethereal.email',
@@ -82,7 +82,7 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
       }
     } catch (err: any) {
       console.error('❌ Failed to create/verify SMTP transporter:', err.message || err);
-      
+
       // If SMTP fails and we have credentials, don't fall back to Ethereal
       if (EMAIL_USER && EMAIL_PASSWORD) {
         console.error('🔐 SMTP authentication failed. Check your EMAIL_USER and EMAIL_PASSWORD.');
@@ -93,7 +93,7 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
         console.error('   - Wrong email address');
         throw new Error(`SMTP authentication failed: ${err.message}`);
       }
-      
+
       // Fallback to Ethereal for development
       try {
         console.warn('⚠️ Falling back to Ethereal test account...');
@@ -128,7 +128,7 @@ const sendMailVerbose = async (transporter: any, mailOptions: any, context = '')
     try {
       const preview = (nodemailer as any).getTestMessageUrl(result);
       if (preview) console.log(`[mail:${context}] previewUrl=`, preview);
-    } catch (e) {}
+    } catch (e) { }
     return result;
   } catch (err) {
     console.error(`[mail:${context}] sendMail error:`, err);
@@ -294,7 +294,7 @@ export const sendOrderReceipt = async (order: any): Promise<boolean> => {
     const mailOptions = {
       from: {
         name: 'Rocs Crew Delivery',
-        address: process.env.EMAIL_USER || 'Kuriajoe85@gmail.com'
+        address: process.env.EMAIL_USER || process.env.ADMIN_EMAIL || 'support@rocscrew.com'
       },
       to: order.customerEmail,
       subject: `Order Confirmed - Receipt for ${order.id} | Rocs Crew`,
@@ -342,9 +342,9 @@ export const sendAdminNotification = async (order: any): Promise<boolean> => {
     const mailOptions = {
       from: {
         name: 'Rocs Crew System',
-        address: process.env.EMAIL_USER || 'Kuriajoe85@gmail.com'
+        address: process.env.EMAIL_USER || process.env.ADMIN_EMAIL || 'system@rocscrew.com'
       },
-      to: process.env.ADMIN_EMAIL || 'Kuriajoe85@gmail.com',
+      to: process.env.ADMIN_EMAIL || 'admin@rocscrew.com',
       subject: `Order Confirmed - ${order.id} | Admin Notification`,
       html: `
         <h3>Order Confirmation Notification</h3>
@@ -549,7 +549,7 @@ export const sendRiderEarningsReceipt = async (rider: any, earning: any): Promis
     const mailOptions = {
       from: {
         name: 'Rocs Crew - Rider Payments',
-        address: process.env.EMAIL_USER || 'Kuriajoe85@gmail.com'
+        address: process.env.EMAIL_USER || process.env.ADMIN_EMAIL || 'payments@rocscrew.com'
       },
       to: rider.email,
       subject: `Delivery Earnings - KES ${earning.riderEarning.toFixed(2)} | ${earning.orderId}`,
@@ -615,12 +615,12 @@ export const sendPasswordResetEmail = async (email: string, token: string, origi
       base = `http://localhost:${port}`;
       console.warn('⚠️ No APP_URL, NETLIFY_URL, or URL env var found. Using localhost fallback:', base);
     }
-    
+
     const resetUrl = `${base}/reset-password?token=${encodeURIComponent(token)}`;
-    
+
     console.log(`🔗 Password reset URL generated: ${resetUrl}`);
     console.log(`📧 Sending password reset email to: ${email}`);
-    
+
     // Check if email credentials are configured
     if (!EMAIL_USER || !EMAIL_PASSWORD || EMAIL_PASSWORD === 'your-email-app-password' || EMAIL_PASSWORD === 'your-gmail-app-password') {
       console.error('❌ EMAIL_USER or EMAIL_PASSWORD not configured properly!');
@@ -628,11 +628,11 @@ export const sendPasswordResetEmail = async (email: string, token: string, origi
       console.error('💡 For development, check Ethereal test account messages.');
       // Still try to send (will use Ethereal in dev)
     }
-    
+
     const mailOptions = {
       from: {
         name: 'Rocs Crew Support',
-        address: EMAIL_USER || 'Kuriajoe85@gmail.com'
+        address: process.env.EMAIL_USER || process.env.ADMIN_EMAIL || 'support@rocscrew.com'
       },
       to: email,
       subject: 'Password Reset Request - Rocs Crew',
@@ -676,7 +676,7 @@ If you didn't request this password reset, please ignore this email. Your passwo
     const transporter = await getTransporter();
     try {
       const result = await sendMailVerbose(transporter, mailOptions, 'PasswordReset');
-      
+
       // Check if using Ethereal (test account)
       const testUrl = (nodemailer as any).getTestMessageUrl(result);
       if (testUrl) {
@@ -686,14 +686,14 @@ If you didn't request this password reset, please ignore this email. Your passwo
         console.error('💡 Configure EMAIL_USER and EMAIL_PASSWORD in Netlify to send real emails.');
         return { success: false, testUrl }; // Return with test URL so caller knows
       }
-      
+
       console.log('✅✅✅ Password reset email sent successfully to', email);
       console.log('📧 Message ID:', (result as any)?.messageId);
       return { success: true };
     } catch (err: any) {
       console.error('❌ Error sending password reset email:', err.message || err);
       console.error('🔍 Full error:', err);
-      
+
       // Provide helpful error messages
       if (err.code === 'EAUTH') {
         console.error('🔐 Authentication failed. Check EMAIL_USER and EMAIL_PASSWORD.');
@@ -702,7 +702,7 @@ If you didn't request this password reset, please ignore this email. Your passwo
       } else if (err.code === 'ETIMEDOUT') {
         console.error('⏱️ Connection timeout. Check firewall/SMTP port settings.');
       }
-      
+
       return { success: false };
     }
   } catch (error: any) {

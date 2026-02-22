@@ -16,12 +16,16 @@ import RiderLogin from "./pages/RiderLogin";
 import RiderWithdrawal from "./pages/RiderWithdrawal";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
+import { AutoLogout } from "./components/AutoLogout";
 // import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
     <BrowserRouter>
+      <AutoLogout />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1">
@@ -41,6 +45,8 @@ function App() {
             <Route path="/rider-withdrawal" element={<RiderWithdrawal />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/locations" element={<AdminLocations />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

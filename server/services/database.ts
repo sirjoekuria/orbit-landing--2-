@@ -14,7 +14,7 @@ export class DatabaseService {
       .from('users')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -26,7 +26,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null; // No rows returned
       throw error;
@@ -40,7 +40,7 @@ export class DatabaseService {
       .select('*')
       .eq('email', email)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -54,7 +54,7 @@ export class DatabaseService {
       .insert([user])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -66,7 +66,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -76,7 +76,7 @@ export class DatabaseService {
       .from('users')
       .delete()
       .eq('id', id);
-    
+
     if (error) throw error;
   }
 
@@ -86,7 +86,7 @@ export class DatabaseService {
       .from('riders')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -97,7 +97,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -111,7 +111,7 @@ export class DatabaseService {
       .select('*')
       .eq('user_id', userId)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -125,7 +125,7 @@ export class DatabaseService {
       .insert([rider])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -137,7 +137,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -147,7 +147,7 @@ export class DatabaseService {
       .from('riders')
       .delete()
       .eq('id', id);
-    
+
     if (error) throw error;
   }
 
@@ -157,7 +157,7 @@ export class DatabaseService {
       .from('orders')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -168,7 +168,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -182,7 +182,7 @@ export class DatabaseService {
       .select('*')
       .eq('customer_id', customerId)
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -193,7 +193,7 @@ export class DatabaseService {
       .select('*')
       .eq('rider_id', riderId)
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -204,7 +204,7 @@ export class DatabaseService {
       .insert([order])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -216,7 +216,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -227,7 +227,7 @@ export class DatabaseService {
       .from('activities')
       .select('*')
       .order('timestamp', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -238,7 +238,7 @@ export class DatabaseService {
       .select('*')
       .eq('rider_id', riderId)
       .order('timestamp', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -249,7 +249,7 @@ export class DatabaseService {
       .insert([activity])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -260,7 +260,7 @@ export class DatabaseService {
       .from('locations')
       .select('*')
       .order('name');
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -271,7 +271,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -285,7 +285,7 @@ export class DatabaseService {
       .insert([location])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -297,7 +297,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -307,7 +307,7 @@ export class DatabaseService {
       .from('locations')
       .delete()
       .eq('id', id);
-    
+
     if (error) throw error;
   }
 
@@ -318,7 +318,7 @@ export class DatabaseService {
       .select('*')
       .eq('token', token)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -332,7 +332,7 @@ export class DatabaseService {
       .insert([token])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -342,7 +342,7 @@ export class DatabaseService {
       .from('reset_tokens')
       .delete()
       .eq('token', token);
-    
+
     if (error) throw error;
   }
 
@@ -352,7 +352,7 @@ export class DatabaseService {
       .from('reset_tokens')
       .delete()
       .lt('expires', now);
-    
+
     if (error) throw error;
   }
 
@@ -362,7 +362,7 @@ export class DatabaseService {
       .from('payments')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -373,7 +373,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -387,7 +387,7 @@ export class DatabaseService {
       .insert([payment])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -399,7 +399,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -410,7 +410,7 @@ export class DatabaseService {
       .from('withdrawals')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -421,7 +421,7 @@ export class DatabaseService {
       .select('*')
       .eq('rider_id', riderId)
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -432,7 +432,7 @@ export class DatabaseService {
       .insert([withdrawal])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -444,7 +444,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -455,7 +455,7 @@ export class DatabaseService {
       .from('partnership_requests')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -466,7 +466,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -480,7 +480,7 @@ export class DatabaseService {
       .insert([request])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -492,7 +492,7 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -502,7 +502,7 @@ export class DatabaseService {
       .from('partnership_requests')
       .delete()
       .eq('id', id);
-    
+
     if (error) throw error;
   }
 
@@ -512,7 +512,7 @@ export class DatabaseService {
       .from('messages')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) throw error;
     return data || [];
   }
@@ -523,7 +523,7 @@ export class DatabaseService {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       if (error.code === 'PGRST116') return null;
       throw error;
@@ -537,7 +537,7 @@ export class DatabaseService {
       .insert([message])
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -549,8 +549,60 @@ export class DatabaseService {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
+  }
+
+  // Security & Account Lockout
+  static async incrementFailedLoginAttempts(userId: string, userType: 'customer' | 'rider' | 'admin'): Promise<number> {
+    this.checkSupabase();
+    const table = userType === 'rider' ? 'riders' : 'users';
+
+    // Get current attempts
+    const { data: user, error: getError } = await supabase!
+      .from(table)
+      .select('failed_login_attempts')
+      .eq('id', userId)
+      .single();
+
+    if (getError) throw getError;
+
+    const newAttempts = (user?.failed_login_attempts || 0) + 1;
+
+    const { error: updateError } = await supabase!
+      .from(table)
+      .update({ failed_login_attempts: newAttempts })
+      .eq('id', userId);
+
+    if (updateError) throw updateError;
+    return newAttempts;
+  }
+
+  static async resetFailedLoginAttempts(userId: string, userType: 'customer' | 'rider' | 'admin'): Promise<void> {
+    this.checkSupabase();
+    const table = userType === 'rider' ? 'riders' : 'users';
+
+    const { error } = await supabase!
+      .from(table)
+      .update({
+        failed_login_attempts: 0,
+        lockout_until: null
+      })
+      .eq('id', userId);
+
+    if (error) throw error;
+  }
+
+  static async setAccountLockout(userId: string, userType: 'customer' | 'rider' | 'admin', until: string): Promise<void> {
+    this.checkSupabase();
+    const table = userType === 'rider' ? 'riders' : 'users';
+
+    const { error } = await supabase!
+      .from(table)
+      .update({ lockout_until: until })
+      .eq('id', userId);
+
+    if (error) throw error;
   }
 }
