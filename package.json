@@ -21,10 +21,23 @@
     "setup:supabase": "node scripts/setup-supabase.js",
     "migrate:supabase": "node scripts/migrate-to-supabase.js",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "mobile:build": "npm run build:client && npx cap copy",
+    "mobile:sync": "npm run assets:convert && npm run build:client && npx cap sync",
+    "mobile:open": "npx cap open android",
+    "assets:convert": "node scripts/convert-assets-to-webp.mjs",
+    "assets:dry-run": "node scripts/convert-assets-to-webp.mjs --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.0",
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/device": "^8.0.1",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/network": "^8.0.1",
+    "@capacitor/toast": "^8.0.1",
     "@google/generative-ai": "^0.24.1",
     "@mapbox/mapbox-gl-geocoder": "^5.1.2",
     "@supabase/supabase-js": "^2.75.1",
@@ -45,6 +58,7 @@
     "nodemailer": "^7.0.5",
     "openai": "^6.5.0",
     "react-map-gl": "7.1.0",
+    "sharp": "^0.34.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {

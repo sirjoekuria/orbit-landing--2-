@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Orbit Landing</string>
+    <string name="title_activity_main">Orbit Landing</string>
+    <string name="package_name">com.orbit.landing</string>
+    <string name="custom_url_scheme">com.orbit.landing</string>
+</resources>

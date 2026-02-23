@@ -1,5 +1,20 @@
 [
   {
+    "riderId": "SYSTEM",
+    "riderName": "System",
+    "type": "status_change",
+    "description": "Daily automated payments completed: 0/1 successful (KES 0)",
+    "amount": 0,
+    "metadata": {
+      "totalRiders": 1,
+      "successfulPayments": 0,
+      "failedPayments": 1,
+      "successRate": "0.0"
+    },
+    "id": "ACT-007",
+    "timestamp": "2026-02-23T20:00:36.566Z"
+  },
+  {
     "riderId": "RD-SEED-001",
     "riderName": "Seeded Test Rider",
     "type": "status_change",

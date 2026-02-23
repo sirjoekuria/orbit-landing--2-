@@ -199,10 +199,20 @@ export const getOrders: RequestHandler = async (req, res) => {
       new Date(b.createdAt || b.created_at).getTime() - new Date(a.createdAt || a.created_at).getTime()
     );
 
+    // Pagination
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedOrders = sortedOrders.slice(startIndex, endIndex);
+
     res.json({
       success: true,
-      orders: sortedOrders,
-      total: allOrders.length
+      orders: paginatedOrders,
+      total: allOrders.length,
+      page,
+      limit,
+      totalPages: Math.ceil(allOrders.length / limit)
     });
   } catch (error) {
     console.error('Error getting orders:', error);

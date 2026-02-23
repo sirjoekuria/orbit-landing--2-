@@ -88,10 +88,20 @@ export const getMessages: RequestHandler = async (req, res) => {
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
 
+    // Pagination
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedMessages = sortedMessages.slice(startIndex, endIndex);
+
     res.json({
       success: true,
-      messages: sortedMessages,
-      total: messages.length
+      messages: paginatedMessages,
+      total: messages.length,
+      page,
+      limit,
+      totalPages: Math.ceil(messages.length / limit)
     });
   } catch (error) {
     console.error('Error getting messages:', error);

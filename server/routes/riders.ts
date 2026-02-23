@@ -5,6 +5,7 @@ import fs from "fs";
 import { DatabaseService } from '../services/database';
 import { supabase } from '../lib/supabase';
 import { logRiderActivity } from "../utils/riderActivity";
+import sharp from "sharp";
 
 // JSON file operations (fallback when Supabase is not available)
 const RIDERS_FILE = path.join(process.cwd(), 'server', 'data', 'riders.json');
@@ -184,13 +185,35 @@ export const riderSignup: RequestHandler = async (req, res) => {
       });
     }
 
-    // Extract file paths for storage
+    // Extract file paths for storage and convert images to WebP
     const documents: any = {};
-    requiredFiles.forEach((field) => {
+    for (const field of requiredFiles) {
       if (files[field] && files[field][0]) {
-        documents[field] = files[field][0].path;
+        const file = files[field][0];
+        const originalPath = file.path;
+
+        // Only convert images, keep PDFs as is
+        if (file.mimetype.startsWith('image/')) {
+          const webpPath = originalPath.replace(path.extname(originalPath), '.webp');
+          try {
+            await sharp(originalPath)
+              .webp({ quality: 80 })
+              .toFile(webpPath);
+
+            // Delete original file if conversion was successful
+            if (fs.existsSync(originalPath) && originalPath !== webpPath) {
+              fs.unlinkSync(originalPath);
+            }
+            documents[field] = webpPath;
+          } catch (err) {
+            console.error(`Failed to convert ${field} to WebP:`, err);
+            documents[field] = originalPath; // Fallback to original if conversion fails
+          }
+        } else {
+          documents[field] = originalPath;
+        }
       }
-    });
+    }
 
     const newRider = {
       id: getNextRiderId(riders),
