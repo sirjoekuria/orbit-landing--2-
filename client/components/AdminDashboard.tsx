@@ -10,8 +10,24 @@ import {
   AlertCircle,
   Phone,
   Mail,
-  Calendar
+  Calendar,
+  PieChart as PieChartIcon
 } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  BarChart,
+  Bar
+} from 'recharts';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -143,6 +159,40 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       }
     };
   }, []);
+
+  const getAnalyticsData = () => {
+    // Orders by day
+    const dayMap: Record<string, number> = {};
+    const revenueMap: Record<string, number> = {};
+
+    orders.forEach(o => {
+      const day = new Date(o.timestamp).toLocaleDateString();
+      dayMap[day] = (dayMap[day] || 0) + 1;
+      revenueMap[day] = (revenueMap[day] || 0) + o.cost;
+    });
+
+    const dailyData = Object.keys(dayMap).map(day => ({
+      name: day,
+      orders: dayMap[day],
+      revenue: revenueMap[day]
+    })).sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
+
+    // Orders by status
+    const statusMap: Record<string, number> = {};
+    orders.forEach(o => {
+      statusMap[o.status] = (statusMap[o.status] || 0) + 1;
+    });
+
+    const statusData = Object.keys(statusMap).map(status => ({
+      name: status.replace('_', ' ').toUpperCase(),
+      value: statusMap[status]
+    }));
+
+    return { dailyData, statusData };
+  };
+
+  const { dailyData, statusData } = getAnalyticsData();
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
   useEffect(() => {
     try {
@@ -387,6 +437,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 'Orders'
               )}
             </TabsTrigger>
+            <TabsTrigger value="analytics">
+              <div className="flex items-center space-x-1">
+                <PieChartIcon className="w-4 h-4" />
+                <span>Analytics</span>
+              </div>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="messages" className="space-y-4">
@@ -547,6 +603,79 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Revenue & Orders Over Time</CardTitle>
+                  <CardDescription>Daily performance overview</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={dailyData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis yAxisId="left" />
+                      <YAxis yAxisId="right" orientation="right" />
+                      <Tooltip />
+                      <Legend />
+                      <Line yAxisId="left" type="monotone" dataKey="revenue" stroke="#16a34a" name="Revenue (KES)" />
+                      <Line yAxisId="right" type="monotone" dataKey="orders" stroke="#facc15" name="Orders" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Order Status Distribution</CardTitle>
+                  <CardDescription>Breakdown of current order states</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={statusData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {statusData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle>Daily Order Volume</CardTitle>
+                  <CardDescription>Number of orders placed each day</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={dailyData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="orders" fill="#16a34a" name="Total Orders" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

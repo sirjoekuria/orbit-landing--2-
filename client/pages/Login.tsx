@@ -9,12 +9,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, forgotPasswordSchema } from '../../shared/validation';
 import { z } from 'zod';
 import { useAuth } from '../lib/AuthContext';
+import { useToast } from '../hooks/use-toast';
+import { triggerHaptic } from '../lib/mobileUtils';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function Login() {
   const { login: authLogin, user: authUser } = useAuth();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userType, setUserType] = useState<'customer' | 'rider'>('customer');
@@ -90,8 +93,17 @@ export default function Login() {
           body: JSON.stringify(data)
         });
         const result = await res.json();
+        toast({
+          title: "Email Sent",
+          description: result.message || 'If the email exists, a reset link has been sent.',
+        });
         setMessage(result.message || 'If the email exists, a reset link has been sent.');
       } catch (err) {
+        toast({
+          title: "Error",
+          description: "Failed to send reset link. Try again later.",
+          variant: "destructive",
+        });
         setMessage('Failed to send reset link. Try again later.');
       } finally {
         setLoading(false);
@@ -171,7 +183,11 @@ export default function Login() {
         throw new Error(error.error || 'Invalid credentials');
       }
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Login failed. Please try again.');
+      toast({
+        title: "Login failed",
+        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -296,7 +312,8 @@ export default function Login() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3"
+              onClick={() => triggerHaptic()}
+              className="w-full h-12 bg-rocs-green hover:bg-rocs-green-dark text-white font-bold rounded-xl shadow-lg shadow-rocs-green/20 transition-all active:scale-[0.98]"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center">

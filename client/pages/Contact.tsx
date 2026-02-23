@@ -9,12 +9,14 @@ import {
   Camera,
   FileText,
 } from "lucide-react";
+import { useToast } from "../hooks/use-toast";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 
 export default function Contact() {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -69,7 +71,11 @@ export default function Contact() {
         throw new Error("Failed to send message");
       }
     } catch (error) {
-      alert("Error sending message. Please try again or contact us directly.");
+      toast({
+        title: "Error Sending Message",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -338,6 +344,7 @@ export default function Contact() {
 
 // Rider Signup Form Component
 function RiderSignupForm() {
+  const { toast } = useToast();
   const [riderData, setRiderData] = useState({
     fullName: "",
     email: "",
@@ -397,7 +404,11 @@ function RiderSignupForm() {
     e.preventDefault();
 
     if (riderData.password !== riderData.confirmPassword) {
-      alert("Passwords do not match");
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match. Please check and try again.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -416,9 +427,11 @@ function RiderSignupForm() {
     );
 
     if (missingFiles.length > 0) {
-      alert(
-        `Please upload the following required documents: ${missingFiles.join(", ")}`,
-      );
+      toast({
+        title: "Missing Documents",
+        description: `Please upload the following required documents: ${missingFiles.join(", ")}`,
+        variant: "destructive",
+      });
       return;
     }
 
@@ -432,7 +445,11 @@ function RiderSignupForm() {
     );
 
     if (missingDates.length > 0) {
-      alert(`Please provide expiry dates for: ${missingDates.join(", ")}`);
+      toast({
+        title: "Missing Information",
+        description: `Please provide expiry dates for: ${missingDates.join(", ")}`,
+        variant: "destructive",
+      });
       return;
     }
 
@@ -474,7 +491,11 @@ function RiderSignupForm() {
         throw new Error("Failed to submit rider application");
       }
     } catch (error) {
-      alert("Error submitting application. Please try again.");
+      toast({
+        title: "Submission Error",
+        description: "Error submitting application. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }

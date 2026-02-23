@@ -1,11 +1,17 @@
-import SlidingHero from "../components/SlidingHero";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import Header from "../components/Header";
 import FeaturesSection from "../components/FeaturesSection";
 import SlidingTestimonials from "../components/SlidingTestimonials";
 
 export default function Index() {
   return (
-    <div className="min-h-screen">
-      <SlidingHero />
+    <div className="flex flex-col min-h-screen">
+      <Helmet>
+        <title>Orbit Delivery | Fast & Reliable Logistics in Kenya</title>
+        <meta name="description" content="Orbit Delivery provides professional courier and logistics services across Kenya. Fast, secure, and reliable deliveries for businesses and individuals." />
+      </Helmet>
+      <Header />
       <FeaturesSection />
       <SlidingTestimonials />
     </div>

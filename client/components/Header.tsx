@@ -1,17 +1,27 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, LogIn, LogOut, UserPlus, User, Menu, X } from 'lucide-react';
+import { Phone, LogIn, LogOut, UserPlus, User, Menu, X, LayoutDashboard, Sun, Moon } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../lib/AuthContext';
+import { useTheme } from './ThemeContext';
+import { useToast } from '../hooks/use-toast';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logout: authLogout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const { toast } = useToast();
 
   const handleLogout = async () => {
     await authLogout();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
     window.location.href = '/';
   };
+
+  const isDark = theme === 'dark';
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -59,8 +69,20 @@ export default function Header() {
               <span>+254 700 898 950</span>
             </a>
 
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-rocs-green"
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+
             {user ? (
               <div className="flex items-center space-x-3">
+                <Link to="/dashboard" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-rocs-green transition-colors">
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </Link>
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <User className="w-4 h-4" />
                   <span>{user.name}</span>
@@ -196,6 +218,6 @@ export default function Header() {
           </div>
         )}
       </div>
-    </header>
+    </header >
   );
 }

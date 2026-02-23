@@ -21,9 +21,15 @@ interface SearchResult {
   text: string;
 }
 
+interface SavedAddress {
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+}
+
 const MAPBOX_ACCESS_TOKEN =
-  import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ||
-  "pk.eyJ1Ijoic2lyam9la3VyaWEiLCJhIjoiY21laGxzZnI0MDBjZzJqcXczc2NtdHZqZCJ9.FhRc9jUcHnkTPuauJrP-Qw";
+  import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 // Comprehensive Kenyan landmarks and buildings database
 const KENYAN_LANDMARKS: SearchResult[] = [
@@ -1889,6 +1895,19 @@ export default function SimpleMapboxLocationPicker({
   onLocationSelect,
   onDistanceCalculated,
 }: LocationPickerProps) {
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('savedAddresses');
+    if (saved) {
+      try {
+        setSavedAddresses(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse saved addresses', e);
+      }
+    }
+  }, []);
+
   const [pickupLocation, setPickupLocation] = useState<Location | null>(null);
   const [dropoffLocation, setDropoffLocation] = useState<Location | null>(null);
   const [pickupQuery, setPickupQuery] = useState("");
@@ -2120,9 +2139,9 @@ export default function SimpleMapboxLocationPicker({
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
@@ -2303,34 +2322,51 @@ export default function SimpleMapboxLocationPicker({
             </button>
           </div>
 
-          {/* Pickup Search Results */}
-          {showPickupResults &&
-            (pickupResults.length > 0 || isSearchingPickup) && (
-              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                {isSearchingPickup ? (
-                  <div className="p-3 text-center text-gray-500">
-                    Searching...
-                  </div>
-                ) : (
-                  pickupResults.map((result) => (
+          {/* Pickup Search Results & Saved Addresses */}
+          {showPickupResults && (
+            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              {isSearchingPickup ? (
+                <div className="p-3 text-center text-gray-500 text-sm">Searching...</div>
+              ) : pickupResults.length > 0 ? (
+                pickupResults.map((result) => (
+                  <button
+                    key={result.id}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => selectPickupLocation(result)}
+                    className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                  >
+                    <div className="font-medium text-gray-800 text-sm">{result.text}</div>
+                    <div className="text-xs text-gray-600">{result.place_name}</div>
+                  </button>
+                ))
+              ) : savedAddresses.length > 0 && pickupQuery.length === 0 ? (
+                <div>
+                  <div className="p-2 bg-gray-50 text-[10px] uppercase font-bold text-gray-400 tracking-wider px-3">Saved Locations</div>
+                  {savedAddresses.map((addr, idx) => (
                     <button
-                      key={result.id}
+                      key={`saved-p-${idx}`}
                       type="button"
                       onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => selectPickupLocation(result)}
+                      onClick={() => {
+                        // Create a mock SearchResult from saved address
+                        selectPickupLocation({
+                          id: `saved-${idx}`,
+                          text: addr.name,
+                          place_name: addr.address,
+                          center: [addr.lng || 36.8, addr.lat || -1.2] // Use defaults if missing
+                        });
+                      }}
                       className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
                     >
-                      <div className="font-medium text-gray-800 text-sm">
-                        {result.text}
-                      </div>
-                      <div className="text-xs text-gray-600">
-                        {result.place_name}
-                      </div>
+                      <div className="font-medium text-gray-800 text-sm">{addr.name}</div>
+                      <div className="text-xs text-gray-600">{addr.address}</div>
                     </button>
-                  ))
-                )}
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
 
         {/* Arrow indicator */}
@@ -2379,34 +2415,50 @@ export default function SimpleMapboxLocationPicker({
             </button>
           </div>
 
-          {/* Dropoff Search Results */}
-          {showDropoffResults &&
-            (dropoffResults.length > 0 || isSearchingDropoff) && (
-              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                {isSearchingDropoff ? (
-                  <div className="p-3 text-center text-gray-500">
-                    Searching...
-                  </div>
-                ) : (
-                  dropoffResults.map((result) => (
+          {/* Dropoff Search Results & Saved Addresses */}
+          {showDropoffResults && (
+            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              {isSearchingDropoff ? (
+                <div className="p-3 text-center text-gray-500 text-sm">Searching...</div>
+              ) : dropoffResults.length > 0 ? (
+                dropoffResults.map((result) => (
+                  <button
+                    key={result.id}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => selectDropoffLocation(result)}
+                    className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                  >
+                    <div className="font-medium text-gray-800 text-sm">{result.text}</div>
+                    <div className="text-xs text-gray-600">{result.place_name}</div>
+                  </button>
+                ))
+              ) : savedAddresses.length > 0 && dropoffQuery.length === 0 ? (
+                <div>
+                  <div className="p-2 bg-gray-50 text-[10px] uppercase font-bold text-gray-400 tracking-wider px-3">Saved Locations</div>
+                  {savedAddresses.map((addr, idx) => (
                     <button
-                      key={result.id}
+                      key={`saved-d-${idx}`}
                       type="button"
                       onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => selectDropoffLocation(result)}
+                      onClick={() => {
+                        selectDropoffLocation({
+                          id: `saved-${idx}`,
+                          text: addr.name,
+                          place_name: addr.address,
+                          center: [addr.lng || 36.8, addr.lat || -1.2]
+                        });
+                      }}
                       className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
                     >
-                      <div className="font-medium text-gray-800 text-sm">
-                        {result.text}
-                      </div>
-                      <div className="text-xs text-gray-600">
-                        {result.place_name}
-                      </div>
+                      <div className="font-medium text-gray-800 text-sm">{addr.name}</div>
+                      <div className="text-xs text-gray-600">{addr.address}</div>
                     </button>
-                  ))
-                )}
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
 

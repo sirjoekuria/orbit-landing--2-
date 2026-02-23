@@ -17,6 +17,9 @@ import {
   assignRiderToOrder,
   confirmPaymentAndSendReceipt,
   resendReceipt,
+  getUserOrders,
+  rateRider,
+  getAssignedOrders,
 } from "./routes/orders";
 import {
   createPayPalOrder,
@@ -180,6 +183,9 @@ export function createServer() {
   // Order routes
   app.post("/api/orders", createOrder);
   app.get("/api/orders/track/:id", trackOrder);
+  app.get("/api/orders/user/:email", getUserOrders);
+  app.post("/api/orders/:id/rate-rider", rateRider);
+  app.get("/api/riders/assigned-orders", getAssignedOrders);
   app.get("/api/admin/orders", getOrders);
   app.patch("/api/admin/orders/:id", updateOrderStatus);
   app.patch("/api/admin/orders/:id/assign-rider", assignRiderToOrder);

@@ -93,8 +93,8 @@ export const createPayPalOrder: RequestHandler = async (req, res) => {
         description: `Rocs Crew Delivery Service - Order ${orderId}`
       }],
       application_context: {
-        return_url: `${req.protocol}://${req.get('host')}/api/payments/paypal-success`,
-        cancel_url: `${req.protocol}://${req.get('host')}/api/payments/paypal-cancel`,
+        return_url: `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/api/payments/paypal-success`,
+        cancel_url: `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/api/payments/paypal-cancel`,
         brand_name: 'Rocs Crew',
         user_action: 'PAY_NOW'
       }
@@ -377,8 +377,6 @@ export const updatePaymentStatus: RequestHandler = (req, res) => {
 };
 
 // POST /api/payments/mpesa/stkpush - Initiate M-Pesa STK Push
-import fs from 'fs';
-import path from 'path';
 
 const logMpesa = (data: any) => {
   const logPath = path.join(process.cwd(), 'mpesa-debug.log');

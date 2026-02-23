@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   MapPin,
   Calculator,
@@ -14,6 +14,8 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import PaymentSelection from "./PaymentSelection";
 import SimpleMapboxLocationPicker from "./SimpleMapboxLocationPicker";
+import { useToast } from "../hooks/use-toast";
+import { triggerHaptic } from "../lib/mobileUtils";
 
 const PRICE_PER_KM = 30;
 const MINIMUM_PRICE = 200;
@@ -36,6 +38,7 @@ interface OrderFormData {
 }
 
 export default function OrderForm() {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<OrderFormData>({
     customerName: "",
     customerEmail: "",
@@ -56,6 +59,7 @@ export default function OrderForm() {
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderCreated, setOrderCreated] = useState<string | null>(null);
+  const [saveAddresses, setSaveAddresses] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -102,7 +106,11 @@ export default function OrderForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!distance || !estimatedPrice) {
-      alert("Please calculate the price first");
+      toast({
+        title: "Incomplete Details",
+        description: "Please calculate the price by selecting both pickup and delivery locations first.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -140,6 +148,31 @@ export default function OrderForm() {
       if (response.ok) {
         const result = await response.json();
         console.log("Order created successfully:", result.order);
+
+        // Save addresses if requested
+        if (saveAddresses && pickupLocation && dropoffLocation) {
+          try {
+            const saved = JSON.parse(localStorage.getItem('savedAddresses') || '[]');
+            const newAddresses = [...saved];
+
+            // Avoid duplicates
+            if (!saved.some((a: any) => a.address === pickupLocation.address)) {
+              newAddresses.push({ name: pickupLocation.name || 'Pickup Location', address: pickupLocation.address, type: 'pickup' });
+            }
+            if (!saved.some((a: any) => a.address === dropoffLocation.address)) {
+              newAddresses.push({ name: dropoffLocation.name || 'Dropoff Location', address: dropoffLocation.address, type: 'delivery' });
+            }
+
+            localStorage.setItem('savedAddresses', JSON.stringify(newAddresses.slice(-10))); // Keep last 10
+          } catch (e) {
+            console.error('Failed to save addresses', e);
+          }
+        }
+
+        toast({
+          title: "Order Created!",
+          description: `Your order ${result.order.id} has been placed successfully.`,
+        });
         setOrderCreated(result.order.id);
         setCurrentStep("completed");
       } else {
@@ -150,7 +183,11 @@ export default function OrderForm() {
         throw new Error(errorData.error || "Failed to create order");
       }
     } catch (error) {
-      alert("Error creating order. Please try again.");
+      toast({
+        title: "Order Failed",
+        description: error instanceof Error ? error.message : "Error creating order. Please try again.",
+        variant: "destructive",
+      });
       setCurrentStep("details");
     } finally {
       setIsSubmitting(false);
@@ -159,7 +196,11 @@ export default function OrderForm() {
 
   const handlePaymentError = (error: any) => {
     console.error("Payment error:", error);
-    alert(error.message || "Payment failed. Please try again.");
+    toast({
+      title: "Payment Error",
+      description: error.message || "Payment failed. Please try again.",
+      variant: "destructive",
+    });
   };
 
   const resetForm = () => {
@@ -412,6 +453,20 @@ export default function OrderForm() {
           </div>
         </div>
 
+        {/* Saved Addresses Option */}
+        <div className="flex items-center space-x-2 mt-4">
+          <input
+            type="checkbox"
+            id="saveAddresses"
+            checked={saveAddresses}
+            onChange={(e) => setSaveAddresses(e.target.checked)}
+            className="w-4 h-4 text-rocs-green border-gray-300 rounded focus:ring-rocs-green"
+          />
+          <Label htmlFor="saveAddresses" className="text-sm text-gray-600 cursor-pointer">
+            Save these addresses for future deliveries
+          </Label>
+        </div>
+
         {/* Location Selection */}
         <div>
           <SimpleMapboxLocationPicker
@@ -500,6 +555,9 @@ export default function OrderForm() {
               !pickupLocation ||
               !dropoffLocation
             }
+            onClick={() => {
+              triggerHaptic();
+            }}
             className="bg-rocs-green hover:bg-rocs-green-dark text-white px-8 py-3 text-lg"
           >
             {isSubmitting ? (

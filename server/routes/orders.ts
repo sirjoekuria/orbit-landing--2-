@@ -138,6 +138,14 @@ export const createOrder: RequestHandler = async (req, res) => {
       message: 'Order created successfully',
       order: newOrder
     });
+
+    // Send order confirmation email (non-blocking)
+    try {
+      await sendOrderReceipt(newOrder);
+      console.log(`Order confirmation email sent to ${newOrder.customerEmail || newOrder.customer_email}`);
+    } catch (emailErr) {
+      console.error('Failed to send order creation email:', emailErr);
+    }
   } catch (error) {
     console.error('Error creating order:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -611,6 +619,66 @@ export const resendReceipt: RequestHandler = async (req, res) => {
     }
   } catch (error) {
     console.error('Error resending receipt:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+// GET /api/orders/user/:email - Get all orders for a specific customer
+export const getUserOrders: RequestHandler = async (req, res) => {
+  try {
+    const { email } = req.params;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    const orders = loadOrders();
+    const userOrders = orders
+      .filter(o => (o.customerEmail || '').toLowerCase() === email.toLowerCase())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    res.json({ success: true, orders: userOrders, total: userOrders.length });
+  } catch (error) {
+    console.error('Error getting user orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// POST /api/orders/:id/rate-rider - Customer rates their rider
+export const rateRider: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+    }
+
+    const orders = loadOrders();
+    const orderIndex = orders.findIndex(o => o.id === id);
+    if (orderIndex === -1) return res.status(404).json({ error: 'Order not found' });
+
+    orders[orderIndex].riderRating = rating;
+    orders[orderIndex].riderRatedAt = new Date().toISOString();
+    saveOrders(orders);
+
+    res.json({ success: true, message: 'Rating submitted. Thank you!' });
+  } catch (error) {
+    console.error('Error rating rider:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// GET /api/riders/assigned-orders - Get orders assigned to a specific rider
+export const getAssignedOrders: RequestHandler = async (req, res) => {
+  try {
+    const { riderId } = req.query as { riderId?: string };
+    if (!riderId) return res.status(400).json({ error: 'riderId required' });
+
+    const orders = loadOrders();
+    const riderOrders = orders
+      .filter(o => o.riderId === riderId || o.rider_id === riderId)
+      .sort((a, b) => new Date(b.createdAt || b.created_at).getTime() - new Date(a.createdAt || a.created_at).getTime());
+
+    res.json({ success: true, orders: riderOrders, total: riderOrders.length });
+  } catch (error) {
+    console.error('Error getting assigned orders:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

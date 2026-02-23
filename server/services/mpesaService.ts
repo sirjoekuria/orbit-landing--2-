@@ -7,12 +7,22 @@ dotenv.config();
  * Get current M-Pesa configuration from environment
  */
 const getConfig = () => {
+    const baseUrl = process.env.BASE_URL || '';
+    let callbackUrl = process.env.MPESA_CALLBACK_URL;
+
+    // Fallback to BASE_URL if MPESA_CALLBACK_URL is missing or placeholder
+    if (!callbackUrl || callbackUrl.includes('your_') || callbackUrl.includes('your-ngrok-url')) {
+        if (baseUrl) {
+            callbackUrl = `${baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl}/api/payments/mpesa/callback`;
+        }
+    }
+
     return {
         CONSUMER_KEY: process.env.MPESA_CONSUMER_KEY,
         CONSUMER_SECRET: process.env.MPESA_CONSUMER_SECRET,
         PASSKEY: process.env.MPESA_PASSKEY,
         SHORTCODE: process.env.MPESA_SHORTCODE || process.env.MPESA_BUSINESS_SHORTCODE || '174379',
-        CALLBACK_URL: process.env.MPESA_CALLBACK_URL,
+        CALLBACK_URL: callbackUrl,
         ENVIRONMENT: process.env.MPESA_ENVIRONMENT || 'sandbox'
     };
 };
