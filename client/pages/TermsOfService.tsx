@@ -8,11 +8,11 @@ export default function TermsOfService() {
             <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-12">
                 <div className="mb-8">
                     <Link
-                        to="/signup"
+                        to="/"
                         className="inline-flex items-center text-sm text-gray-500 hover:text-rocs-green mb-6 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4 mr-1" />
-                        Back to Sign Up
+                        Back to Home
                     </Link>
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-2 bg-rocs-green/10 rounded-lg">
@@ -20,7 +20,7 @@ export default function TermsOfService() {
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900">Terms of Service</h1>
                     </div>
-                    <p className="text-gray-500">Last updated: {new Date().toLocaleDateString()}</p>
+                    <p className="text-gray-500">Last updated: May 15, 2024</p>
                 </div>
 
                 <div className="prose prose-green max-w-none text-gray-600 space-y-6">

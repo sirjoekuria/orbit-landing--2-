@@ -19,7 +19,20 @@ export default function AdminLocations() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<LocationItem | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [newLocation, setNewLocation] = useState<{name:string, place_name?:string, lat?:number, lon?:number}>({ name: '', place_name: '', lat: undefined, lon: undefined });
+  const [newLocation, setNewLocation] = useState<{ name: string, place_name?: string, lat?: number, lon?: number }>({ name: '', place_name: '', lat: undefined, lon: undefined });
+
+  const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
+    const csrfRes = await fetch("/api/csrf-token");
+    const { token } = await csrfRes.json();
+
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "x-csrf-token": token,
+      },
+    });
+  };
 
   const fetchLocations = async () => {
     setLoading(true);
@@ -51,7 +64,7 @@ export default function AdminLocations() {
   const handleSave = async () => {
     if (!selected) return;
     try {
-      const res = await fetch(`/api/admin/locations/${selected.id}`, {
+      const res = await fetchWithCsrf(`/api/admin/locations/${selected.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selected),
@@ -69,7 +82,7 @@ export default function AdminLocations() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this location?')) return;
     try {
-      const res = await fetch(`/api/admin/locations/${id}`, { method: 'DELETE' });
+      const res = await fetchWithCsrf(`/api/admin/locations/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setMessage('Deleted');
         fetchLocations();
@@ -86,7 +99,7 @@ export default function AdminLocations() {
     if (!newLocation.name || !newLocation.lat || !newLocation.lon) return setMessage('Name and coordinates required');
     try {
       const payload = { name: newLocation.name, place_name: newLocation.place_name, center: [newLocation.lon, newLocation.lat] };
-      const res = await fetch('/api/admin/locations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const res = await fetchWithCsrf('/api/admin/locations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const d = await res.json();
       if (res.ok) {
         setMessage('Added');
@@ -107,8 +120,8 @@ export default function AdminLocations() {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Locations Admin</h2>
       <div className="mb-4 flex gap-2">
-        <Input placeholder="Search name or tag" value={q} onChange={(e:any)=>setQ(e.target.value)} />
-        <Button onClick={()=>{ setPage(1); fetchLocations(); }} className="bg-rocs-green">Search</Button>
+        <Input placeholder="Search name or tag" value={q} onChange={(e: any) => setQ(e.target.value)} />
+        <Button onClick={() => { setPage(1); fetchLocations(); }} className="bg-rocs-green">Search</Button>
       </div>
 
       {message && <div className="mb-3 text-sm text-gray-700">{message}</div>}
@@ -133,8 +146,8 @@ export default function AdminLocations() {
                 <td className="p-2">{loc.center?.[0]?.toFixed?.(6) || ''}</td>
                 <td className="p-2">
                   <div className="flex gap-2">
-                    <Button onClick={()=>handleEdit(loc)} className="bg-rocs-green">Edit</Button>
-                    <Button onClick={()=>handleDelete(loc.id)} className="bg-red-600">Delete</Button>
+                    <Button onClick={() => handleEdit(loc)} className="bg-rocs-green">Edit</Button>
+                    <Button onClick={() => handleDelete(loc.id)} className="bg-red-600">Delete</Button>
                   </div>
                 </td>
               </tr>
@@ -144,9 +157,9 @@ export default function AdminLocations() {
       </div>
 
       <div className="mt-4 flex gap-2">
-        <Button onClick={()=>setPage(p=>Math.max(1,p-1))}>Prev</Button>
+        <Button onClick={() => setPage(p => Math.max(1, p - 1))}>Prev</Button>
         <div className="px-3 py-2">Page {page}</div>
-        <Button onClick={()=>setPage(p=>p+1)}>Next</Button>
+        <Button onClick={() => setPage(p => p + 1)}>Next</Button>
       </div>
 
       {/* Add new location */}
@@ -155,19 +168,19 @@ export default function AdminLocations() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="new-name">Name</Label>
-            <Input id="new-name" value={newLocation.name} onChange={(e:any)=>setNewLocation(n=>({...n, name: e.target.value}))} />
+            <Input id="new-name" value={newLocation.name} onChange={(e: any) => setNewLocation(n => ({ ...n, name: e.target.value }))} />
           </div>
           <div>
             <Label htmlFor="new-place">Place name</Label>
-            <Input id="new-place" value={newLocation.place_name} onChange={(e:any)=>setNewLocation(n=>({...n, place_name: e.target.value}))} />
+            <Input id="new-place" value={newLocation.place_name} onChange={(e: any) => setNewLocation(n => ({ ...n, place_name: e.target.value }))} />
           </div>
           <div>
             <Label htmlFor="new-lat">Latitude</Label>
-            <Input id="new-lat" value={newLocation.lat||''} onChange={(e:any)=>setNewLocation(n=>({...n, lat: parseFloat(e.target.value||'0')}))} />
+            <Input id="new-lat" value={newLocation.lat || ''} onChange={(e: any) => setNewLocation(n => ({ ...n, lat: parseFloat(e.target.value || '0') }))} />
           </div>
           <div>
             <Label htmlFor="new-lon">Longitude</Label>
-            <Input id="new-lon" value={newLocation.lon||''} onChange={(e:any)=>setNewLocation(n=>({...n, lon: parseFloat(e.target.value||'0')}))} />
+            <Input id="new-lon" value={newLocation.lon || ''} onChange={(e: any) => setNewLocation(n => ({ ...n, lon: parseFloat(e.target.value || '0') }))} />
           </div>
         </div>
         <div className="mt-4">
@@ -182,25 +195,25 @@ export default function AdminLocations() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" value={selected.name} onChange={(e:any)=>handleChangeSelected('name', e.target.value)} />
+              <Input id="name" value={selected.name} onChange={(e: any) => handleChangeSelected('name', e.target.value)} />
             </div>
             <div>
               <Label htmlFor="place">Place name</Label>
-              <Input id="place" value={selected.place_name || ''} onChange={(e:any)=>handleChangeSelected('place_name', e.target.value)} />
+              <Input id="place" value={selected.place_name || ''} onChange={(e: any) => handleChangeSelected('place_name', e.target.value)} />
             </div>
             <div>
               <Label htmlFor="lat">Latitude</Label>
-              <Input id="lat" value={selected.center?.[1]} onChange={(e:any)=>handleChangeSelected('center', [selected.center?.[0] || 0, parseFloat(e.target.value || '0')])} />
+              <Input id="lat" value={selected.center?.[1]} onChange={(e: any) => handleChangeSelected('center', [selected.center?.[0] || 0, parseFloat(e.target.value || '0')])} />
             </div>
             <div>
               <Label htmlFor="lon">Longitude</Label>
-              <Input id="lon" value={selected.center?.[0]} onChange={(e:any)=>handleChangeSelected('center', [parseFloat(e.target.value || '0'), selected.center?.[1] || 0])} />
+              <Input id="lon" value={selected.center?.[0]} onChange={(e: any) => handleChangeSelected('center', [parseFloat(e.target.value || '0'), selected.center?.[1] || 0])} />
             </div>
           </div>
 
           <div className="mt-4 flex gap-2">
             <Button onClick={handleSave} className="bg-rocs-green">Save</Button>
-            <Button onClick={()=>setSelected(null)}>Close</Button>
+            <Button onClick={() => setSelected(null)}>Close</Button>
           </div>
         </div>
       )}

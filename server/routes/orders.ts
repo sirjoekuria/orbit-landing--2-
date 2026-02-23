@@ -1,101 +1,57 @@
 import { RequestHandler } from "express";
+import fs from 'fs';
+import path from 'path';
+import { DatabaseService } from '../services/database';
+import { supabase } from '../lib/supabase';
 import { sendOrderReceipt, sendAdminNotification, sendRiderEarningsReceipt } from "../services/emailService";
 import { findRiderByName, addEarningToRider } from "../utils/riderEarnings";
 import { logRiderActivity } from "../utils/riderActivity";
 
-// In-memory storage for orders (in production, use a proper database)
-let orders: any[] = [];
-let orderIdCounter = 1;
+// JSON file operations (fallback when Supabase is not available)
+const ORDERS_FILE = path.join(process.cwd(), 'server', 'data', 'orders.json');
 
-// Sample data for demonstration
-const sampleOrders = [
-  {
-    id: 'RC-2024-001',
-    customerName: 'John Doe',
-    customerEmail: 'john.doe@example.com',
-    customerPhone: '+254 712 345 678',
-    pickup: 'Westlands Shopping Mall, Nairobi',
-    delivery: 'KICC, Nairobi CBD',
-    distance: 5.2,
-    cost: 156,
-    currentStatus: 'in_transit',
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-    estimatedDelivery: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes from now
-    riderName: 'Peter Kimani',
-    riderPhone: '+254 700 123 456',
-    statusHistory: [
-      {
-        status: 'pending',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        description: 'Order received and is being processed'
-      },
-      {
-        status: 'confirmed',
-        timestamp: new Date(Date.now() - 105 * 60 * 1000).toISOString(),
-        description: 'Order confirmed and rider assigned'
-      },
-      {
-        status: 'picked_up',
-        timestamp: new Date(Date.now() - 75 * 60 * 1000).toISOString(),
-        description: 'Package picked up from Westlands Shopping Mall'
-      },
-      {
-        status: 'in_transit',
-        timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-        description: 'Package is on the way to destination'
-      }
-    ]
-  },
-  {
-    id: 'RC-2024-002',
-    customerName: 'Mary Wanjiku',
-    customerEmail: 'mary.wanjiku@example.com',
-    customerPhone: '+254 722 987 654',
-    pickup: 'Karen Shopping Centre',
-    delivery: 'Yaya Centre, Kilimani',
-    distance: 8.1,
-    cost: 243,
-    currentStatus: 'delivered',
-    createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    estimatedDelivery: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-    riderName: 'James Mwangi',
-    riderPhone: '+254 701 987 654',
-    statusHistory: [
-      {
-        status: 'pending',
-        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-        description: 'Order received and is being processed'
-      },
-      {
-        status: 'confirmed',
-        timestamp: new Date(Date.now() - 220 * 60 * 1000).toISOString(),
-        description: 'Order confirmed and rider assigned'
-      },
-      {
-        status: 'picked_up',
-        timestamp: new Date(Date.now() - 180 * 60 * 1000).toISOString(),
-        description: 'Package picked up from Karen Shopping Centre'
-      },
-      {
-        status: 'in_transit',
-        timestamp: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
-        description: 'Package is on the way to destination'
-      },
-      {
-        status: 'delivered',
-        timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-        description: 'Package delivered successfully to Yaya Centre'
-      }
-    ]
+function isSupabaseAvailable() {
+  return !!supabase;
+}
+
+function loadOrders(): any[] {
+  try {
+    if (!fs.existsSync(ORDERS_FILE)) return [];
+    const raw = fs.readFileSync(ORDERS_FILE, 'utf-8');
+    return JSON.parse(raw || '[]');
+  } catch (e) {
+    console.error('Failed to load orders:', e);
+    return [];
   }
-];
+}
 
-// Initialize with sample data
-orders = [];
-orderIdCounter = 1;
+function saveOrders(orders: any[]) {
+  try {
+    const dir = path.dirname(ORDERS_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Failed to save orders:', e);
+  }
+}
+
+function getNextOrderId(existingOrders: any[]): string {
+  if (existingOrders.length === 0) return 'RC-2024-001';
+
+  // Find the highest numeric part
+  const ids = existingOrders
+    .map(o => {
+      const parts = o.id.split('-');
+      return parts.length === 3 ? parseInt(parts[2]) : 0;
+    })
+    .filter(id => !isNaN(id));
+
+  const maxId = Math.max(0, ...ids);
+  return `RC-2024-${(maxId + 1).toString().padStart(3, '0')}`;
+}
 
 // POST /api/orders - Create a new order
-export const createOrder: RequestHandler = (req, res) => {
+export const createOrder: RequestHandler = async (req, res) => {
   try {
     const {
       customerName,
@@ -111,7 +67,7 @@ export const createOrder: RequestHandler = (req, res) => {
       paymentStatus,
       transactionId
     } = req.body;
-    
+
     if (!customerName || !customerEmail || !customerPhone || !pickup || !delivery || !distance || !cost || !packageDetails) {
       return res.status(400).json({
         error: 'Missing required fields: customerName, customerEmail, customerPhone, pickup, delivery, distance, cost, and packageDetails are required'
@@ -121,37 +77,64 @@ export const createOrder: RequestHandler = (req, res) => {
     const now = new Date();
     const estimatedDelivery = new Date(now.getTime() + 90 * 60 * 1000); // 90 minutes from now
 
-    const newOrder = {
-      id: `RC-2024-${orderIdCounter.toString().padStart(3, '0')}`,
-      customerName,
-      customerEmail,
-      customerPhone,
-      pickup,
-      delivery,
-      distance: Number(distance),
-      cost: Number(cost),
-      packageDetails,
-      notes: notes || '',
-      paymentMethod: paymentMethod || 'cash_on_delivery',
-      paymentStatus: paymentStatus || 'pending',
-      transactionId: transactionId || null,
-      currentStatus: 'pending',
-      createdAt: now.toISOString(),
-      estimatedDelivery: estimatedDelivery.toISOString(),
-      statusHistory: [
-        {
+    let newOrder;
+    if (isSupabaseAvailable()) {
+      try {
+        // Map frontend fields to DB fields if necessary, or pass through if DatabaseService handles it
+        // DatabaseService.createOrder expects Omit<Order, 'id' | 'created_at' | 'updated_at'>
+        // Let's assume for now it handles the mapping or we keep names consistent
+        newOrder = await DatabaseService.createOrder({
+          customer_id: req.body.customerId || 'anonymous', // Need a valid customer ID for Supabase
+          pickup_location: { name: pickup, address: pickup, coordinates: [0, 0] },
+          delivery_location: { name: delivery, address: delivery, coordinates: [0, 0] },
+          items: [{ name: packageDetails, description: packageDetails, quantity: 1 }],
           status: 'pending',
-          timestamp: now.toISOString(),
-          description: 'Order received and is being processed'
-        }
-      ]
-    };
+          payment_status: paymentStatus || 'pending',
+          payment_method: paymentMethod || 'cash_on_delivery',
+          total_amount: Number(cost),
+          delivery_fee: 0, // Should be calculated
+          notes: notes || '',
+          estimated_delivery_time: estimatedDelivery.toISOString()
+        } as any);
+      } catch (e) {
+        console.error('Supabase createOrder failed, falling back to JSON:', e);
+      }
+    }
 
-    orders.push(newOrder);
-    orderIdCounter++;
+    if (!newOrder) {
+      const orders = loadOrders();
+      newOrder = {
+        id: getNextOrderId(orders),
+        customerName,
+        customerEmail,
+        customerPhone,
+        pickup,
+        delivery,
+        distance: Number(distance),
+        cost: Number(cost),
+        packageDetails,
+        notes: notes || '',
+        paymentMethod: paymentMethod || 'cash_on_delivery',
+        paymentStatus: paymentStatus || 'pending',
+        transactionId: transactionId || null,
+        currentStatus: 'pending',
+        createdAt: now.toISOString(),
+        estimatedDelivery: estimatedDelivery.toISOString(),
+        statusHistory: [
+          {
+            status: 'pending',
+            timestamp: now.toISOString(),
+            description: 'Order received and is being processed'
+          }
+        ]
+      };
 
-    res.status(201).json({ 
-      success: true, 
+      orders.push(newOrder);
+      saveOrders(orders);
+    }
+
+    res.status(201).json({
+      success: true,
       message: 'Order created successfully',
       order: newOrder
     });
@@ -162,18 +145,31 @@ export const createOrder: RequestHandler = (req, res) => {
 };
 
 // GET /api/orders/track/:id - Get order tracking information
-export const trackOrder: RequestHandler = (req, res) => {
+export const trackOrder: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const order = orders.find(order => order.id === id);
+
+    let order;
+    if (isSupabaseAvailable()) {
+      try {
+        order = await DatabaseService.getOrderById(id);
+      } catch (e) {
+        console.error('Supabase getOrderById failed, falling back to JSON:', e);
+      }
+    }
+
+    if (!order) {
+      const orders = loadOrders();
+      order = orders.find(o => o.id === id);
+    }
+
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    res.json({ 
-      success: true, 
-      order 
+    res.json({
+      success: true,
+      order
     });
   } catch (error) {
     console.error('Error tracking order:', error);
@@ -182,17 +178,31 @@ export const trackOrder: RequestHandler = (req, res) => {
 };
 
 // GET /api/admin/orders - Get all orders (admin only)
-export const getOrders: RequestHandler = (req, res) => {
+export const getOrders: RequestHandler = async (req, res) => {
   try {
+    let allOrders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        allOrders = await DatabaseService.getOrders();
+      } catch (e) {
+        console.error('Supabase getOrders failed, falling back to JSON:', e);
+      }
+    }
+
+    if (allOrders.length === 0) {
+      allOrders = loadOrders();
+    }
+
     // Sort orders by creation date (newest first)
-    const sortedOrders = [...orders].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    const sortedOrders = [...allOrders].sort((a, b) =>
+      new Date(b.createdAt || b.created_at).getTime() - new Date(a.createdAt || a.created_at).getTime()
     );
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       orders: sortedOrders,
-      total: orders.length 
+      total: allOrders.length
     });
   } catch (error) {
     console.error('Error getting orders:', error);
@@ -213,32 +223,48 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
       });
     }
 
-    const orderIndex = orders.findIndex(order => order.id === id);
-    if (orderIndex === -1) {
-      return res.status(404).json({ error: 'Order not found' });
+    let order;
+    let orders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        order = await DatabaseService.updateOrder(id, { status } as any);
+      } catch (e) {
+        console.error('Supabase updateOrder failed, falling back to JSON:', e);
+      }
     }
 
-    const order = orders[orderIndex];
-    const now = new Date().toISOString();
+    if (!order) {
+      orders = loadOrders();
+      const orderIndex = orders.findIndex(o => o.id === id);
+      if (orderIndex === -1) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      order = orders[orderIndex];
+      const now = new Date().toISOString();
 
-    // Update status
-    order.currentStatus = status;
-    order.updatedAt = now;
+      // Update status
+      order.currentStatus = status;
+      order.updatedAt = now;
 
-    // Add to status history
-    const statusDescriptions = {
-      pending: 'Order received and is being processed',
-      confirmed: 'Order confirmed and rider assigned',
-      picked_up: `Package picked up from ${order.pickup}`,
-      in_transit: 'Package is on the way to destination',
-      delivered: `Package delivered successfully to ${order.delivery}`
-    };
+      // Add to status history
+      const statusDescriptions = {
+        pending: 'Order received and is being processed',
+        confirmed: 'Order confirmed and rider assigned',
+        picked_up: `Package picked up from ${order.pickup}`,
+        in_transit: 'Package is on the way to destination',
+        delivered: `Package delivered successfully to ${order.delivery}`
+      };
 
-    order.statusHistory.push({
-      status,
-      timestamp: now,
-      description: statusDescriptions[status as keyof typeof statusDescriptions]
-    });
+      if (!order.statusHistory) order.statusHistory = [];
+      order.statusHistory.push({
+        status,
+        timestamp: now,
+        description: statusDescriptions[status as keyof typeof statusDescriptions]
+      });
+
+      saveOrders(orders);
+    }
 
     // Log rider activities for status changes (if rider is assigned)
     if (order.riderName && (status === 'picked_up' || status === 'in_transit')) {
@@ -263,106 +289,68 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
       }
     }
 
-    // Assign rider info when confirmed
-    if (status === 'confirmed' && !order.riderName) {
-      // Rider must be assigned explicitly via the assign-rider endpoint
-    }
-
     // Send email receipt when order is confirmed
     if (status === 'confirmed') {
       try {
         const emailSent = await sendOrderReceipt(order);
         if (emailSent) {
           console.log(`Receipt email sent successfully to ${order.customerEmail}`);
-          // Also notify admin
           await sendAdminNotification(order);
-        } else {
-          console.log(`Failed to send receipt email to ${order.customerEmail}`);
         }
       } catch (emailError) {
         console.error('Error sending confirmation email:', emailError);
-        // Continue with the response even if email fails
       }
     }
 
     // Process rider earnings when order is delivered
-    if (status === 'delivered' && order.riderName) {
+    if (status === 'delivered' && (order.riderName || order.rider_id)) {
       try {
-        console.log(`Order ${order.id} delivered - Processing rider earnings for ${order.riderName}`);
-        console.log(`Order amount: KES ${order.cost}, Rider will earn: KES ${(order.cost * 0.8).toFixed(2)} (80%)`);
+        const riderName = order.riderName || 'Rider';
+        const cost = order.cost || order.total_amount || 0;
+        console.log(`Order ${order.id} delivered - Processing rider earnings for ${riderName}`);
 
-        // Find rider and add earning
         let rider = null;
-        if (order.riderId) {
-          // Try to find by ID first
-          rider = findRiderByName(order.riderName); // Using findRiderByName for now since we have the full mapping
+        if (order.riderId || order.rider_id) {
+          rider = findRiderByName(riderName);
         } else {
-          // Fallback to finding by name
-          rider = findRiderByName(order.riderName);
+          rider = findRiderByName(riderName);
         }
 
         if (rider) {
+          const now = new Date().toISOString();
           const earningResult = addEarningToRider(rider.id, {
             orderId: order.id,
-            orderAmount: order.cost,
+            orderAmount: cost,
             deliveryDate: now
           });
 
           if (earningResult.success) {
-            console.log(`✅ Rider earning processed successfully:`, earningResult);
-
-            // Log rider activity for delivery completion with earnings
             logRiderActivity({
               riderId: rider.id,
               riderName: rider.fullName,
               type: 'delivery_completed',
               orderId: order.id,
-              description: `Successfully delivered order ${order.id} to ${order.delivery}`,
-              amount: order.cost,
-              commission: order.cost * 0.2,
-              netEarning: order.cost * 0.8,
-              location: order.delivery,
+              description: `Successfully delivered order ${order.id} to ${order.delivery || 'destination'}`,
+              amount: cost,
+              commission: cost * 0.2,
+              netEarning: cost * 0.8,
+              location: order.delivery || 'N/A',
               metadata: {
                 customerName: order.customerName,
                 customerPhone: order.customerPhone,
                 pickupLocation: order.pickup,
                 deliveryLocation: order.delivery,
-                balanceChange: order.cost * 0.8,
+                balanceChange: cost * 0.8,
                 newBalance: earningResult.newBalance
               }
             });
 
-            // Send earnings receipt email to rider
             try {
-              const riderEarning = order.cost * 0.8;
-              const commission = order.cost * 0.2;
-
-              const earningData = {
-                riderId: rider.id,
-                riderName: rider.fullName,
-                riderEmail: rider.email,
-                orderId: order.id,
-                orderAmount: order.cost,
-                riderEarning,
-                commission,
-                newBalance: earningResult.newBalance,
-                totalEarnings: earningResult.totalEarnings,
-                deliveryDate: now,
-                customerName: order.customerName,
-                pickupLocation: order.pickup,
-                deliveryLocation: order.delivery
-              };
-
-              await sendRiderEarningsReceipt(earningData);
-              console.log(`📧 Earnings receipt sent to rider ${rider.fullName}`);
+              await sendRiderEarningsReceipt(rider, earningResult.earning);
             } catch (emailError) {
               console.error('Error sending earnings receipt:', emailError);
             }
-          } else {
-            console.error('Failed to add rider earning:', earningResult.error);
           }
-        } else {
-          console.log(`⚠️ Rider ${order.riderName} not found in system - earnings will need to be manually processed`);
         }
       } catch (error) {
         console.error('Error processing rider earnings:', error);
@@ -382,7 +370,7 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
 };
 
 // PATCH /api/admin/orders/:id/assign-rider - Assign rider to order
-export const assignRiderToOrder: RequestHandler = (req, res) => {
+export const assignRiderToOrder: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { riderId, riderName, riderPhone } = req.body;
@@ -393,35 +381,55 @@ export const assignRiderToOrder: RequestHandler = (req, res) => {
       });
     }
 
-    const orderIndex = orders.findIndex(order => order.id === id);
-    if (orderIndex === -1) {
-      return res.status(404).json({ error: 'Order not found' });
+    let order;
+    let orders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        order = await DatabaseService.updateOrder(id, {
+          rider_id: riderId,
+          // We might need to store names in metadata or other fields if not in schema
+        } as any);
+      } catch (e) {
+        console.error('Supabase assignRiderToOrder failed, falling back to JSON:', e);
+      }
     }
 
-    const order = orders[orderIndex];
-    const now = new Date().toISOString();
+    if (!order) {
+      orders = loadOrders();
+      const orderIndex = orders.findIndex(o => o.id === id);
+      if (orderIndex === -1) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      order = orders[orderIndex];
+      const now = new Date().toISOString();
 
-    // Update order with rider info
-    order.riderName = riderName;
-    order.riderPhone = riderPhone;
-    order.riderId = riderId;
-    order.updatedAt = now;
+      // Update order with rider info
+      order.riderName = riderName;
+      order.riderPhone = riderPhone;
+      order.riderId = riderId;
+      order.updatedAt = now;
 
-    // Update status to confirmed if it's pending
-    if (order.currentStatus === 'pending') {
-      order.currentStatus = 'confirmed';
-      order.statusHistory.push({
-        status: 'confirmed',
-        timestamp: now,
-        description: `Order confirmed and assigned to ${riderName}`
-      });
-    } else {
-      // Add rider assignment to history
-      order.statusHistory.push({
-        status: order.currentStatus,
-        timestamp: now,
-        description: `Rider assigned: ${riderName}`
-      });
+      // Update status to confirmed if it's pending
+      if (order.currentStatus === 'pending') {
+        order.currentStatus = 'confirmed';
+        if (!order.statusHistory) order.statusHistory = [];
+        order.statusHistory.push({
+          status: 'confirmed',
+          timestamp: now,
+          description: `Order confirmed and assigned to ${riderName}`
+        });
+      } else {
+        // Add rider assignment to history
+        if (!order.statusHistory) order.statusHistory = [];
+        order.statusHistory.push({
+          status: order.currentStatus,
+          timestamp: now,
+          description: `Rider assigned: ${riderName}`
+        });
+      }
+
+      saveOrders(orders);
     }
 
     // Log rider activity for order assignment
@@ -430,8 +438,8 @@ export const assignRiderToOrder: RequestHandler = (req, res) => {
       riderName: riderName,
       type: 'order_assigned',
       orderId: order.id,
-      description: `Assigned to delivery order ${order.id} (${order.pickup} → ${order.delivery})`,
-      location: order.pickup,
+      description: `Assigned to delivery order ${order.id} (${order.pickup || 'N/A'} → ${order.delivery || 'N/A'})`,
+      location: order.pickup || 'N/A',
       metadata: {
         customerName: order.customerName,
         customerPhone: order.customerPhone,
@@ -458,42 +466,58 @@ export const confirmPaymentAndSendReceipt: RequestHandler = async (req, res) => 
   try {
     const { id } = req.params;
 
-    const orderIndex = orders.findIndex(order => order.id === id);
-    if (orderIndex === -1) {
-      return res.status(404).json({ error: 'Order not found' });
+    let order;
+    let orders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        order = await DatabaseService.updateOrder(id, { payment_status: 'paid' } as any);
+      } catch (e) {
+        console.error('Supabase confirmPaymentAndSendReceipt failed, falling back to JSON:', e);
+      }
     }
 
-    const order = orders[orderIndex];
-    const now = new Date().toISOString();
+    if (!order) {
+      orders = loadOrders();
+      const orderIndex = orders.findIndex(o => o.id === id);
+      if (orderIndex === -1) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      order = orders[orderIndex];
+      const now = new Date().toISOString();
 
-    // Update payment status and add timestamp
-    order.paymentConfirmed = true;
-    order.paymentConfirmedAt = now;
-    order.updatedAt = now;
+      // Update payment status and add timestamp
+      order.paymentConfirmed = true;
+      order.paymentConfirmedAt = now;
+      order.updatedAt = now;
 
-    // If order is still pending, update to confirmed
-    if (order.currentStatus === 'pending') {
-      order.currentStatus = 'confirmed';
+      // If order is still pending, update to confirmed
+      if (order.currentStatus === 'pending') {
+        order.currentStatus = 'confirmed';
+        if (!order.statusHistory) order.statusHistory = [];
+        order.statusHistory.push({
+          status: 'confirmed',
+          timestamp: now,
+          description: 'Payment confirmed and order confirmed by admin'
+        });
+      }
+
+      // Add payment confirmation to status history
+      if (!order.statusHistory) order.statusHistory = [];
       order.statusHistory.push({
-        status: 'confirmed',
+        status: 'payment_confirmed',
         timestamp: now,
-        description: 'Payment confirmed and order confirmed by admin'
+        description: 'Payment confirmed by admin - Receipt sent to customer'
       });
-    }
 
-    // Add payment confirmation to status history
-    order.statusHistory.push({
-      status: 'payment_confirmed',
-      timestamp: now,
-      description: 'Payment confirmed by admin - Receipt sent to customer'
-    });
+      saveOrders(orders);
+    }
 
     try {
       // Send receipt email
       const emailSent = await sendOrderReceipt(order);
       if (emailSent) {
         console.log(`Payment confirmation receipt sent to ${order.customerEmail}`);
-        // Notify admin
         await sendAdminNotification(order);
 
         res.json({
@@ -517,7 +541,7 @@ export const confirmPaymentAndSendReceipt: RequestHandler = async (req, res) => 
         error: 'Payment confirmed but email sending failed',
         order,
         emailSent: false,
-        emailError: emailError.message
+        emailError: (emailError as Error).message
       });
     }
   } catch (error) {
@@ -531,7 +555,20 @@ export const resendReceipt: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const order = orders.find(order => order.id === id);
+    let order;
+    if (isSupabaseAvailable()) {
+      try {
+        order = await DatabaseService.getOrderById(id);
+      } catch (e) {
+        console.error('Supabase getOrderById failed, falling back to JSON:', e);
+      }
+    }
+
+    if (!order) {
+      const orders = loadOrders();
+      order = orders.find(o => o.id === id);
+    }
+
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
@@ -539,13 +576,13 @@ export const resendReceipt: RequestHandler = async (req, res) => {
     try {
       const emailSent = await sendOrderReceipt(order);
       if (emailSent) {
-        console.log(`Receipt resent to ${order.customerEmail}`);
+        console.log(`Receipt resent to ${order.customerEmail || order.customer_email}`);
 
         res.json({
           success: true,
           message: 'Receipt resent successfully',
           emailSent: true,
-          customerEmail: order.customerEmail
+          customerEmail: order.customerEmail || order.customer_email
         });
       } else {
         res.status(500).json({
@@ -559,7 +596,7 @@ export const resendReceipt: RequestHandler = async (req, res) => {
       res.status(500).json({
         success: false,
         error: 'Failed to resend receipt',
-        emailError: emailError.message
+        emailError: (emailError as Error).message
       });
     }
   } catch (error) {

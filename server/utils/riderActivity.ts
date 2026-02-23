@@ -23,6 +23,7 @@ export interface RiderActivity {
     newStatus?: string;
     balanceChange?: number;
     newBalance?: number;
+    [key: string]: any;
   };
 }
 
@@ -111,8 +112,8 @@ export const getActivitiesInRange = (startDate: Date, endDate: Date): RiderActiv
 
 // Get earnings-related activities for a rider
 export const getRiderEarningsActivities = (riderId: string): RiderActivity[] => {
-  return riderActivities.filter(activity => 
-    activity.riderId === riderId && 
+  return riderActivities.filter(activity =>
+    activity.riderId === riderId &&
     (activity.type === 'delivery_completed' || activity.type === 'payment_received' || activity.type === 'earnings_added')
   );
 };
@@ -125,7 +126,7 @@ export const calculateTotalEarningsFromActivities = (riderId: string): {
   deliveryCount: number;
 } => {
   const earningsActivities = getRiderEarningsActivities(riderId);
-  
+
   let totalEarned = 0;
   let totalPaid = 0;
   let deliveryCount = 0;
@@ -150,7 +151,7 @@ export const calculateTotalEarningsFromActivities = (riderId: string): {
 // Helper function to format activity description with more details
 export const getDetailedActivityDescription = (activity: RiderActivity): string => {
   const baseDesc = activity.description;
-  
+
   switch (activity.type) {
     case 'delivery_completed':
       return `${baseDesc} | Earned: KES ${activity.netEarning?.toFixed(2)} (after 20% commission)`;
@@ -199,7 +200,7 @@ export const getActivityStats = (): {
   const weekActivities = riderActivities.filter(a => new Date(a.timestamp) >= weekStart).length;
   const deliveriesCompleted = riderActivities.filter(a => a.type === 'delivery_completed').length;
   const paymentsProcessed = riderActivities.filter(a => a.type === 'payment_received').length;
-  
+
   const activeRiders = new Set(
     riderActivities
       .filter(a => new Date(a.timestamp) >= weekStart)

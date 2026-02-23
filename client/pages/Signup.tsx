@@ -13,7 +13,6 @@ import {
   Camera,
   FileText,
 } from "lucide-react";
-import RecaptchaWidget from "../components/RecaptchaWidget";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -52,8 +51,7 @@ export default function Signup() {
       motivation: "",
       drivingLicenseExpiry: "",
       goodConductExpiry: "",
-      motorcycleInsuranceExpiry: "",
-      recaptchaToken: ""
+      motorcycleInsuranceExpiry: ""
     }
   });
 
@@ -133,7 +131,7 @@ export default function Signup() {
       const { token: csrfToken } = await csrfRes.json();
 
       const endpoint =
-        userType === "rider" ? "/api/riders/signup" : "/api/users/signup";
+        userType === "rider" ? "/api/riders/signup" : "/api/auth/signup";
 
       let response;
 
@@ -726,10 +724,6 @@ export default function Signup() {
               </>
             )}
 
-            {/* Bot Protection */}
-            <RecaptchaWidget
-              onChange={(token) => setValue('recaptchaToken', token || '')}
-            />
 
             <div className="text-xs text-gray-500 text-center">
               By clicking {userType === "rider" ? "Submit Application" : "Create Account"}, you agree to our{" "}

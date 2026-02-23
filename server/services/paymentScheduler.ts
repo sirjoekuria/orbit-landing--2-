@@ -2,6 +2,7 @@
 // Handles daily automated payments at 23:00 hrs and withdrawal processing
 
 import { logRiderActivity } from "../utils/riderActivity";
+import { initiateB2C } from "./mpesaService";
 
 export interface WithdrawalRequest {
   id: string;
@@ -119,7 +120,7 @@ export const createWithdrawalRequest = (data: {
   notes?: string;
 }): { success: boolean; withdrawalRequest?: WithdrawalRequest; error?: string } => {
   const validation = validateWithdrawalRequest(data.riderId, data.amount, data.currentBalance);
-  
+
   if (!validation.valid) {
     return { success: false, error: validation.error };
   }
@@ -155,7 +156,7 @@ export const createWithdrawalRequest = (data: {
   });
 
   console.log(`💸 Withdrawal Request Created: ${data.riderName} - KES ${data.amount} (Net: KES ${validation.netAmount})`);
-  
+
   return { success: true, withdrawalRequest };
 };
 
@@ -176,7 +177,7 @@ export const updateWithdrawalRequestStatus = (
   adminNotes?: string
 ): { success: boolean; withdrawalRequest?: WithdrawalRequest; error?: string } => {
   const requestIndex = withdrawalRequests.findIndex(req => req.id === requestId);
-  
+
   if (requestIndex === -1) {
     return { success: false, error: 'Withdrawal request not found' };
   }
@@ -184,7 +185,7 @@ export const updateWithdrawalRequestStatus = (
   const request = withdrawalRequests[requestIndex];
   request.status = status;
   request.processedAt = new Date().toISOString();
-  
+
   if (adminNotes) {
     request.adminNotes = adminNotes;
   }
@@ -205,27 +206,47 @@ export const updateWithdrawalRequestStatus = (
   });
 
   console.log(`📋 Withdrawal Request Updated: ${request.riderName} - ${requestId} → ${status}`);
-  
+
   return { success: true, withdrawalRequest: request };
 };
 
-// Simulate M-Pesa payment (in production, integrate with actual M-Pesa API)
-const simulateMpesaPayment = async (phone: string, amount: number): Promise<{
+// M-Pesa B2C payment integration
+export const processMpesaB2CPayment = async (phone: string, amount: number, riderName: string): Promise<{
   success: boolean;
   transactionId?: string;
   error?: string;
 }> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Simulate 95% success rate
-  const success = Math.random() > 0.05;
-  
-  if (success) {
-    const transactionId = `MP${Date.now()}${Math.floor(Math.random() * 1000)}`;
-    return { success: true, transactionId };
-  } else {
-    return { success: false, error: 'M-Pesa transaction failed' };
+  try {
+    // Normalize phone for M-Pesa (B2C specifically often needs 254...)
+    const formattedPhone = phone.replace(/\D/g, "");
+    const finalPhone = formattedPhone.startsWith("0") ? "254" + formattedPhone.slice(1) : formattedPhone;
+
+    console.log(`💸 Initiating real M-Pesa B2C Payout for ${riderName} (${finalPhone}): KES ${amount}`);
+
+    const response = await initiateB2C(
+      finalPhone,
+      Math.round(amount),
+      `Payout to ${riderName}`,
+      'SalaryPayment'
+    );
+
+    if (response.ResponseCode === '0') {
+      return {
+        success: true,
+        transactionId: response.ConversationID || `B2C-${Date.now()}`
+      };
+    } else {
+      return {
+        success: false,
+        error: response.ResponseDescription || 'M-Pesa B2C initiation failed'
+      };
+    }
+  } catch (error: any) {
+    console.error('M-Pesa B2C Payout Error:', error.message);
+    return {
+      success: false,
+      error: error.message || 'System error during M-Pesa B2C processing'
+    };
   }
 };
 
@@ -250,13 +271,13 @@ export const processAutomatedPayment = async (rider: {
   paymentIdCounter++;
 
   try {
-    // Simulate M-Pesa payment
-    const mpesaResult = await simulateMpesaPayment(rider.phone, rider.currentBalance);
-    
+    // Actual M-Pesa B2C payout
+    const mpesaResult = await processMpesaB2CPayment(rider.phone, rider.currentBalance, rider.fullName);
+
     if (mpesaResult.success) {
       payment.status = 'success';
       payment.transactionId = mpesaResult.transactionId;
-      
+
       // Log successful automated payment
       logRiderActivity({
         riderId: rider.id,
@@ -272,12 +293,12 @@ export const processAutomatedPayment = async (rider: {
           paymentType: 'automated_daily'
         }
       });
-      
+
       console.log(`✅ Automated Payment Success: ${rider.fullName} - KES ${rider.currentBalance} (TX: ${mpesaResult.transactionId})`);
     } else {
       payment.status = 'failed';
       payment.failureReason = mpesaResult.error;
-      
+
       console.log(`❌ Automated Payment Failed: ${rider.fullName} - ${mpesaResult.error}`);
     }
   } catch (error) {
@@ -305,7 +326,7 @@ export const isAutomatedPaymentTime = (): boolean => {
   const now = new Date();
   const hour = now.getHours();
   const minute = now.getMinutes();
-  
+
   // Check if it's 23:00 (11 PM)
   return hour === 23 && minute === 0;
 };
@@ -339,16 +360,16 @@ export const getPaymentStats = (): {
 // Cleanup old records (optional)
 export const cleanupOldRecords = (daysToKeep: number = 30): void => {
   const cutoffDate = new Date(Date.now() - daysToKeep * 24 * 60 * 60 * 1000);
-  
+
   const originalWithdrawalsCount = withdrawalRequests.length;
   const originalPaymentsCount = automatedPayments.length;
-  
+
   withdrawalRequests = withdrawalRequests.filter(req => new Date(req.requestedAt) > cutoffDate);
   automatedPayments = automatedPayments.filter(payment => new Date(payment.processedAt) > cutoffDate);
-  
+
   const cleanedWithdrawals = originalWithdrawalsCount - withdrawalRequests.length;
   const cleanedPayments = originalPaymentsCount - automatedPayments.length;
-  
+
   if (cleanedWithdrawals > 0 || cleanedPayments > 0) {
     console.log(`🧹 Cleanup: Removed ${cleanedWithdrawals} old withdrawal requests and ${cleanedPayments} old payment records`);
   }

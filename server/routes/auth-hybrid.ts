@@ -5,8 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { DatabaseService } from '../services/database';
 import { sendPasswordResetEmail } from '../services/emailService';
-import { verifyRecaptcha } from '../utils/security';
-import { generateToken, setAuthCookie } from '../utils/jwt';
+import { generateToken, setAuthCookie, verifyToken, clearAuthCookie } from '../utils/jwt';
 
 const SALT_ROUNDS = 10;
 const MAX_FAILED_ATTEMPTS = 5;
@@ -72,13 +71,7 @@ function isSupabaseAvailable(): boolean {
 // User signup
 export const userSignup: RequestHandler = async (req, res) => {
   try {
-    const { fullName, email, phone, password, userType = 'customer', recaptchaToken } = req.body;
-
-    // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
-      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
-    }
+    const { fullName, email, phone, password, userType = 'customer' } = req.body;
 
     if (!fullName || !email || !phone || !password) {
       return res.status(400).json({
@@ -153,13 +146,7 @@ export const userSignup: RequestHandler = async (req, res) => {
 // User login
 export const login: RequestHandler = async (req, res) => {
   try {
-    const { email, password, userType, recaptchaToken } = req.body;
-
-    // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
-      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
-    }
+    const { email, password, userType } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -734,3 +721,49 @@ export const deleteUser: RequestHandler = async (req, res) => {
     });
   }
 };
+// Get current authenticated user session
+export const getMe: RequestHandler = async (req, res) => {
+  try {
+    const token = req.cookies.auth_token;
+
+    if (!token) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return res.status(401).json({ error: 'Invalid or expired session' });
+    }
+
+    if (isSupabaseAvailable()) {
+      const user = await DatabaseService.getUserById(decoded.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const { password: _, ...userResponse } = user;
+      return res.json({ user: userResponse });
+    } else {
+      const users = loadUsers();
+      const user = users.find(u => u.id === decoded.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const { password: _, ...userResponse } = user;
+      return res.json({ user: userResponse });
+    }
+  } catch (error) {
+    console.error('getMe error:', error);
+  }
+};
+
+// Logout user and clear cookies
+export const logout: RequestHandler = async (req, res) => {
+  try {
+    clearAuthCookie(res);
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ error: 'Logout failed' });
+  }
+};
+

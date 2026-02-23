@@ -123,7 +123,7 @@ export default function Footer() {
                   <a href="tel:+254700898950" className="text-rocs-green-light hover:text-rocs-yellow transition-colors">+254 700 898 950</a>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
                 <div>
@@ -131,7 +131,7 @@ export default function Footer() {
                   <a href="mailto:Kuriajoe85@gmail.com" className="text-rocs-green-light hover:text-rocs-yellow transition-colors">Kuriajoe85@gmail.com</a>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
                 <div>
@@ -139,7 +139,7 @@ export default function Footer() {
                   <div className="text-rocs-green-light">Nairobi & Surrounding Areas</div>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <Clock className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
                 <div>
@@ -158,10 +158,10 @@ export default function Footer() {
               © 2024 Rocs Crew. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
-              <Link to="/contact" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
+              <Link to="/privacy" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
                 Privacy Policy
               </Link>
-              <Link to="/contact" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
+              <Link to="/terms" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
                 Terms of Service
               </Link>
               <Link to="/contact" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">

@@ -125,10 +125,14 @@ export default function OrderForm() {
         timestamp: new Date().toISOString(),
       };
 
+      const csrfRes = await fetch("/api/csrf-token");
+      const { token: csrfToken } = await csrfRes.json();
+
       const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         body: JSON.stringify(orderData),
       });

@@ -30,14 +30,18 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
+      const csrfRes = await fetch("/api/csrf-token");
+      const { token: csrfToken } = await csrfRes.json();
+
+      const response = await fetch("/api/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         body: JSON.stringify({
           ...formData,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }),
       });
 
@@ -151,7 +155,7 @@ export default function ContactForm() {
               <h3 className="text-2xl font-semibold text-rocs-green mb-6">
                 Send Us a Message
               </h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -169,7 +173,7 @@ export default function ContactForm() {
                       placeholder="Your full name"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="email" className="text-gray-700 font-medium">
                       Email Address *
@@ -202,7 +206,7 @@ export default function ContactForm() {
                       placeholder="+254 7XX XXX XXX"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="subject" className="text-gray-700 font-medium">
                       Subject *

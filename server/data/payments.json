@@ -1,0 +1,13 @@
+[
+  {
+    "id": "MPESA-000001",
+    "orderId": "ORD-1771869145375",
+    "checkoutRequestId": "ws_CO_23022026205226022700898950",
+    "merchantRequestId": "aef9-409a-9ca8-a2808e1f3a7925699",
+    "amount": 400,
+    "currency": "KES",
+    "status": "pending",
+    "method": "mpesa",
+    "createdAt": "2026-02-23T17:52:26.317Z"
+  }
+]

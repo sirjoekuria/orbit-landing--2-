@@ -157,15 +157,19 @@ export default function DeliveryPartners() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/partnership-requests', {
-        method: 'POST',
+      const csrfRes = await fetch("/api/csrf-token");
+      const { token: csrfToken } = await csrfRes.json();
+
+      const response = await fetch("/api/partnership-requests", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         body: JSON.stringify({
           ...formData,
           timestamp: new Date().toISOString(),
-          type: 'partnership'
+          type: "partnership",
         }),
       });
 
@@ -199,7 +203,7 @@ export default function DeliveryPartners() {
             Our Delivery Partners
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Rocs Crew partners with leading businesses across Kenya to provide reliable, 
+            Rocs Crew partners with leading businesses across Kenya to provide reliable,
             fast, and secure delivery services. Join our growing network of satisfied partners.
           </p>
         </div>
@@ -227,11 +231,10 @@ export default function DeliveryPartners() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
-                className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                  activeTab === tab.key
+                className={`px-6 py-3 rounded-lg font-medium transition-all ${activeTab === tab.key
                     ? 'bg-rocs-green text-white shadow-md'
                     : 'text-gray-600 hover:text-rocs-green'
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -253,13 +256,12 @@ export default function DeliveryPartners() {
                       alt={partner.name}
                       className="h-12 w-24 object-cover rounded-lg"
                     />
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      partner.partnership === 'Premium Partner' ? 'bg-yellow-100 text-yellow-800' :
-                      partner.partnership === 'Strategic Partner' ? 'bg-blue-100 text-blue-800' :
-                      partner.partnership === 'Technology Partner' ? 'bg-purple-100 text-purple-800' :
-                      partner.partnership === 'Financial Partner' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${partner.partnership === 'Premium Partner' ? 'bg-yellow-100 text-yellow-800' :
+                        partner.partnership === 'Strategic Partner' ? 'bg-blue-100 text-blue-800' :
+                          partner.partnership === 'Technology Partner' ? 'bg-purple-100 text-purple-800' :
+                            partner.partnership === 'Financial Partner' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
+                      }`}>
                       {partner.partnership}
                     </span>
                   </div>
@@ -267,7 +269,7 @@ export default function DeliveryPartners() {
                   {/* Partner Info */}
                   <h3 className="text-xl font-bold text-gray-800 mb-2">{partner.name}</h3>
                   <p className="text-gray-600 mb-4">{partner.description}</p>
-                  
+
                   {/* Stats */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="bg-rocs-green/10 text-rocs-green px-3 py-1 rounded-full text-sm font-medium">
@@ -319,7 +321,7 @@ export default function DeliveryPartners() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="text-center mt-12">
                 <button
                   onClick={() => setActiveTab('join')}
@@ -413,7 +415,7 @@ export default function DeliveryPartners() {
 
                       <div>
                         <label className="block text-gray-700 font-medium mb-2">Business Category *</label>
-                        <select 
+                        <select
                           name="businessCategory"
                           required
                           value={formData.businessCategory}
@@ -485,7 +487,7 @@ export default function DeliveryPartners() {
                     <div>
                       <h3 className="text-2xl font-bold text-rocs-green mb-6">Get in Touch</h3>
                       <p className="text-gray-600 mb-8 leading-relaxed">
-                        Ready to partner with Rocs Crew? Contact our partnership team to discuss 
+                        Ready to partner with Rocs Crew? Contact our partnership team to discuss
                         how we can help grow your business with reliable delivery solutions.
                       </p>
                     </div>

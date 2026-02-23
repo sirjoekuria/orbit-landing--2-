@@ -1,27 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Phone, Mail, UserPlus, LogIn, LogOut, User } from 'lucide-react';
+import { Phone, LogIn, LogOut, UserPlus, User, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
+import { useAuth } from '../lib/AuthContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const { user, logout: authLogout } = useAuth();
 
-  useEffect(() => {
-    // Check for logged in user
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        localStorage.removeItem('user');
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
+  const handleLogout = async () => {
+    await authLogout();
     window.location.href = '/';
   };
 
@@ -53,8 +41,11 @@ export default function Header() {
             <Link to="/contact" className="text-gray-700 hover:text-rocs-green transition-colors">
               Contact
             </Link>
-            <Link to="/signup" className="text-gray-700 hover:text-rocs-green transition-colors">
-              Join as Rider
+            <Link to="/services" className="text-gray-700 hover:text-rocs-green transition-colors">
+              Our Services
+            </Link>
+            <Link to="/about" className="text-gray-700 hover:text-rocs-green transition-colors">
+              About Us
             </Link>
             <Link to="/admin" className="text-gray-700 hover:text-rocs-green transition-colors">
               Admin
@@ -67,7 +58,7 @@ export default function Header() {
               <Phone className="w-4 h-4" />
               <span>+254 700 898 950</span>
             </a>
-            
+
             {user ? (
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -149,13 +140,20 @@ export default function Header() {
                 Contact
               </Link>
               <Link
-                to="/signup"
+                to="/services"
                 className="text-gray-700 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Join as Rider
+                Our Services
               </Link>
-              
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-rocs-green transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About Us
+              </Link>
+
               {user ? (
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2 text-sm text-gray-600">

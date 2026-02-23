@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { UserPlus, LogIn, Package } from 'lucide-react';
-import OrderForm from '../components/OrderForm';
+import { Package, UserPlus, LogIn } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
 import { Button } from '../components/ui/button';
+import OrderForm from '../components/OrderForm';
 
 export default function BookDelivery() {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    // Check for logged in user
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-      } catch (error) {
-        localStorage.removeItem('user');
-      }
-    }
-    
     // Store intended path for redirect after login
     localStorage.setItem('intendedPath', '/book-delivery');
-    setIsLoading(false);
   }, []);
 
   if (isLoading) {
@@ -42,11 +30,11 @@ export default function BookDelivery() {
             <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center mx-auto mb-6">
               <Package className="w-8 h-8 text-white" />
             </div>
-            
+
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
               Sign In Required
             </h1>
-            
+
             <p className="text-gray-600 mb-8">
               You need to create an account or sign in to book a delivery with Rocs Crew.
             </p>
@@ -58,10 +46,10 @@ export default function BookDelivery() {
                   Create Account
                 </Button>
               </Link>
-              
+
               <Link to="/login">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white font-semibold py-3"
                 >
                   <LogIn className="w-5 h-5 mr-2" />

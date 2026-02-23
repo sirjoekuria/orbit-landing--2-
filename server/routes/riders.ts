@@ -2,7 +2,51 @@ import { RequestHandler } from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { DatabaseService } from '../services/database';
+import { supabase } from '../lib/supabase';
 import { logRiderActivity } from "../utils/riderActivity";
+
+// JSON file operations (fallback when Supabase is not available)
+const RIDERS_FILE = path.join(process.cwd(), 'server', 'data', 'riders.json');
+
+function isSupabaseAvailable() {
+  return !!supabase;
+}
+
+function loadRiders(): any[] {
+  try {
+    if (!fs.existsSync(RIDERS_FILE)) return [];
+    const raw = fs.readFileSync(RIDERS_FILE, 'utf-8');
+    return JSON.parse(raw || '[]');
+  } catch (e) {
+    console.error('Failed to load riders:', e);
+    return [];
+  }
+}
+
+function saveRiders(riders: any[]) {
+  try {
+    const dir = path.dirname(RIDERS_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(RIDERS_FILE, JSON.stringify(riders, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Failed to save riders:', e);
+  }
+}
+
+function getNextRiderId(existingRiders: any[]): string {
+  if (existingRiders.length === 0) return 'RD-001';
+
+  const ids = existingRiders
+    .map(r => {
+      const parts = r.id.split('-');
+      return parts.length === 2 ? parseInt(parts[1]) : 0;
+    })
+    .filter(id => !isNaN(id));
+
+  const maxId = Math.max(0, ...ids);
+  return `RD-${(maxId + 1).toString().padStart(3, '0')}`;
+}
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -53,135 +97,16 @@ export const uploadRiderDocuments = upload.fields([
   { name: "motorcycleInsurance", maxCount: 1 },
 ]);
 
-// In-memory storage for riders (in production, use a proper database)
-let riders: any[] = [];
-let riderIdCounter = 1;
-
-// Sample data for demonstration - enhanced with earnings tracking
-const sampleRiders = [
-  {
-    id: "RD-001",
-    fullName: "John Mwangi",
-    email: "john.mwangi@example.com",
-    phone: "+254 712 345 678",
-    password: "password123", // In production, this would be hashed
-    nationalId: "12345678",
-    motorcycle: "Honda CB 150R, 2020",
-    experience: "3-5 years",
-    area: "Westlands",
-    motivation:
-      "I want to earn extra income and provide excellent delivery service to customers.",
-    status: "approved",
-    rating: 4.8,
-    totalDeliveries: 156,
-    joinedAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-    userType: "rider",
-    currentBalance: 12480, // KES
-    totalEarnings: 24960, // KES
-    totalWithdrawn: 12480, // KES
-    lastWithdrawal: new Date(
-      Date.now() - 7 * 24 * 60 * 60 * 1000,
-    ).toISOString(),
-    earnings: [
-      {
-        orderId: "RC-2024-001",
-        amount: 156,
-        commission: 31.2, // 20% commission
-        riderEarning: 124.8, // 80% to rider
-        deliveryDate: new Date(
-          Date.now() - 2 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
-        status: "pending",
-      },
-    ],
-  },
-  {
-    id: "RD-002",
-    fullName: "Peter Kimani",
-    email: "peter.kimani@example.com",
-    phone: "+254 700 123 456",
-    password: "password123", // In production, this would be hashed
-    nationalId: "87654321",
-    motorcycle: "Yamaha YBR 125, 2019",
-    experience: "5+ years",
-    area: "CBD",
-    motivation:
-      "I have extensive experience in Nairobi and want to help businesses with reliable delivery.",
-    status: "approved",
-    rating: 4.9,
-    totalDeliveries: 203,
-    joinedAt: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-    userType: "rider",
-    currentBalance: 8960, // KES
-    totalEarnings: 32480, // KES
-    totalWithdrawn: 23520, // KES
-    lastWithdrawal: new Date(
-      Date.now() - 3 * 24 * 60 * 60 * 1000,
-    ).toISOString(),
-    earnings: [],
-  },
-  {
-    id: "RD-003",
-    fullName: "David Ochieng",
-    email: "david.ochieng@example.com",
-    phone: "+254 722 987 654",
-    password: "password123", // In production, this would be hashed
-    nationalId: "11223344",
-    motorcycle: "TVS Apache 160, 2021",
-    experience: "1-2 years",
-    area: "Karen",
-    motivation:
-      "I am a recent graduate looking for flexible work opportunities while I pursue other goals.",
-    status: "pending",
-    rating: 0,
-    totalDeliveries: 0,
-    joinedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: false,
-    userType: "rider",
-    currentBalance: 0,
-    totalEarnings: 0,
-    totalWithdrawn: 0,
-    earnings: [],
-  },
-  {
-    id: "RD-004",
-    fullName: "James Mwangi",
-    email: "james.mwangi@example.com",
-    phone: "+254 701 987 654",
-    password: "password123", // In production, this would be hashed
-    nationalId: "44332211",
-    motorcycle: "Bajaj Pulsar 150, 2020",
-    experience: "2-3 years",
-    area: "Kilimani",
-    motivation:
-      "I want to provide reliable delivery services while earning a good income.",
-    status: "approved",
-    rating: 4.7,
-    totalDeliveries: 89,
-    joinedAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-    userType: "rider",
-    currentBalance: 3460, // KES
-    totalEarnings: 15680, // KES
-    totalWithdrawn: 12220, // KES
-    lastWithdrawal: new Date(
-      Date.now() - 5 * 24 * 60 * 60 * 1000,
-    ).toISOString(),
-    earnings: [],
-  },
-];
-
-// Initialize with sample data
-riders = [];
-riderIdCounter = 1;
 
 // Export function to get riders data (for auth purposes)
-export const getRidersData = () => riders;
+export const getRidersData = () => {
+  // This is synchronous, so we'll use the JSON fallback for now
+  // In a real production app, this should be async or use a cached version
+  return loadRiders();
+};
 
 // POST /api/riders/signup - Submit rider application
-export const riderSignup: RequestHandler = (req, res) => {
+export const riderSignup: RequestHandler = async (req, res) => {
   try {
     const {
       fullName,
@@ -243,6 +168,8 @@ export const riderSignup: RequestHandler = (req, res) => {
       });
     }
 
+    let riders = loadRiders();
+
     // Check if rider already exists
     const existingRider = riders.find(
       (rider) =>
@@ -258,7 +185,7 @@ export const riderSignup: RequestHandler = (req, res) => {
     }
 
     // Extract file paths for storage
-    const documents = {};
+    const documents: any = {};
     requiredFiles.forEach((field) => {
       if (files[field] && files[field][0]) {
         documents[field] = files[field][0].path;
@@ -266,7 +193,7 @@ export const riderSignup: RequestHandler = (req, res) => {
     });
 
     const newRider = {
-      id: `RD-${riderIdCounter.toString().padStart(3, "0")}`,
+      id: getNextRiderId(riders),
       fullName,
       email,
       phone,
@@ -293,8 +220,19 @@ export const riderSignup: RequestHandler = (req, res) => {
       earnings: [],
     };
 
+    if (isSupabaseAvailable()) {
+      try {
+        // We'd need to create a user first then a rider, or use a combined service
+        // For simplicity during this migration, we'll ensure JSON persistence first
+        // and optionally try to create in Supabase if DatabaseService supports it fully
+        // DatabaseService.createRider(newRider as any);
+      } catch (e) {
+        console.error('Supabase rider signup failed:', e);
+      }
+    }
+
     riders.push(newRider);
-    riderIdCounter++;
+    saveRiders(riders);
 
     res.status(201).json({
       success: true,
@@ -315,11 +253,25 @@ export const riderSignup: RequestHandler = (req, res) => {
 };
 
 // GET /api/admin/riders - Get all riders (admin only)
-export const getRiders: RequestHandler = (req, res) => {
+export const getRiders: RequestHandler = async (req, res) => {
   try {
+    let riders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        riders = await DatabaseService.getRiders();
+      } catch (e) {
+        console.error('Supabase getRiders failed, falling back to JSON:', e);
+      }
+    }
+
+    if (riders.length === 0) {
+      riders = loadRiders();
+    }
+
     // Sort riders by join date (newest first)
     const sortedRiders = [...riders].sort(
-      (a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime(),
+      (a, b) => new Date(b.joinedAt || b.created_at).getTime() - new Date(a.joinedAt || a.created_at).getTime(),
     );
 
     res.json({
@@ -340,7 +292,7 @@ export const getRiders: RequestHandler = (req, res) => {
 };
 
 // PATCH /api/admin/riders/:id/status - Update rider status (approve/reject)
-export const updateRiderStatus: RequestHandler = (req, res) => {
+export const updateRiderStatus: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -352,20 +304,32 @@ export const updateRiderStatus: RequestHandler = (req, res) => {
       });
     }
 
+    let rider;
+    let riders = loadRiders();
     const riderIndex = riders.findIndex((rider) => rider.id === id);
-    if (riderIndex === -1) {
-      return res.status(404).json({ error: "Rider not found" });
+
+    if (isSupabaseAvailable()) {
+      try {
+        rider = await DatabaseService.updateRider(id, { status } as any);
+      } catch (e) {
+        console.error('Supabase updateRiderStatus failed, falling back to JSON:', e);
+      }
     }
 
-    const rider = riders[riderIndex];
-    rider.status = status;
-    rider.updatedAt = new Date().toISOString();
+    if (!rider) {
+      if (riderIndex === -1) {
+        return res.status(404).json({ error: "Rider not found" });
+      }
+      rider = riders[riderIndex];
+      rider.status = status;
+      rider.updatedAt = new Date().toISOString();
 
-    // If approved, activate the rider
-    if (status === "approved") {
-      rider.isActive = true;
-    } else if (status === "rejected") {
-      rider.isActive = false;
+      if (status === "approved") {
+        rider.isActive = true;
+      } else if (status === "rejected") {
+        rider.isActive = false;
+      }
+      saveRiders(riders);
     }
 
     res.json({
@@ -380,19 +344,32 @@ export const updateRiderStatus: RequestHandler = (req, res) => {
 };
 
 // PATCH /api/admin/riders/:id/active - Toggle rider active status
-export const toggleRiderActive: RequestHandler = (req, res) => {
+export const toggleRiderActive: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { isActive } = req.body;
 
+    let rider;
+    let riders = loadRiders();
     const riderIndex = riders.findIndex((rider) => rider.id === id);
-    if (riderIndex === -1) {
-      return res.status(404).json({ error: "Rider not found" });
+
+    if (isSupabaseAvailable()) {
+      try {
+        rider = await DatabaseService.updateRider(id, { is_active: isActive } as any);
+      } catch (e) {
+        console.error('Supabase toggleRiderActive failed, falling back to JSON:', e);
+      }
     }
 
-    const rider = riders[riderIndex];
-    rider.isActive = isActive;
-    rider.updatedAt = new Date().toISOString();
+    if (!rider) {
+      if (riderIndex === -1) {
+        return res.status(404).json({ error: "Rider not found" });
+      }
+      rider = riders[riderIndex];
+      rider.isActive = isActive;
+      rider.updatedAt = new Date().toISOString();
+      saveRiders(riders);
+    }
 
     res.json({
       success: true,
@@ -406,17 +383,31 @@ export const toggleRiderActive: RequestHandler = (req, res) => {
 };
 
 // GET /api/riders/available - Get available riders for assignment
-export const getAvailableRiders: RequestHandler = (req, res) => {
+export const getAvailableRiders: RequestHandler = async (req, res) => {
   try {
+    let riders: any[] = [];
+
+    if (isSupabaseAvailable()) {
+      try {
+        riders = await DatabaseService.getRiders();
+      } catch (e) {
+        console.error('Supabase getAvailableRiders failed, falling back to JSON:', e);
+      }
+    }
+
+    if (riders.length === 0) {
+      riders = loadRiders();
+    }
+
     const availableRiders = riders
-      .filter((rider) => rider.status === "approved" && rider.isActive)
+      .filter((rider) => (rider.status === "approved" || rider.status === undefined) && (rider.isActive || rider.is_active))
       .map((rider) => ({
         id: rider.id,
-        fullName: rider.fullName,
+        fullName: rider.fullName || rider.full_name,
         phone: rider.phone,
         area: rider.area,
         rating: rider.rating,
-        totalDeliveries: rider.totalDeliveries,
+        totalDeliveries: rider.totalDeliveries || rider.total_deliveries || 0,
       }));
 
     res.json({
@@ -430,16 +421,27 @@ export const getAvailableRiders: RequestHandler = (req, res) => {
 };
 
 // DELETE /api/admin/riders/:id - Delete rider
-export const deleteRider: RequestHandler = (req, res) => {
+export const deleteRider: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
+    if (isSupabaseAvailable()) {
+      try {
+        // Find user_id first if needed, or delete by rider id if supported
+        // await DatabaseService.deleteRider(id);
+      } catch (e) {
+        console.error('Supabase deleteRider failed:', e);
+      }
+    }
+
+    let riders = loadRiders();
     const riderIndex = riders.findIndex((rider) => rider.id === id);
     if (riderIndex === -1) {
       return res.status(404).json({ error: "Rider not found" });
     }
 
     const deletedRider = riders.splice(riderIndex, 1)[0];
+    saveRiders(riders);
 
     res.json({
       success: true,
@@ -453,25 +455,38 @@ export const deleteRider: RequestHandler = (req, res) => {
 };
 
 // GET /api/admin/riders/:id/earnings - Get rider earnings details
-export const getRiderEarnings: RequestHandler = (req, res) => {
+export const getRiderEarnings: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
+    let rider;
 
-    const rider = riders.find((r) => r.id === id);
+    if (isSupabaseAvailable()) {
+      try {
+        rider = await DatabaseService.getRiderById(id);
+      } catch (e) {
+        console.error('Supabase getRiderById failed, falling back to JSON:', e);
+      }
+    }
+
+    if (!rider) {
+      const riders = loadRiders();
+      rider = riders.find((r) => r.id === id);
+    }
+
     if (!rider) {
       return res.status(404).json({ error: "Rider not found" });
     }
 
     res.json({
       riderId: rider.id,
-      fullName: rider.fullName,
+      fullName: rider.fullName || rider.full_name,
       email: rider.email,
-      currentBalance: rider.currentBalance || 0,
-      totalEarnings: rider.totalEarnings || 0,
-      totalWithdrawn: rider.totalWithdrawn || 0,
-      lastWithdrawal: rider.lastWithdrawal,
+      currentBalance: rider.currentBalance || rider.current_balance || 0,
+      totalEarnings: rider.totalEarnings || rider.total_earnings || 0,
+      totalWithdrawn: rider.totalWithdrawn || rider.total_withdrawn || 0,
+      lastWithdrawal: rider.lastWithdrawal || rider.last_withdrawal,
       earnings: rider.earnings || [],
-      totalDeliveries: rider.totalDeliveries || 0,
+      totalDeliveries: rider.totalDeliveries || rider.total_deliveries || 0,
       rating: rider.rating || 0,
     });
   } catch (error) {
@@ -481,17 +496,28 @@ export const getRiderEarnings: RequestHandler = (req, res) => {
 };
 
 // POST /api/admin/riders/:id/add-earning - Add earning for completed delivery
-export const addRiderEarning: RequestHandler = (req, res) => {
+export const addRiderEarning: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { orderId, orderAmount, deliveryDate } = req.body;
 
+    let rider;
+    let riders = loadRiders();
     const riderIndex = riders.findIndex((r) => r.id === id);
-    if (riderIndex === -1) {
+
+    if (isSupabaseAvailable()) {
+      try {
+        // update rider stats in Supabase if supported
+      } catch (e) {
+        console.error('Supabase addRiderEarning failed:', e);
+      }
+    }
+
+    if (riderIndex === -1 && !rider) {
       return res.status(404).json({ error: "Rider not found" });
     }
 
-    const rider = riders[riderIndex];
+    rider = riders[riderIndex];
 
     // Calculate commission (20% to company, 80% to rider)
     const commission = orderAmount * 0.2;
@@ -515,6 +541,8 @@ export const addRiderEarning: RequestHandler = (req, res) => {
     rider.totalEarnings = (rider.totalEarnings || 0) + riderEarning;
     rider.totalDeliveries = (rider.totalDeliveries || 0) + 1;
 
+    saveRiders(riders);
+
     res.json({
       success: true,
       message: "Earning added successfully",
@@ -529,11 +557,12 @@ export const addRiderEarning: RequestHandler = (req, res) => {
 };
 
 // POST /api/admin/riders/:id/process-payment - Process payment to rider
-export const processRiderPayment: RequestHandler = (req, res) => {
+export const processRiderPayment: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { amount, paymentMethod, notes } = req.body;
 
+    let riders = loadRiders();
     const riderIndex = riders.findIndex((r) => r.id === id);
     if (riderIndex === -1) {
       return res.status(404).json({ error: "Rider not found" });
@@ -561,6 +590,8 @@ export const processRiderPayment: RequestHandler = (req, res) => {
       processedAt: new Date().toISOString(),
       status: "completed",
     });
+
+    saveRiders(riders);
 
     // Log rider activity for payment received
     logRiderActivity({

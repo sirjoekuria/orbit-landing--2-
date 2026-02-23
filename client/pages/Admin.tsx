@@ -61,12 +61,12 @@ interface Order {
   distance: number;
   cost: number;
   status:
-    | "pending"
-    | "confirmed"
-    | "picked_up"
-    | "in_transit"
-    | "delivered"
-    | "cancelled";
+  | "pending"
+  | "confirmed"
+  | "picked_up"
+  | "in_transit"
+  | "delivered"
+  | "cancelled";
   timestamp: string;
   riderName?: string;
   riderPhone?: string;
@@ -277,6 +277,19 @@ export default function Admin() {
     setIsLoading(false);
   };
 
+  const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
+    const csrfRes = await fetch("/api/csrf-token");
+    const { token } = await csrfRes.json();
+
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "x-csrf-token": token,
+      },
+    });
+  };
+
   // Load data when authenticated
   useEffect(() => {
     if (isAuthenticated) {
@@ -307,7 +320,7 @@ export default function Admin() {
     status: "approved" | "rejected",
   ) => {
     try {
-      const response = await fetch(`/api/admin/riders/${riderId}/status`, {
+      const response = await fetchWithCsrf(`/api/admin/riders/${riderId}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -328,7 +341,7 @@ export default function Admin() {
 
   const toggleRiderActive = async (riderId: string, isActive: boolean) => {
     try {
-      const response = await fetch(`/api/admin/riders/${riderId}/active`, {
+      const response = await fetchWithCsrf(`/api/admin/riders/${riderId}/active`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -351,7 +364,7 @@ export default function Admin() {
     if (!confirm("Are you sure you want to delete this rider?")) return;
 
     try {
-      const response = await fetch(`/api/admin/riders/${riderId}`, {
+      const response = await fetchWithCsrf(`/api/admin/riders/${riderId}`, {
         method: "DELETE",
       });
 
@@ -374,7 +387,7 @@ export default function Admin() {
         return;
       }
 
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/orders/${orderId}/assign-rider`,
         {
           method: "PATCH",
@@ -417,7 +430,7 @@ export default function Admin() {
 
   const processRiderPayment = async (riderId: string) => {
     try {
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/riders/${riderId}/process-payment`,
         {
           method: "POST",
@@ -461,7 +474,7 @@ export default function Admin() {
     status: "approved" | "rejected",
   ) => {
     try {
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/partnership-requests/${requestId}/status`,
         {
           method: "PATCH",
@@ -488,7 +501,7 @@ export default function Admin() {
       return;
 
     try {
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/partnership-requests/${requestId}`,
         {
           method: "DELETE",
@@ -509,7 +522,7 @@ export default function Admin() {
   // Payment confirmation function
   const confirmPaymentAndSendReceipt = async (orderId: string) => {
     try {
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/orders/${orderId}/confirm-payment`,
         {
           method: "POST",
@@ -556,7 +569,7 @@ export default function Admin() {
   // Resend receipt function
   const resendReceipt = async (orderId: string) => {
     try {
-      const response = await fetch(
+      const response = await fetchWithCsrf(
         `/api/admin/orders/${orderId}/resend-receipt`,
         {
           method: "POST",
@@ -602,7 +615,7 @@ export default function Admin() {
     newStatus: Order["status"],
   ) => {
     try {
-      const response = await fetch(`/api/admin/orders/${orderId}`, {
+      const response = await fetchWithCsrf(`/api/admin/orders/${orderId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -692,9 +705,9 @@ export default function Admin() {
       users.map((user) =>
         user.id === userId
           ? {
-              ...user,
-              status: user.status === "active" ? "inactive" : "active",
-            }
+            ...user,
+            status: user.status === "active" ? "inactive" : "active",
+          }
           : user,
       ),
     );
@@ -856,9 +869,8 @@ export default function Admin() {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform flex flex-col justify-between ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform flex flex-col justify-between ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
@@ -884,11 +896,10 @@ export default function Admin() {
               setActiveTab("overview");
               setSidebarOpen(false);
             }}
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors mb-1 ${
-              activeTab === "overview"
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors mb-1 ${activeTab === "overview"
                 ? "bg-rocs-green text-white"
                 : "text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             <Home className="w-5 h-5" />
             <span>Dashboard Overview</span>
@@ -922,11 +933,10 @@ export default function Admin() {
                     setActiveTab("orders");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "orders"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "orders"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   {stats.pendingOrders > 0 ? (
                     <PendingBookingDot>Orders Management</PendingBookingDot>
@@ -939,11 +949,10 @@ export default function Admin() {
                     setActiveTab("messages");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "messages"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "messages"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   {stats.unreadMessages > 0 ? (
                     <UnreadMessageDot>Customer Messages</UnreadMessageDot>
@@ -980,11 +989,10 @@ export default function Admin() {
                     setActiveTab("users");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "users"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "users"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Customer Users
                 </button>
@@ -993,11 +1001,10 @@ export default function Admin() {
                     setActiveTab("riders");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "riders"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "riders"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Rider Management
                 </button>
@@ -1006,11 +1013,10 @@ export default function Admin() {
                     setActiveTab("partnerships");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "partnerships"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "partnerships"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Business Partners
                 </button>
@@ -1046,11 +1052,10 @@ export default function Admin() {
                     setActiveTab("rider-earnings");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "rider-earnings"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "rider-earnings"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Rider Earnings
                 </button>
@@ -1059,11 +1064,10 @@ export default function Admin() {
                     setActiveTab("rider-activity");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "rider-activity"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "rider-activity"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Rider Activity Log
                 </button>
@@ -1072,11 +1076,10 @@ export default function Admin() {
                     setActiveTab("withdrawal-requests");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "withdrawal-requests"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "withdrawal-requests"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Withdrawal Requests
                 </button>
@@ -1085,11 +1088,10 @@ export default function Admin() {
                     setActiveTab("automated-payments");
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    activeTab === "automated-payments"
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "automated-payments"
                       ? "bg-rocs-green text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   Automated Payments
                 </button>
@@ -1997,24 +1999,22 @@ export default function Admin() {
 
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`px-3 py-1 text-sm font-medium rounded-full ${
-                              rider.status === "approved"
+                            className={`px-3 py-1 text-sm font-medium rounded-full ${rider.status === "approved"
                                 ? "bg-green-100 text-green-800"
                                 : rider.status === "pending"
                                   ? "bg-yellow-100 text-yellow-800"
                                   : "bg-red-100 text-red-800"
-                            }`}
+                              }`}
                           >
                             {rider.status}
                           </span>
 
                           {rider.status === "approved" && (
                             <span
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                rider.isActive
+                              className={`px-2 py-1 text-xs rounded-full ${rider.isActive
                                   ? "bg-green-100 text-green-800"
                                   : "bg-gray-100 text-gray-800"
-                              }`}
+                                }`}
                             >
                               {rider.isActive ? "Active" : "Inactive"}
                             </span>
@@ -2099,11 +2099,10 @@ export default function Admin() {
                               onClick={() =>
                                 toggleRiderActive(rider.id, !rider.isActive)
                               }
-                              className={`px-3 py-1 rounded text-sm font-medium ${
-                                rider.isActive
+                              className={`px-3 py-1 rounded text-sm font-medium ${rider.isActive
                                   ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
                                   : "bg-rocs-green text-white hover:bg-rocs-green-dark"
-                              }`}
+                                }`}
                             >
                               {rider.isActive ? "Deactivate" : "Activate"}
                             </button>
@@ -2242,13 +2241,12 @@ export default function Admin() {
 
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`px-3 py-1 text-sm font-medium rounded-full ${
-                              request.status === "approved"
+                            className={`px-3 py-1 text-sm font-medium rounded-full ${request.status === "approved"
                                 ? "bg-green-100 text-green-800"
                                 : request.status === "pending"
                                   ? "bg-yellow-100 text-yellow-800"
                                   : "bg-red-100 text-red-800"
-                            }`}
+                              }`}
                           >
                             {request.status}
                           </span>
@@ -2661,7 +2659,7 @@ export default function Admin() {
                                     !paymentAmount ||
                                     parseFloat(paymentAmount) <= 0 ||
                                     parseFloat(paymentAmount) >
-                                      (rider.currentBalance || 0)
+                                    (rider.currentBalance || 0)
                                   }
                                   className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                                 >
@@ -2722,15 +2720,14 @@ export default function Admin() {
 
 📋 RECENT EARNINGS (Last 5)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${
-  earnings.earnings
-    .slice(-5)
-    .map(
-      (e) =>
-        `🔹 ${e.orderId}: +KES ${e.riderEarning.toLocaleString()} (${formatDate(e.deliveryDate)})`,
-    )
-    .join("\n") || "No earnings recorded yet"
-}
+${earnings.earnings
+                                        .slice(-5)
+                                        .map(
+                                          (e) =>
+                                            `🔹 ${e.orderId}: +KES ${e.riderEarning.toLocaleString()} (${formatDate(e.deliveryDate)})`,
+                                        )
+                                        .join("\n") || "No earnings recorded yet"
+                                      }
 
 �� Commission Structure: 20% Company | 80% Rider
                                 `;
@@ -2777,22 +2774,22 @@ ${
                       className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                     >
                       {isLoading ? (
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                    ) : (
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                        />
-                      </svg>
-                    )}
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                      ) : (
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                      )}
                       <span>
                         {isLoading ? 'Refreshing...' : 'Refresh Activities'}
                       </span>
@@ -2818,7 +2815,7 @@ ${
                         type="file"
                         accept="application/json"
                         className="hidden"
-                        onChange={async (e:any) => {
+                        onChange={async (e: any) => {
                           const file = e.target.files && e.target.files[0];
                           if (!file) return;
                           try {
@@ -2884,7 +2881,7 @@ ${
                             const data = await res.json().catch(() => ({ error: 'Unknown error' }));
                             alert('Failed to add activity: ' + (data.error || 'Unknown'));
                           }
-                        } catch (err:any) {
+                        } catch (err: any) {
                           console.error('Error creating activity', err);
                           alert('Failed to create activity: ' + (err?.message || err));
                         }
@@ -3059,12 +3056,11 @@ ${
                         className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                       >
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
-                            activity.type === 'delivery_completed' ? 'bg-green-500' :
-                            activity.type === 'pickup_completed' ? 'bg-orange-500' :
-                            activity.type === 'payment_received' ? 'bg-purple-500' :
-                            activity.type === 'order_assigned' ? 'bg-blue-500' : 'bg-gray-500'
-                          }`}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${activity.type === 'delivery_completed' ? 'bg-green-500' :
+                              activity.type === 'pickup_completed' ? 'bg-orange-500' :
+                                activity.type === 'payment_received' ? 'bg-purple-500' :
+                                  activity.type === 'order_assigned' ? 'bg-blue-500' : 'bg-gray-500'
+                            }`}
                         >
                           <span className="text-lg">{activity.type === 'delivery_completed' ? '✅' : activity.type === 'pickup_completed' ? '📦' : activity.type === 'payment_received' ? '💰' : activity.type === 'order_assigned' ? '🏍️' : '•'}</span>
                         </div>
@@ -3128,12 +3124,11 @@ ${
 
                         <div className="flex flex-col items-end space-y-1">
                           <span
-                            className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              activity.type === 'delivery_completed' ? 'bg-green-100 text-green-800' :
-                              activity.type === 'pickup_completed' ? 'bg-orange-100 text-orange-800' :
-                              activity.type === 'payment_received' ? 'bg-purple-100 text-purple-800' :
-                              activity.type === 'order_assigned' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                            }`}
+                            className={`px-2 py-1 text-xs font-medium rounded-full ${activity.type === 'delivery_completed' ? 'bg-green-100 text-green-800' :
+                                activity.type === 'pickup_completed' ? 'bg-orange-100 text-orange-800' :
+                                  activity.type === 'payment_received' ? 'bg-purple-100 text-purple-800' :
+                                    activity.type === 'order_assigned' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                              }`}
                           >
                             {activity.type.replace('_', ' ')}
                           </span>
@@ -3370,13 +3365,12 @@ ${
                             </div>
                           </div>
                           <span
-                            className={`px-3 py-1 text-sm font-medium rounded-full ${
-                              request.status === "pending"
+                            className={`px-3 py-1 text-sm font-medium rounded-full ${request.status === "pending"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : request.status === "approved"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-red-100 text-red-800"
-                            }`}
+                              }`}
                           >
                             {request.status}
                           </span>
@@ -3633,11 +3627,10 @@ ${
                         <div className="flex justify-between items-start">
                           <div className="flex items-center space-x-4">
                             <div
-                              className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                payment.status === "success"
+                              className={`w-10 h-10 rounded-full flex items-center justify-center ${payment.status === "success"
                                   ? "bg-green-500"
                                   : "bg-red-500"
-                              }`}
+                                }`}
                             >
                               <span className="text-white text-lg">
                                 {payment.status === "success" ? "✅" : "❌"}
@@ -3660,11 +3653,10 @@ ${
                               KES {payment.amount.toLocaleString()}
                             </div>
                             <span
-                              className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                payment.status === "success"
+                              className={`px-2 py-1 text-xs font-medium rounded-full ${payment.status === "success"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-red-100 text-red-800"
-                              }`}
+                                }`}
                             >
                               {payment.status}
                             </span>

@@ -74,7 +74,7 @@ export default function Services() {
           <div className="text-center text-white">
             <h1 className="text-5xl font-bold mb-6">Our Delivery Services</h1>
             <p className="text-xl mb-8 max-w-3xl mx-auto">
-              From same-day delivery to bulk shipments, we provide comprehensive motorcycle 
+              From same-day delivery to bulk shipments, we provide comprehensive motorcycle
               delivery solutions across Nairobi at competitive rates.
             </p>
             <button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-bold px-8 py-4 rounded-lg text-lg transition-all">
@@ -96,11 +96,10 @@ export default function Services() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
-              <div 
-                key={service.id} 
-                className={`relative bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 ${
-                  service.popular ? 'border-2 border-rocs-yellow' : 'border border-gray-200'
-                }`}
+              <div
+                key={service.id}
+                className={`relative bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 ${service.popular ? 'border-2 border-rocs-yellow' : 'border border-gray-200'
+                  }`}
               >
                 {service.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -129,9 +128,11 @@ export default function Services() {
 
                 <div className="text-center border-t pt-6">
                   <div className="text-2xl font-bold text-rocs-green mb-4">{service.price}</div>
-                  <button className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3 rounded-lg transition-colors">
-                    Book Now
-                  </button>
+                  <Link to="/book-delivery">
+                    <button className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3 rounded-lg transition-colors">
+                      Book Now
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AnyZodObject, ZodError } from "zod";
+import { ZodTypeAny, ZodError } from "zod";
 import {
     signupSchema,
     loginSchema,
@@ -12,7 +12,7 @@ export { signupSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema };
 
 // --- Middleware ---
 
-export const validate = (schema: AnyZodObject) =>
+export const validate = (schema: ZodTypeAny) =>
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await schema.parseAsync(req.body);

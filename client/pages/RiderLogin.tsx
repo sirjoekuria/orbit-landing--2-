@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Eye, EyeOff, Bike, User } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -8,15 +8,23 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, forgotPasswordSchema } from '../../shared/validation';
 import { z } from 'zod';
-import RecaptchaWidget from '../components/RecaptchaWidget';
+import { useAuth } from '../lib/AuthContext';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function RiderLogin() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { login: authLogin, user: authUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  // Check if user is already logged in and redirect
+  useEffect(() => {
+    if (authUser) {
+      navigate(authUser.userType === 'rider' ? '/rider-dashboard' : '/book-delivery');
+    }
+  }, [navigate, authUser]);
 
   // Forgot password modal state
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -31,8 +39,7 @@ export default function RiderLogin() {
     mode: 'onChange',
     defaultValues: {
       email: '',
-      password: '',
-      recaptchaToken: ''
+      password: ''
     }
   });
 
@@ -55,9 +62,15 @@ export default function RiderLogin() {
       setLoading(true);
       setMessage(null);
       try {
+        const csrfRes = await fetch('/api/csrf-token');
+        const { token } = await csrfRes.json();
+
         const res = await fetch('/api/auth/forgot-password', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': token
+          },
           body: JSON.stringify(data)
         });
         const result = await res.json();
@@ -121,10 +134,14 @@ export default function RiderLogin() {
     setIsSubmitting(true);
 
     try {
+      const csrfRes = await fetch('/api/csrf-token');
+      const { token } = await csrfRes.json();
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-csrf-token': token
         },
         body: JSON.stringify({
           ...data,
@@ -139,15 +156,7 @@ export default function RiderLogin() {
           throw new Error('This account is not registered as a rider.');
         }
 
-        localStorage.setItem('user', JSON.stringify({
-          id: result.user.id,
-          name: result.user.fullName || result.user.full_name,
-          email: result.user.email,
-          userType: result.user.userType || result.user.user_type,
-          isAuthenticated: true,
-          loginTime: Date.now()
-        }));
-
+        authLogin(result.user);
         navigate('/rider-dashboard');
       } else {
         const error = await response.json();
@@ -219,11 +228,6 @@ export default function RiderLogin() {
               {errors.password && <p className="mt-1.5 text-xs font-medium text-red-600 pl-1">{errors.password.message}</p>}
             </div>
 
-            {/* Bot Protection */}
-            <RecaptchaWidget
-              onChange={(token) => setValue('recaptchaToken', token || '')}
-            />
-            {errors.recaptchaToken && <p className="mt-[-1rem] text-xs font-medium text-red-600 text-center">{errors.recaptchaToken.message}</p>}
 
             <div className="text-[11px] text-gray-400 text-center px-4 leading-relaxed">
               By signing in, you agree to our{" "}

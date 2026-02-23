@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Eye, EyeOff, User, Bike } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import RecaptchaWidget from '../components/RecaptchaWidget';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, forgotPasswordSchema } from '../../shared/validation';
 import { z } from 'zod';
+import { useAuth } from '../lib/AuthContext';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function Login() {
+  const { login: authLogin, user: authUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userType, setUserType] = useState<'customer' | 'rider'>('customer');
@@ -30,8 +31,7 @@ export default function Login() {
     mode: 'onChange',
     defaultValues: {
       email: '',
-      password: '',
-      recaptchaToken: ''
+      password: ''
     }
   });
 
@@ -41,23 +41,15 @@ export default function Login() {
 
   // Check if user is already logged in and redirect
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        if (user.isAuthenticated) {
-          // User is already logged in, redirect based on type
-          if (user.userType === 'rider') {
-            navigate('/rider-dashboard');
-          } else {
-            navigate('/book-delivery');
-          }
-        }
-      } catch (error) {
-        localStorage.removeItem('user');
+    if (authUser && authUser.isAuthenticated) {
+      // User is already logged in, redirect based on type
+      if (authUser.userType === 'rider') {
+        navigate('/rider-dashboard');
+      } else {
+        navigate('/book-delivery');
       }
     }
-  }, [navigate]);
+  }, [navigate, authUser]);
 
   // Load saved email on component mount
   useEffect(() => {
@@ -169,14 +161,7 @@ export default function Login() {
           localStorage.removeItem('rememberedEmail');
         }
 
-        localStorage.setItem('user', JSON.stringify({
-          id: result.user.id,
-          name: result.user.fullName,
-          email: result.user.email,
-          userType: result.user.userType,
-          isAuthenticated: true,
-          loginTime: Date.now()
-        }));
+        authLogin(result.user);
 
         const intendedPath = localStorage.getItem('intendedPath') || '/book-delivery';
         localStorage.removeItem('intendedPath');
@@ -301,10 +286,6 @@ export default function Login() {
               {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />}
             </div>
 
-            {/* Bot Protection */}
-            <RecaptchaWidget
-              onChange={(token) => setValue('recaptchaToken', token || '')}
-            />
 
             <div className="text-xs text-gray-500 text-center">
               By signing in, you agree to our{" "}

@@ -17,7 +17,8 @@
     "password": "december25J",
     "userType": "customer",
     "isActive": true,
-    "createdAt": "2025-09-30T19:29:49.267Z"
+    "createdAt": "2025-09-30T19:29:49.267Z",
+    "failedAttempts": 4
   },
   {
     "id": "USR-003",
@@ -27,7 +28,9 @@
     "password": "$2b$10$qBTa9boINIz7KlBxmaQpau6sCwo6yZSSAb.xPwgNo8ef4jFhIP4P6",
     "userType": "customer",
     "isActive": true,
-    "createdAt": "2025-10-01T18:40:02.002Z"
+    "createdAt": "2025-10-01T18:40:02.002Z",
+    "failedAttempts": 0,
+    "lockoutUntil": null
   },
   {
     "id": "USR-004",

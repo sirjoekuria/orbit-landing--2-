@@ -26,6 +26,9 @@ import {
   getPayment,
   getAllPayments,
   updatePaymentStatus,
+  initiateMpesaStkPush,
+  mpesaCallback,
+  getMpesaStatus,
 } from "./routes/payments";
 import {
   riderSignup,
@@ -42,13 +45,15 @@ import {
 import {
   userSignup,
   login,
+  forgotPassword,
+  resetPassword,
   getProfile,
   updateProfile,
   getAllUsers,
   toggleUserStatus,
   deleteUser,
-  forgotPassword,
-  resetPassword,
+  getMe,
+  logout
 } from "./routes/auth-hybrid";
 import {
   submitPartnershipRequest,
@@ -97,6 +102,7 @@ import {
 } from "./routes/ai";
 
 import cookieParser from "cookie-parser";
+import { generateToken, setAuthCookie, verifyToken, clearAuthCookie } from './utils/jwt';
 import { globalLimiter, authLimiter } from "./middleware/rateLimiter";
 import {
   invalidCsrfTokenError,
@@ -114,6 +120,10 @@ import {
 export function createServer() {
   const app = express();
 
+  // Trust first proxy (required for secure cookies behind Vite proxy)
+  app.set('trust proxy', 1);
+
+
   // Middleware
   app.use(cookieParser());
   app.use(cors({
@@ -122,8 +132,19 @@ export function createServer() {
   }));
   app.use(express.json());
 
-  // Apply global rate limiting
+  // apply global rate limiting
   app.use(globalLimiter);
+
+  // Request logger for debugging
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    }
+    next();
+  });
+
+  // Alias for signup to support both endpoints
+  app.post("/api/users/signup", validate(signupSchema), userSignup);
 
   // CSRF Token endpoint
   app.get("/api/csrf-token", (req, res) => {
@@ -136,12 +157,18 @@ export function createServer() {
     }
   });
 
+  // M-Pesa Callback (Exempt from CSRF)
+  app.post("/api/payments/mpesa/callback", mpesaCallback);
+
   // Apply CSRF protection to all API routes except GET/HEAD/OPTIONS (configured in csrf.ts)
   app.use("/api", doubleCsrfProtection);
 
   // Existing routes
   app.get("/api/ping", (req, res) => {
-    res.json({ message: "Server is running!" });
+    res.json({ message: "Server is running!", version: "1.0.1" });
+  });
+  app.get("/api/version", (req, res) => {
+    res.json({ version: "1.0.1", timestamp: new Date().toISOString() });
   });
   app.get("/api/demo", handleDemo);
 
@@ -171,6 +198,10 @@ export function createServer() {
   app.get("/api/admin/payments", getAllPayments);
   app.patch("/api/payments/:id/status", updatePaymentStatus);
 
+  // M-Pesa routes
+  app.post("/api/payments/mpesa/stkpush", initiateMpesaStkPush);
+  app.get("/api/payments/mpesa/status/:checkoutRequestId", getMpesaStatus);
+
   // Rider routes
   app.post("/api/riders/signup", uploadRiderDocuments, validate(signupSchema), riderSignup);
   app.get("/api/admin/riders", getRiders);
@@ -187,6 +218,8 @@ export function createServer() {
   app.post("/api/auth/login", validate(loginSchema), login);
   app.post("/api/auth/forgot-password", validate(forgotPasswordSchema), forgotPassword);
   app.post("/api/auth/reset-password", validate(resetPasswordSchema), resetPassword);
+  app.get("/api/auth/me", getMe);
+  app.post("/api/auth/logout", logout);
   app.get("/api/auth/profile/:userId", getProfile);
   app.patch("/api/auth/profile/:userId", updateProfile);
   app.get("/api/admin/users", getAllUsers);
@@ -266,6 +299,7 @@ export function createServer() {
   // Error handling for CSRF
   app.use((err: any, req: any, res: any, next: any) => {
     if (err === invalidCsrfTokenError) {
+      console.error('CSRF Error for', req.path, 'from', req.ip);
       res.status(403).json({
         error: "Invalid CSRF token",
       });

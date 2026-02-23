@@ -68,6 +68,66 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const newestOrderTimestampRef = useRef<string | null>(null);
   const pollRef = useRef<number | null>(null);
 
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch('/api/admin/messages');
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data.messages || []);
+        setStats(prev => ({
+          ...prev,
+          totalMessages: data.messages?.length || 0,
+          unreadMessages: data.messages?.filter((m: Message) => m.status === 'new').length || 0
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch('/api/admin/orders');
+      if (response.ok) {
+        const data = await response.json();
+        const fetchedOrders = data.orders || [];
+
+        // Detect newest order timestamp
+        const newestTimestamp = fetchedOrders.reduce((latest: string | null, o: Order) => {
+          if (!o.timestamp) return latest;
+          if (!latest) return o.timestamp;
+          return new Date(o.timestamp) > new Date(latest) ? o.timestamp : latest;
+        }, newestOrderTimestampRef.current);
+
+        // If we have a previous timestamp and there's a newer one, play sound
+        if (newestOrderTimestampRef.current && newestTimestamp && new Date(newestTimestamp) > new Date(newestOrderTimestampRef.current)) {
+          if (isSoundEnabled) playNotificationRingtone(20000);
+        }
+
+        // Update the ref to the latest known timestamp
+        if (newestTimestamp) newestOrderTimestampRef.current = newestTimestamp;
+
+        setOrders(fetchedOrders);
+        const today = new Date().toDateString();
+        const todayOrders = fetchedOrders.filter((o: Order) =>
+          new Date(o.timestamp).toDateString() === today
+        ).length || 0;
+        const revenue = fetchedOrders.reduce((sum: number, o: Order) => sum + o.cost, 0) || 0;
+        const pending = fetchedOrders.filter((o: Order) => o.status === 'pending').length || 0;
+
+        setStats(prev => ({
+          ...prev,
+          totalOrders: fetchedOrders.length || 0,
+          todayOrders,
+          totalRevenue: revenue,
+          pendingOrders: pending
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+    }
+  };
+
   useEffect(() => {
     fetchMessages();
     fetchOrders();
@@ -139,7 +199,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         } else {
           // stop and close after remaining time
           setTimeout(() => {
-            try { ctx.close(); } catch (e) {}
+            try { ctx.close(); } catch (e) { }
           }, Math.max(0, durationMs - (Date.now() - startTime)));
         }
       };
@@ -150,75 +210,28 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       try {
         const audio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQAAAAA=');
         audio.loop = true;
-        audio.play().catch(() => {});
+        audio.play().catch(() => { });
         setTimeout(() => { audio.pause(); }, durationMs);
-      } catch (e2) {}
+      } catch (e2) { }
     }
   };
 
-  const fetchMessages = async () => {
-    try {
-      const response = await fetch('/api/admin/messages');
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data.messages || []);
-        setStats(prev => ({
-          ...prev,
-          totalMessages: data.messages?.length || 0,
-          unreadMessages: data.messages?.filter((m: Message) => m.status === 'new').length || 0
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to fetch messages:', error);
-    }
-  };
+  const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
+    const csrfRes = await fetch("/api/csrf-token");
+    const { token } = await csrfRes.json();
 
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch('/api/admin/orders');
-      if (response.ok) {
-        const data = await response.json();
-        const fetchedOrders = data.orders || [];
-
-        // Detect newest order timestamp
-        const newestTimestamp = fetchedOrders.reduce((latest: string | null, o: Order) => {
-          if (!o.timestamp) return latest;
-          if (!latest) return o.timestamp;
-          return new Date(o.timestamp) > new Date(latest) ? o.timestamp : latest;
-        }, newestOrderTimestampRef.current);
-
-        // If we have a previous timestamp and there's a newer one, play sound
-        if (newestOrderTimestampRef.current && newestTimestamp && new Date(newestTimestamp) > new Date(newestOrderTimestampRef.current)) {
-          if (isSoundEnabled) playNotificationRingtone(20000);
-        }
-
-        // Update the ref to the latest known timestamp
-        if (newestTimestamp) newestOrderTimestampRef.current = newestTimestamp;
-
-        setOrders(fetchedOrders);
-        const today = new Date().toDateString();
-        const todayOrders = fetchedOrders.filter((o: Order) =>
-          new Date(o.timestamp).toDateString() === today
-        ).length || 0;
-        const revenue = fetchedOrders.reduce((sum: number, o: Order) => sum + o.cost, 0) || 0;
-        const pending = fetchedOrders.filter((o: Order) => o.status === 'pending').length || 0;
-
-        setStats(prev => ({
-          ...prev,
-          totalOrders: fetchedOrders.length || 0,
-          todayOrders,
-          totalRevenue: revenue,
-          pendingOrders: pending
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to fetch orders:', error);
-    }
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "x-csrf-token": token,
+      },
+    });
   };
 
   const markMessageAsRead = async (messageId: string) => {
     try {
-      await fetch(`/api/admin/messages/${messageId}`, {
+      await fetchWithCsrf(`/api/admin/messages/${messageId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'read' })
@@ -231,7 +244,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const updateOrderStatus = async (orderId: string, status: Order['status']) => {
     try {
-      await fetch(`/api/admin/orders/${orderId}`, {
+      await fetchWithCsrf(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -403,7 +416,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           </div>
                           <span className="text-sm text-gray-500">{formatDate(message.timestamp)}</span>
                         </div>
-                        
+
                         <div className="text-sm text-gray-600 mb-2">
                           <div className="flex items-center space-x-4">
                             <span className="flex items-center">
@@ -418,10 +431,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             )}
                           </div>
                         </div>
-                        
+
                         <h5 className="font-medium text-gray-800 mb-2">{message.subject}</h5>
                         <p className="text-gray-700 text-sm mb-3">{message.message}</p>
-                        
+
                         {message.status === 'new' && (
                           <Button
                             size="sm"
@@ -469,7 +482,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             <p className="text-sm text-gray-500 mt-1">{formatDate(order.timestamp)}</p>
                           </div>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                           <div>
                             <p className="text-sm font-medium text-gray-700">Pickup:</p>
@@ -480,13 +493,13 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             <p className="text-sm text-gray-600">{order.delivery}</p>
                           </div>
                         </div>
-                        
+
                         <div className="flex justify-between items-center">
                           <div className="text-sm">
                             <span className="text-gray-600">Distance: {order.distance}km</span>
                             <span className="ml-4 font-semibold text-rocs-green">Cost: KES {order.cost}</span>
                           </div>
-                          
+
                           {order.status !== 'delivered' && (
                             <div className="flex space-x-2">
                               {order.status === 'pending' && (

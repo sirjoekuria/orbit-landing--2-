@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIdleTimer } from '../hooks/useIdleTimer';
+import { useAuth } from '../lib/AuthContext';
 // import { useToast } from './ui/use-toast';
 
 const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 minutes
@@ -8,17 +9,19 @@ const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 minutes
 export const AutoLogout = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, logout } = useAuth(); // Replaced with useAuth
     // const { toast } = useToast();
 
-    const handleIdle = () => {
+    const handleIdle = async () => { // Made handleIdle async
         // Check if user is on a protected route (e.g., admin) or logged in
-        const userJson = localStorage.getItem('user');
-        const riderJson = localStorage.getItem('rider');
+        // const userJson = localStorage.getItem('user'); // Removed
+        // const riderJson = localStorage.getItem('rider'); // Removed
 
-        if (userJson || riderJson) {
+        if (user) { // Changed condition to use 'user' from useAuth
             // Clear session
-            localStorage.removeItem('user');
-            localStorage.removeItem('rider');
+            // localStorage.removeItem('user'); // Removed
+            // localStorage.removeItem('rider'); // Removed
+            await logout(); // Called logout from useAuth
 
             // Redirect to login
             navigate('/login');

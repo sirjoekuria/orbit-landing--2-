@@ -10,6 +10,13 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     https: {},
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false, // development with self-signed certificate
+      }
+    },
     fs: {
       allow: [".", "./client", "./shared"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
@@ -18,7 +25,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist/spa",
   },
-  plugins: [react(), basicSsl(), expressPlugin()],
+  plugins: [react(), basicSsl(), backendPlugin()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
@@ -27,20 +34,33 @@ export default defineConfig(({ mode }) => ({
   },
 }));
 
-function expressPlugin(): Plugin {
+/**
+ * Starts the backend server on port 3001 as a separate process in development.
+ * This isolates Express from Vite's HTTP/2 server, fixing protocol crashes.
+ */
+import { spawn } from 'child_process';
+function backendPlugin(): Plugin {
   return {
-    name: "express-plugin",
-    apply: "serve", // Only apply during development (serve mode)
-    configureServer(server) {
-      const app = createServer();
+    name: "backend-plugin",
+    apply: "serve",
+    configureServer() {
+      console.log('🚀 Starting Backend Process on port 3001...');
 
-      // Add Express app as middleware to Vite dev server, targeting only /api routes
-      server.middlewares.use((req, res, next) => {
-        if (req.url?.startsWith("/api")) {
-          return app(req, res, next);
-        }
-        next();
+      const backend = spawn('npx', ['tsx', '--watch', 'server/node-build.ts'], {
+        env: { ...process.env, PORT: '3001' },
+        stdio: 'inherit',
+        shell: true
       });
+
+      backend.on('error', (err) => {
+        console.error('❌ Failed to start backend:', err);
+      });
+
+      // Cleanup on exit
+      process.on('exit', () => backend.kill());
+      process.on('SIGINT', () => backend.kill());
+      process.on('SIGTERM', () => backend.kill());
     },
   };
 }
+

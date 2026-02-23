@@ -17,7 +17,6 @@ export const signupSchema = z.object({
     drivingLicenseExpiry: z.string().optional(),
     goodConductExpiry: z.string().optional(),
     motorcycleInsuranceExpiry: z.string().optional(),
-    recaptchaToken: z.string().min(1, "Please complete the reCAPTCHA"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
@@ -27,7 +26,6 @@ export const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
     password: z.string().min(1, "Password is required"),
     userType: z.enum(["customer", "rider"]).optional(),
-    recaptchaToken: z.string().min(1, "Please complete the reCAPTCHA"),
 });
 
 export const forgotPasswordSchema = z.object({

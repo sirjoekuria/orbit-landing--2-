@@ -1,0 +1,78 @@
+[
+  {
+    "id": "RC-2024-TEST-001",
+    "customerName": "Manual Test",
+    "customerEmail": "manual@example.com",
+    "customerPhone": "+254 712 345 678",
+    "pickup": "Veritas Street",
+    "delivery": "Persistence Point",
+    "distance": 10,
+    "cost": 300,
+    "packageDetails": "Persistent data",
+    "currentStatus": "confirmed",
+    "createdAt": "2026-02-23T08:00:00.000Z",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "timestamp": "2026-02-23T08:00:00.000Z",
+        "description": "Order created manually for verification"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:48.147Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:52.131Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:53.154Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:53.871Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:54.172Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T16:33:54.459Z",
+        "description": "Order confirmed and rider assigned"
+      }
+    ],
+    "updatedAt": "2026-02-23T16:33:54.459Z"
+  },
+  {
+    "id": "RC-2024-001",
+    "customerName": "Joseph Kuria",
+    "customerEmail": "whatsapprecoverykenya@gmail.com",
+    "customerPhone": "+254700898950",
+    "pickup": "TRM Drive (Thika Road Mall area), Nairobi",
+    "delivery": "Nairobi, Kenya",
+    "distance": 13.221515,
+    "cost": 400,
+    "packageDetails": "keys",
+    "notes": "none",
+    "paymentMethod": "cash",
+    "paymentStatus": "pending",
+    "transactionId": "COD-1771869212920",
+    "currentStatus": "pending",
+    "createdAt": "2026-02-23T17:53:32.960Z",
+    "estimatedDelivery": "2026-02-23T19:23:32.960Z",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "timestamp": "2026-02-23T17:53:32.960Z",
+        "description": "Order received and is being processed"
+      }
+    ]
+  }
+]

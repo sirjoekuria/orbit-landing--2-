@@ -41,10 +41,14 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
+      const csrfRes = await fetch("/api/csrf-token");
+      const { token: csrfToken } = await csrfRes.json();
+
       const response = await fetch("/api/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
         body: JSON.stringify({
           ...formData,
@@ -453,8 +457,14 @@ function RiderSignupForm() {
         }
       });
 
+      const csrfRes = await fetch("/api/csrf-token");
+      const { token: csrfToken } = await csrfRes.json();
+
       const response = await fetch("/api/riders/signup", {
         method: "POST",
+        headers: {
+          "x-csrf-token": csrfToken,
+        },
         body: submitData, // Don't set Content-Type header, let browser set it for FormData
       });
 

@@ -1,5 +1,49 @@
 [
   {
+    "riderId": "RD-SEED-001",
+    "riderName": "Seeded Test Rider",
+    "type": "status_change",
+    "description": "Withdrawal request processed: KES 100 (ID: WR-001)",
+    "amount": 100,
+    "metadata": {
+      "withdrawalRequestId": "WR-001",
+      "previousStatus": "pending",
+      "newStatus": "processed",
+      "adminNotes": "M-Pesa Payout Successful: AG_20260223_0100105619kevwvfsuoa"
+    },
+    "id": "ACT-006",
+    "timestamp": "2026-02-23T18:17:50.132Z"
+  },
+  {
+    "riderId": "RD-SEED-001",
+    "riderName": "Seeded Test Rider",
+    "type": "status_change",
+    "description": "Withdrawal request approved: KES 100 (ID: WR-001)",
+    "amount": 100,
+    "metadata": {
+      "withdrawalRequestId": "WR-001",
+      "previousStatus": "pending",
+      "newStatus": "approved",
+      "adminNotes": "Approved via verification script"
+    },
+    "id": "ACT-005",
+    "timestamp": "2026-02-23T18:17:49.019Z"
+  },
+  {
+    "riderId": "RD-SEED-001",
+    "riderName": "Seeded Test Rider",
+    "type": "status_change",
+    "description": "Requested early withdrawal of KES 100 (Fee: KES 20, Net: KES 80)",
+    "amount": 100,
+    "metadata": {
+      "withdrawalFee": 20,
+      "netAmount": 80,
+      "notes": "Verification test payout"
+    },
+    "id": "ACT-004",
+    "timestamp": "2026-02-23T18:17:48.970Z"
+  },
+  {
     "riderId": "SYSTEM",
     "riderName": "System",
     "type": "status_change",

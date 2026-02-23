@@ -1,0 +1,15 @@
+[
+    {
+        "id": "RD-SEED-001",
+        "fullName": "Seeded Test Rider",
+        "email": "seeded@example.com",
+        "phone": "0712345678",
+        "password": "password123",
+        "status": "approved",
+        "isActive": true,
+        "currentBalance": 1000,
+        "totalEarnings": 1000,
+        "totalWithdrawn": 0,
+        "createdAt": "2024-05-23T12:00:00.000Z"
+    }
+]

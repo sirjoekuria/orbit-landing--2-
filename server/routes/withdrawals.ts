@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { 
+import {
   createWithdrawalRequest,
   getWithdrawalRequests,
   getRiderWithdrawalRequests,
@@ -8,24 +8,27 @@ import {
   getRiderAutomatedPayments,
   processAutomatedPayment,
   getPaymentStats,
-  calculateWithdrawalFee
+  calculateWithdrawalFee,
+  processMpesaB2CPayment
 } from "../services/paymentScheduler";
-import { 
-  getRiderById, 
-  updateRiderBalance, 
+import {
+  getRiderById,
+  updateRiderBalance,
   validateRiderForWithdrawal,
-  getPaymentStatistics
+  getPaymentStatistics,
+  syncRiderData
 } from "../utils/ridersData";
-import { 
-  startCronScheduler, 
-  stopCronScheduler, 
-  getCronStatus, 
-  triggerManualPayments 
+import {
+  startCronScheduler,
+  stopCronScheduler,
+  getCronStatus,
+  triggerManualPayments
 } from "../services/cronScheduler";
 
 // POST /api/riders/:riderId/withdrawal-request - Create withdrawal request
-export const createWithdrawal: RequestHandler = (req, res) => {
+export const createWithdrawal: RequestHandler = async (req, res) => {
   try {
+    await syncRiderData();
     const { riderId } = req.params;
     const { amount, notes } = req.body;
 
@@ -78,18 +81,18 @@ export const createWithdrawal: RequestHandler = (req, res) => {
 export const getAdminWithdrawalRequests: RequestHandler = (req, res) => {
   try {
     const { status, riderId, limit = '50' } = req.query;
-    
+
     let requests = getWithdrawalRequests();
-    
+
     // Apply filters
     if (status) {
       requests = requests.filter(req => req.status === status);
     }
-    
+
     if (riderId) {
       requests = requests.filter(req => req.riderId === riderId);
     }
-    
+
     // Apply limit
     const limitNum = parseInt(limit as string);
     requests = requests.slice(0, limitNum);
@@ -144,7 +147,7 @@ export const updateWithdrawalStatus: RequestHandler = async (req, res) => {
     }
 
     const result = updateWithdrawalRequestStatus(requestId, status, adminNotes);
-    
+
     if (!result.success) {
       return res.status(404).json({
         error: result.error
@@ -154,17 +157,32 @@ export const updateWithdrawalStatus: RequestHandler = async (req, res) => {
     // If approved, process the payment
     if (status === 'approved') {
       const request = result.withdrawalRequest!;
-      
-      // Update rider balance (deduct the withdrawal amount)
-      const balanceUpdated = updateRiderBalance(
-        request.riderId, 
-        0, // Set balance to 0 since we're paying out everything (simplified for demo)
-        request.amount
-      );
 
-      if (!balanceUpdated) {
+      // Trigger real M-Pesa B2C Payout
+      console.log(`🚀 Automated Payout Triggered for ${request.riderName} via admin approval`);
+      const paymentResult = await processMpesaB2CPayment(request.riderPhone, request.netAmount, request.riderName);
+
+      if (paymentResult.success) {
+        // Update rider balance (deduct the withdrawal amount)
+        const balanceUpdated = updateRiderBalance(
+          request.riderId,
+          0, // Set balance to 0 since we're paying out everything (simplified for demo)
+          request.amount
+        );
+
+        if (!balanceUpdated) {
+          return res.status(500).json({
+            error: 'Failed to update rider balance after successful M-Pesa payout'
+          });
+        }
+
+        // Mark as processed since payment went through
+        updateWithdrawalRequestStatus(requestId, 'processed', `M-Pesa Payout Successful: ${paymentResult.transactionId}`);
+      } else {
+        // Log failure but keep status as appoved or revert? 
+        // For now, return error so admin knows it failed
         return res.status(500).json({
-          error: 'Failed to update rider balance'
+          error: `M-Pesa Payout Failed: ${paymentResult.error}. Balance not deducted.`
         });
       }
     }
@@ -184,18 +202,18 @@ export const updateWithdrawalStatus: RequestHandler = async (req, res) => {
 export const getAdminAutomatedPayments: RequestHandler = (req, res) => {
   try {
     const { status, riderId, limit = '50' } = req.query;
-    
+
     let payments = getAutomatedPayments();
-    
+
     // Apply filters
     if (status) {
       payments = payments.filter(payment => payment.status === status);
     }
-    
+
     if (riderId) {
       payments = payments.filter(payment => payment.riderId === riderId);
     }
-    
+
     // Apply limit
     const limitNum = parseInt(limit as string);
     payments = payments.slice(0, limitNum);
@@ -237,10 +255,10 @@ export const getRiderAutomatedPaymentHistory: RequestHandler = (req, res) => {
 export const triggerAutomatedPayments: RequestHandler = async (req, res) => {
   try {
     console.log('🔧 Admin triggered manual automated payments');
-    
+
     // Trigger the payments
     await triggerManualPayments();
-    
+
     res.json({
       success: true,
       message: 'Automated payments triggered successfully',
@@ -257,7 +275,7 @@ export const getSchedulerStatus: RequestHandler = (req, res) => {
   try {
     const status = getCronStatus();
     const stats = getPaymentStatistics();
-    
+
     res.json({
       success: true,
       scheduler: status,
@@ -273,7 +291,7 @@ export const getSchedulerStatus: RequestHandler = (req, res) => {
 export const startScheduler: RequestHandler = (req, res) => {
   try {
     startCronScheduler();
-    
+
     res.json({
       success: true,
       message: 'Payment scheduler started successfully'
@@ -288,7 +306,7 @@ export const startScheduler: RequestHandler = (req, res) => {
 export const stopScheduler: RequestHandler = (req, res) => {
   try {
     stopCronScheduler();
-    
+
     res.json({
       success: true,
       message: 'Payment scheduler stopped successfully'
@@ -303,24 +321,24 @@ export const stopScheduler: RequestHandler = (req, res) => {
 export const calculateFee: RequestHandler = (req, res) => {
   try {
     const { amount } = req.query;
-    
+
     if (!amount) {
       return res.status(400).json({
         error: 'Amount parameter is required'
       });
     }
-    
+
     const amountNum = parseFloat(amount as string);
-    
+
     if (isNaN(amountNum) || amountNum <= 0) {
       return res.status(400).json({
         error: 'Invalid amount'
       });
     }
-    
+
     const fee = calculateWithdrawalFee(amountNum);
     const netAmount = amountNum - fee;
-    
+
     res.json({
       success: true,
       amount: amountNum,
