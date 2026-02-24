@@ -32,28 +32,6 @@ export default defineConfig(({ mode }) => {
       reportCompressedSize: true,
       // Hard limit per chunk – warns if bundle gets too large
       chunkSizeWarningLimit: 500,
-      rollupOptions: {
-        output: {
-          // Split large vendor libraries into separate cacheable chunks
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-                return 'vendor-react';
-              }
-              if (id.includes('@radix-ui') || id.includes('framer-motion')) {
-                return 'vendor-ui';
-              }
-              if (id.includes('lucide')) {
-                return 'vendor-icons';
-              }
-              if (id.includes('recharts')) {
-                return 'vendor-charts';
-              }
-              return 'vendor';
-            }
-          },
-        },
-      },
     },
     plugins: [react(), basicSsl(), backendPlugin()],
     resolve: {
