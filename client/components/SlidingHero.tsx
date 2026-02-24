@@ -79,7 +79,7 @@ export default function SlidingHero() {
 
   return (
     <section
-      className="relative h-screen overflow-hidden"
+      className="relative h-[85vh] md:h-screen overflow-hidden bg-black"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -88,14 +88,14 @@ export default function SlidingHero() {
         <div
           key={slide.id}
           className={`absolute inset-0 transition-all duration-1000 ease-in-out ${index === currentSlide
-              ? "opacity-100 scale-100"
-              : "opacity-0 scale-105"
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-105"
             }`}
         >
           <div className="relative h-full">
             {/* Background Image with Overlay */}
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat sm:bg-cover bg-[length:auto_100%] sm:bg-center"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `url(${slide.image})`,
               }}
@@ -172,8 +172,8 @@ export default function SlidingHero() {
             key={index}
             onClick={() => goToSlide(index)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-                ? "bg-rocs-yellow scale-125"
-                : "bg-white/50 hover:bg-white/70"
+              ? "bg-rocs-yellow scale-125"
+              : "bg-white/50 hover:bg-white/70"
               }`}
           />
         ))}

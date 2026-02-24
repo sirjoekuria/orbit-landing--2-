@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-6">
-              <img src="/logo.png" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
+              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
               <span className="text-2xl font-bold">Rocs Crew</span>
             </div>
             <p className="text-rocs-green-light mb-6">
