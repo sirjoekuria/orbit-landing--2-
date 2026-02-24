@@ -166,7 +166,7 @@ export default function SlidingTestimonials() {
   const maxSlides = testimonials.length - visibleTestimonials + 1;
 
   return (
-    <section className="py-10 md:py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <section className="py-10 md:py-20 bg-background relative overflow-hidden transition-colors duration-300">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-32 h-32 bg-rocs-green rounded-full blur-3xl" />
@@ -186,7 +186,7 @@ export default function SlidingTestimonials() {
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-rocs-green mb-4 md:mb-6">
             What Our Customers Say
           </h2>
-          <p className="text-sm md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
+          <p className="text-sm md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
             Join thousands of satisfied customers who trust Rocs Crew for their
             delivery needs across Nairobi. Here's what they have to say about
             our service.
@@ -215,7 +215,7 @@ export default function SlidingTestimonials() {
                   className="px-2 md:px-3"
                   style={{ width: `${100 / testimonials.length}%` }}
                 >
-                  <div className="bg-white rounded-2xl p-4 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-gray-100">
+                  <div className="bg-card rounded-2xl p-4 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-border">
                     {/* Quote Icon */}
                     <div className="flex items-start justify-between mb-6">
                       <Quote className="w-10 h-10 text-rocs-yellow flex-shrink-0" />
@@ -223,7 +223,7 @@ export default function SlidingTestimonials() {
                     </div>
 
                     {/* Testimonial Content */}
-                    <blockquote className="text-gray-700 mb-6 md:mb-8 leading-relaxed text-sm md:text-lg">
+                    <blockquote className="text-muted-foreground mb-6 md:mb-8 leading-relaxed text-sm md:text-lg italic">
                       "{testimonial.content}"
                     </blockquote>
 
@@ -310,7 +310,7 @@ export default function SlidingTestimonials() {
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-20 bg-white rounded-2xl p-8 shadow-lg">
+        <div className="mt-20 bg-card rounded-2xl p-8 shadow-lg border border-border">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-rocs-green mb-2">

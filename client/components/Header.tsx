@@ -24,38 +24,38 @@ export default function Header() {
   const isDark = theme === 'dark';
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-background/80 backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img src="/logo.png" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
-            <span className="text-2xl font-bold text-rocs-green">Rocs Crew</span>
+            <span className="text-2xl font-bold text-foreground">Rocs Crew</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/" className="text-foreground/80 hover:text-rocs-green transition-colors">
               Home
             </Link>
             <Link to="/book-delivery">
-              <Button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold">
+              <Button variant="outline" className="border-rocs-green text-rocs-green hover:border-rocs-green/70 hover:bg-transparent transition-all font-semibold">
                 Book Now
               </Button>
             </Link>
-            <Link to="/tracking" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/tracking" className="text-foreground/80 hover:text-rocs-green transition-colors">
               Track Order
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/contact" className="text-foreground/80 hover:text-rocs-green transition-colors">
               Contact
             </Link>
-            <Link to="/services" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/services" className="text-foreground/80 hover:text-rocs-green transition-colors">
               Our Services
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/about" className="text-foreground/80 hover:text-rocs-green transition-colors">
               About Us
             </Link>
-            <Link to="/admin" className="text-gray-700 hover:text-rocs-green transition-colors">
+            <Link to="/admin" className="text-foreground/80 hover:text-rocs-green transition-colors">
               Admin
             </Link>
           </nav>
@@ -128,47 +128,47 @@ export default function Header() {
             <nav className="flex flex-col space-y-4">
               <Link
                 to="/"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
               <Link to="/book-delivery" onClick={() => setIsMenuOpen(false)}>
-                <Button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold w-fit">
+                <Button variant="outline" className="border-rocs-green text-rocs-green hover:border-rocs-green/70 hover:bg-transparent transition-all font-semibold w-fit">
                   Book Now
                 </Button>
               </Link>
               <Link
                 to="/tracking"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Track Order
               </Link>
               <Link
                 to="/admin"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Admin
               </Link>
               <Link
                 to="/contact"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </Link>
               <Link
                 to="/services"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Our Services
               </Link>
               <Link
                 to="/about"
-                className="text-gray-700 hover:text-rocs-green transition-colors"
+                className="text-foreground/80 hover:text-rocs-green transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About Us
