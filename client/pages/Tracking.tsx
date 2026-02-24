@@ -177,8 +177,8 @@ export default function Tracking() {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Track Order {id ? `#${id}` : ''} | Orbit Delivery</title>
-        <meta name="description" content="Track your Orbit Delivery package in real-time." />
+        <title>Track Order {id ? `#${id}` : ''} | Rocs Crew</title>
+        <meta name="description" content="Track your Rocs Crew package in real-time." />
       </Helmet>
 
       {/* Hero Section */}
@@ -326,7 +326,7 @@ export default function Tracking() {
         <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-500">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-2xl max-w-sm">
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">Package Delivered! 🎉</h3>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">How was your experience with Orbit Delivery? Please rate your rider.</p>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">How was your experience with Rocs Crew? Please rate your rider.</p>
             <div className="flex justify-center gap-2 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button

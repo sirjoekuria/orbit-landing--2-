@@ -98,7 +98,7 @@ export default function UserDashboard() {
         <>
             <div className="min-h-screen bg-gray-50">
                 <Helmet>
-                    <title>User Dashboard | Orbit Delivery</title>
+                    <title>User Dashboard | Rocs Crew</title>
                 </Helmet>
                 {/* Header Banner */}
                 <div className="bg-rocs-green text-white px-6 py-8">

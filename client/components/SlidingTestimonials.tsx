@@ -101,9 +101,8 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${
-            i < rating ? "text-rocs-yellow fill-current" : "text-gray-300"
-          }`}
+          className={`w-4 h-4 ${i < rating ? "text-rocs-yellow fill-current" : "text-gray-300"
+            }`}
         />
       ))}
     </div>
@@ -206,8 +205,8 @@ export default function SlidingTestimonials() {
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${currentSlide * (100 / visibleTestimonials)}%)`,
-                width: `${(testimonials.length / visibleTestimonials) * 100}%`,
+                transform: `translateX(-${currentSlide * 100}%)`,
+                width: `${testimonials.length * 100}%`,
               }}
             >
               {testimonials.map((testimonial) => (
@@ -302,11 +301,10 @@ export default function SlidingTestimonials() {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-4 h-4 md:w-3 md:h-3 rounded-full transition-all duration-300 touch-manipulation ${
-                index === currentSlide
-                  ? "bg-rocs-green scale-125"
-                  : "bg-gray-300 hover:bg-gray-400"
-              }`}
+              className={`w-4 h-4 md:w-3 md:h-3 rounded-full transition-all duration-300 touch-manipulation ${index === currentSlide
+                ? "bg-rocs-green scale-125"
+                : "bg-gray-300 hover:bg-gray-400"
+                }`}
             />
           ))}
         </div>

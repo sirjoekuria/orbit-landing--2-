@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 
-const logoPath = './public/logo.svg';
+const logoPath = './public/logo.png';
 const resDir = './android/app/src/main/res';
 
 const sizes = [

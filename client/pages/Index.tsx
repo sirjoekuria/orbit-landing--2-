@@ -8,8 +8,8 @@ export default function Index() {
   return (
     <div className="flex flex-col min-h-screen">
       <Helmet>
-        <title>Orbit Delivery | Fast & Reliable Logistics in Kenya</title>
-        <meta name="description" content="Orbit Delivery provides professional courier and logistics services across Kenya. Fast, secure, and reliable deliveries for businesses and individuals." />
+        <title>Rocs Crew | Fast & Reliable Logistics in Kenya</title>
+        <meta name="description" content="Rocs Crew provides professional courier and logistics services across Kenya. Fast, secure, and reliable deliveries for businesses and individuals." />
       </Helmet>
       <SlidingHero />
       <FeaturesSection />

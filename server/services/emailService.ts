@@ -186,7 +186,7 @@ const generateReceiptHTML = (order: any) => {
     </head>
     <body>
       <div class="header">
-        <div class="logo">🏍️ ROCS CREW</div>
+        <div class="logo">🏍️ Rocs Crew</div>
         <div class="tagline">Fast, Reliable Motorcycle Delivery Service</div>
       </div>
 
@@ -424,7 +424,7 @@ const generateRiderEarningsHTML = (rider: any, earning: any) => {
     </head>
     <body>
       <div class="header">
-        <div class="logo">🏍️ ROCS CREW</div>
+        <div class="logo">🏍️ Rocs Crew</div>
         <div class="tagline">Rider Earnings Statement</div>
       </div>
 
@@ -639,7 +639,7 @@ export const sendPasswordResetEmail = async (email: string, token: string, origi
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 24px;">🏍️ ROCS CREW</h1>
+            <h1 style="margin: 0; font-size: 24px;">🏍️ Rocs Crew</h1>
             <p style="margin: 5px 0 0 0; opacity: 0.9;">Password Reset Request</p>
           </div>
           <div style="background: white; border: 2px solid #10b981; border-radius: 8px; padding: 20px;">

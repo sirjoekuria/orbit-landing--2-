@@ -32,8 +32,8 @@ const FloatingLogo: React.FC = () => {
             >
                 <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-rocs-green to-rocs-yellow rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
-                    <div className="relative w-14 h-14 bg-rocs-green rounded-full flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-800 transition-transform active:scale-95">
-                        <span className="text-white font-bold text-xl select-none">RC</span>
+                    <div className="relative w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-rocs-green dark:border-gray-800 transition-transform active:scale-95 overflow-hidden">
+                        <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
                     </div>
 
                     {/* Tooltip hint */}
