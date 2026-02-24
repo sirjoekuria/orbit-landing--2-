@@ -1,5 +1,6 @@
+```javascript
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -41,7 +42,7 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <ThemeProvider>
-          <BrowserRouter>
+          <HashRouter>
             <ScrollToTop />
             <AutoLogout />
             <OfflineNotice />
@@ -75,7 +76,7 @@ function App() {
               <Footer />
               <Toaster />
             </div>
-          </BrowserRouter>
+          </HashRouter>
         </ThemeProvider>
       </AuthProvider>
     </HelmetProvider>
