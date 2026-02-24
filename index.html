@@ -13,6 +13,24 @@
   <link rel="canonical" href="https://rocscrew.com/" />
   <link rel="icon" type="image/png" href="/logo.png" />
 
+  <!-- App Polyfill and Error Catcher to diagnose blank screen APKs -->
+  <script>
+    window.global = window;
+    var __has_unhandled_err = false;
+    window.onerror = function (message, source, lineno, colno, error) {
+      if(!__has_unhandled_err) {
+        alert("App Error: " + message + "\\nLine: " + lineno + "\\nFile: " + source);
+        __has_unhandled_err = true;
+      }
+    };
+    window.addEventListener('unhandledrejection', function (event) {
+      if(!__has_unhandled_err) {
+        alert("Unhandled Promise Rejection: " + (event.reason ? event.reason.message : 'Unknown'));
+        __has_unhandled_err = true;
+      }
+    });
+  </script>
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://rocscrew.com/" />
