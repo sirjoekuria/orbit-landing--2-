@@ -97,5 +97,41 @@
       }
     ],
     "updatedAt": "2026-02-23T18:40:26.930Z"
+  },
+  {
+    "id": "RC-2024-002",
+    "customerName": "sirjoekuria",
+    "customerEmail": "kuriajoe85@gmail.com",
+    "customerPhone": "+254700898950",
+    "pickup": "TRM Drive, Thika Road, Nairobi",
+    "delivery": "Jomo Kenyatta International Airport (JKIA), Nairobi",
+    "distance": 12.41153212297817,
+    "cost": 370,
+    "packageDetails": "keys",
+    "notes": "non",
+    "paymentMethod": "cash",
+    "paymentStatus": "pending",
+    "transactionId": "COD-1771883932253",
+    "currentStatus": "picked_up",
+    "createdAt": "2026-02-23T21:58:52.303Z",
+    "estimatedDelivery": "2026-02-23T23:28:52.303Z",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "timestamp": "2026-02-23T21:58:52.303Z",
+        "description": "Order received and is being processed"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-23T21:59:43.779Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "picked_up",
+        "timestamp": "2026-02-23T22:00:28.603Z",
+        "description": "Package picked up from TRM Drive, Thika Road, Nairobi"
+      }
+    ],
+    "updatedAt": "2026-02-23T22:00:28.603Z"
   }
 ]
