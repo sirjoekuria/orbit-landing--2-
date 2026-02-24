@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from '../lib/api';
 import {
   Send,
   Phone,
@@ -43,10 +44,10 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch("/api/csrf-token");
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
-      const response = await fetch("/api/messages", {
+      const response = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -474,10 +475,10 @@ function RiderSignupForm() {
         }
       });
 
-      const csrfRes = await fetch("/api/csrf-token");
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
-      const response = await fetch("/api/riders/signup", {
+      const response = await fetch(`${API_BASE_URL}/api/riders/signup`, {
         method: "POST",
         headers: {
           "x-csrf-token": csrfToken,

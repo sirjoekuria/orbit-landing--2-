@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE_URL } from '../lib/api';
 import { ExternalLink, Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
 
 const partners = [
@@ -157,10 +158,10 @@ export default function DeliveryPartners() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch("/api/csrf-token");
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
-      const response = await fetch("/api/partnership-requests", {
+      const response = await fetch(`${API_BASE_URL}/api/partnership-requests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -232,8 +233,8 @@ export default function DeliveryPartners() {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
                 className={`px-6 py-3 rounded-lg font-medium transition-all ${activeTab === tab.key
-                    ? 'bg-rocs-green text-white shadow-md'
-                    : 'text-gray-600 hover:text-rocs-green'
+                  ? 'bg-rocs-green text-white shadow-md'
+                  : 'text-gray-600 hover:text-rocs-green'
                   }`}
               >
                 {tab.label}
@@ -257,10 +258,10 @@ export default function DeliveryPartners() {
                       className="h-12 w-24 object-cover rounded-lg"
                     />
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${partner.partnership === 'Premium Partner' ? 'bg-yellow-100 text-yellow-800' :
-                        partner.partnership === 'Strategic Partner' ? 'bg-blue-100 text-blue-800' :
-                          partner.partnership === 'Technology Partner' ? 'bg-purple-100 text-purple-800' :
-                            partner.partnership === 'Financial Partner' ? 'bg-green-100 text-green-800' :
-                              'bg-gray-100 text-gray-800'
+                      partner.partnership === 'Strategic Partner' ? 'bg-blue-100 text-blue-800' :
+                        partner.partnership === 'Technology Partner' ? 'bg-purple-100 text-purple-800' :
+                          partner.partnership === 'Financial Partner' ? 'bg-green-100 text-green-800' :
+                            'bg-gray-100 text-gray-800'
                       }`}>
                       {partner.partnership}
                     </span>

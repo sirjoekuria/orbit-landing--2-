@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { Package, CheckCircle, MapPin, Clock, LogOut, TrendingUp, Star, RefreshCw, ChevronRight } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { Button } from '../components/ui/button';
@@ -34,8 +35,8 @@ export default function RiderDashboard() {
         setIsLoading(true);
         try {
             const [ordersRes, earningsRes] = await Promise.all([
-                fetch(`/api/riders/assigned-orders?riderId=${user.id}`),
-                fetch(`/api/admin/riders/${user.id}/earnings`),
+                fetch(`${API_BASE_URL}/api/riders/assigned-orders?riderId=${user.id}`),
+                fetch(`${API_BASE_URL}/api/admin/riders/${user.id}/earnings`),
             ]);
             if (ordersRes.ok) { const d = await ordersRes.json(); setOrders(d.orders || []); }
             if (earningsRes.ok) { const d = await earningsRes.json(); setEarnings(d.earnings || []); }
@@ -51,9 +52,9 @@ export default function RiderDashboard() {
     const updateStatus = async (orderId: string, newStatus: string) => {
         setUpdatingId(orderId);
         try {
-            const csrfRes = await fetch('/api/csrf-token');
+            const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
             const { token } = await csrfRes.json();
-            const res = await fetch(`/api/admin/orders/${orderId}`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/orders/${orderId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', 'x-csrf-token': token },
                 body: JSON.stringify({ status: newStatus }),

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { LogIn, Mail, Lock, Eye, EyeOff, User, Bike } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -81,10 +82,10 @@ export default function Login() {
       setLoading(true);
       setMessage(null);
       try {
-        const csrfRes = await fetch('/api/csrf-token');
+        const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
         const { token } = await csrfRes.json();
 
-        const res = await fetch('/api/auth/forgot-password', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -146,10 +147,10 @@ export default function Login() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const csrfRes = await fetch('/api/csrf-token');
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token } = await csrfRes.json();
 
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

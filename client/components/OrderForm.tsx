@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { API_BASE_URL } from '../lib/api';
 import {
   MapPin,
   Calculator,
@@ -133,10 +134,10 @@ export default function OrderForm() {
         timestamp: new Date().toISOString(),
       };
 
-      const csrfRes = await fetch("/api/csrf-token");
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
-      const response = await fetch("/api/orders", {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE_URL } from '../lib/api';
 import {
   LogOut,
   MessageSquare,
@@ -86,7 +87,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('/api/admin/messages');
+      const response = await fetch(`${API_BASE_URL}/api/admin/messages`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);
@@ -103,7 +104,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('/api/admin/orders');
+      const response = await fetch(`${API_BASE_URL}/api/admin/orders`);
       if (response.ok) {
         const data = await response.json();
         const fetchedOrders = data.orders || [];
@@ -267,10 +268,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   };
 
   const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
-    const csrfRes = await fetch("/api/csrf-token");
+    const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
     const { token } = await csrfRes.json();
 
-    return fetch(url, {
+    return fetch(`${API_BASE_URL}${url}`, {
       ...options,
       headers: {
         ...options.headers,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Button } from '../components/ui/button';
@@ -44,10 +45,10 @@ export default function ResetPassword() {
     setMessage(null);
     setLoading(true);
     try {
-      const csrfRes = await fetch('/api/csrf-token');
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
-      const res = await fetch('/api/auth/reset-password', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from '../lib/api';
 import {
   CheckCircle,
   AlertCircle,
@@ -70,11 +71,11 @@ export default function MpesaPayment({
 
     try {
       // 1. Fetch CSRF token
-      const csrfRes = await fetch("/api/csrf-token");
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
       // 2. Initiate STK Push
-      const response = await fetch("/api/payments/mpesa/stkpush", {
+      const response = await fetch(`${API_BASE_URL}/api/payments/mpesa/stkpush`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ export default function MpesaPayment({
       // 2. Start Polling for status
       const pollingInterval = setInterval(async () => {
         try {
-          const statusResponse = await fetch(`/api/payments/mpesa/status/${data.checkoutRequestId}`);
+          const statusResponse = await fetch(`${API_BASE_URL}/api/payments/mpesa/status/${data.checkoutRequestId}`);
           const statusData = await statusResponse.json();
 
           if (statusData.status === "completed") {

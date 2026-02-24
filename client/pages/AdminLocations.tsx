@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../lib/api';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Button } from '../components/ui/button';
@@ -22,10 +23,10 @@ export default function AdminLocations() {
   const [newLocation, setNewLocation] = useState<{ name: string, place_name?: string, lat?: number, lon?: number }>({ name: '', place_name: '', lat: undefined, lon: undefined });
 
   const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
-    const csrfRes = await fetch("/api/csrf-token");
+    const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
     const { token } = await csrfRes.json();
 
-    return fetch(url, {
+    return fetch(`${API_BASE_URL}${url}`, {
       ...options,
       headers: {
         ...options.headers,
@@ -37,7 +38,7 @@ export default function AdminLocations() {
   const fetchLocations = async () => {
     setLoading(true);
     try {
-      const url = `/api/admin/locations?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`;
+      const url = `${API_BASE_URL}/api/admin/locations?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`;
       const res = await fetch(url);
       const data = await res.json();
       if (res.ok) {

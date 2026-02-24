@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { API_BASE_URL } from './api';
 
 interface User {
     id: string;
@@ -30,7 +31,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const checkSession = async () => {
         try {
-            const response = await fetch('/api/auth/me', { credentials: 'include' });
+            const response = await fetch(`${API_BASE_URL}/api/auth/me`, { credentials: 'include' });
 
             if (response.ok) {
                 const data = await response.json();
@@ -103,9 +104,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = async () => {
         try {
-            const csrfRes = await fetch('/api/csrf-token');
+            const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
             const { token } = await csrfRes.json();
-            await fetch('/api/auth/logout', {
+            await fetch(`${API_BASE_URL}/api/auth/logout`, {
                 method: 'POST',
                 headers: { 'x-csrf-token': token }
             }); // We should implement this

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { Helmet } from 'react-helmet-async';
 import {
   Printer,
@@ -86,7 +87,7 @@ export default function Tracking() {
     setError("");
 
     try {
-      const response = await fetch(`/api/orders/track/${id.trim()}`);
+      const response = await fetch(`${API_BASE_URL}/api/orders/track/${id.trim()}`);
 
       if (response.ok) {
         const data = await response.json();

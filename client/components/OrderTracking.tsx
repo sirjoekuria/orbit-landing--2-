@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE_URL } from '../lib/api';
 import { Search, Package, MapPin, Clock, CheckCircle, Truck, User } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -49,8 +50,8 @@ export default function OrderTracking() {
     setOrderData(null);
 
     try {
-      const response = await fetch(`/api/orders/track/${trackingId}`);
-      
+      const response = await fetch(`${API_BASE_URL}/api/orders/track/${trackingId}`);
+
       if (response.ok) {
         const data = await response.json();
         setOrderData(data.order);
@@ -69,7 +70,7 @@ export default function OrderTracking() {
   const getStepStatus = (stepKey: string, currentStatus: string) => {
     const stepIndex = trackingSteps.findIndex(step => step.key === stepKey);
     const currentIndex = trackingSteps.findIndex(step => step.key === currentStatus);
-    
+
     if (stepIndex <= currentIndex) return 'completed';
     if (stepIndex === currentIndex + 1) return 'current';
     return 'pending';
@@ -213,37 +214,35 @@ export default function OrderTracking() {
               {/* Tracking Progress */}
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <h3 className="text-xl font-semibold text-rocs-green mb-6">Delivery Progress</h3>
-                
+
                 <div className="relative">
                   {trackingSteps.map((step, index) => {
                     const status = getStepStatus(step.key, orderData.currentStatus);
                     const Icon = step.icon;
-                    
+
                     return (
                       <div key={step.key} className="flex items-center mb-8 last:mb-0">
                         {/* Connector Line */}
                         {index < trackingSteps.length - 1 && (
-                          <div className="absolute left-6 w-0.5 h-16 bg-gray-200 top-12 transform -translate-x-0.5" 
-                               style={{ top: `${(index + 1) * 4}rem` }} />
+                          <div className="absolute left-6 w-0.5 h-16 bg-gray-200 top-12 transform -translate-x-0.5"
+                            style={{ top: `${(index + 1) * 4}rem` }} />
                         )}
-                        
+
                         {/* Step Icon */}
-                        <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center ${
-                          status === 'completed' ? 'bg-rocs-green text-white' :
-                          status === 'current' ? 'bg-rocs-yellow text-gray-800' :
-                          'bg-gray-200 text-gray-400'
-                        }`}>
+                        <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center ${status === 'completed' ? 'bg-rocs-green text-white' :
+                            status === 'current' ? 'bg-rocs-yellow text-gray-800' :
+                              'bg-gray-200 text-gray-400'
+                          }`}>
                           <Icon className="w-6 h-6" />
                         </div>
 
                         {/* Step Content */}
                         <div className="ml-6 flex-1">
-                          <h4 className={`font-semibold ${
-                            status === 'completed' || status === 'current' ? 'text-gray-800' : 'text-gray-400'
-                          }`}>
+                          <h4 className={`font-semibold ${status === 'completed' || status === 'current' ? 'text-gray-800' : 'text-gray-400'
+                            }`}>
                             {step.label}
                           </h4>
-                          
+
                           {/* Status Timestamp */}
                           {orderData.statusHistory.find(h => h.status === step.key) && (
                             <p className="text-sm text-gray-600 mt-1">

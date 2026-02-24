@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { Helmet } from 'react-helmet-async';
 import { Package, Clock, CheckCircle, MapPin, User, Mail, Phone, Home, LayoutDashboard, ChevronRight, RefreshCw, Star } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
@@ -45,7 +46,7 @@ export default function UserDashboard() {
         if (!user?.email) return;
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/orders/user/${encodeURIComponent(user.email)}`);
+            const res = await fetch(`${API_BASE_URL}/api/orders/user/${encodeURIComponent(user.email)}`);
             if (res.ok) {
                 const data = await res.json();
                 setOrders(data.orders || []);
@@ -64,7 +65,7 @@ export default function UserDashboard() {
     const submitRating = async () => {
         if (!ratingModal || ratingValue === 0) return;
         try {
-            await fetch(`/api/orders/${ratingModal.orderId}/rate-rider`, {
+            await fetch(`${API_BASE_URL}/api/orders/${ratingModal.orderId}/rate-rider`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ rating: ratingValue }),

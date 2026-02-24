@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from '../lib/api';
 import {
   UserPlus,
   Mail,
@@ -127,11 +128,11 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch('/api/csrf-token');
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
       const { token: csrfToken } = await csrfRes.json();
 
       const endpoint =
-        userType === "rider" ? "/api/riders/signup" : "/api/auth/signup";
+        userType === "rider" ? `${API_BASE_URL}/api/riders/signup` : `${API_BASE_URL}/api/auth/signup`;
 
       let response;
 

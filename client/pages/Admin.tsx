@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from '../lib/api';
 import {
   PendingBookingDot,
   UnreadMessageDot,
@@ -106,12 +107,12 @@ export default function Admin() {
 
   const fetchActivities = async () => {
     try {
-      const res = await fetch('/api/admin/rider-activities');
+      const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities`);
       if (res.ok) {
         const data = await res.json();
         setActivities(data.activities || []);
       }
-      const sres = await fetch('/api/admin/rider-activities/stats');
+      const sres = await fetch(`${API_BASE_URL}/api/admin/rider-activities/stats`);
       if (sres.ok) {
         const sdata = await sres.json();
         setActivityStats(sdata || null);
@@ -246,7 +247,7 @@ export default function Admin() {
   // Fetch data from API
   const fetchOrders = async (page = 1) => {
     try {
-      const response = await fetch(`/api/admin/orders?page=${page}&limit=10`);
+      const response = await fetch(`${API_BASE_URL}/api/admin/orders?page=${page}&limit=10`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -277,7 +278,7 @@ export default function Admin() {
 
   const fetchMessages = async (page = 1) => {
     try {
-      const response = await fetch(`/api/admin/messages?page=${page}&limit=10`);
+      const response = await fetch(`${API_BASE_URL}/api/admin/messages?page=${page}&limit=10`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -295,7 +296,7 @@ export default function Admin() {
 
   const fetchRiders = async () => {
     try {
-      const response = await fetch("/api/admin/riders");
+      const response = await fetch(`${API_BASE_URL}/api/admin/riders`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -309,7 +310,7 @@ export default function Admin() {
 
   const fetchAvailableRiders = async () => {
     try {
-      const response = await fetch("/api/riders/available");
+      const response = await fetch(`${API_BASE_URL}/api/riders/available`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -323,7 +324,7 @@ export default function Admin() {
 
   const fetchPartnershipRequests = async () => {
     try {
-      const response = await fetch("/api/admin/partnership-requests");
+      const response = await fetch(`${API_BASE_URL}/api/admin/partnership-requests`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -350,12 +351,12 @@ export default function Admin() {
   const handleExport = async (format: 'json' | 'csv') => {
     try {
       if (isNative()) {
-        const res = await fetch(`/api/admin/rider-activities/export?format=${format}`);
+        const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/export?format=${format}`);
         const content = await res.text();
         const fileName = `activities_${new Date().toISOString().split('T')[0]}.${format}`;
         await saveFileNative(fileName, content);
       } else {
-        window.open(`/api/admin/rider-activities/export?format=${format}`, '_blank');
+        window.open(`${API_BASE_URL}/api/admin/rider-activities/export?format=${format}`, '_blank');
       }
     } catch (err) {
       console.error('Export failed:', err);
@@ -364,10 +365,10 @@ export default function Admin() {
   };
 
   const fetchWithCsrf = async (url: string, options: RequestInit = {}) => {
-    const csrfRes = await fetch("/api/csrf-token");
+    const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
     const { token } = await csrfRes.json();
 
-    return fetch(url, {
+    return fetch(`${API_BASE_URL}${url}`, {
       ...options,
       headers: {
         ...options.headers,
@@ -503,7 +504,7 @@ export default function Admin() {
   // Rider earnings management functions
   const fetchRiderEarnings = async (riderId: string) => {
     try {
-      const response = await fetch(`/api/admin/riders/${riderId}/earnings`);
+      const response = await fetch(`${API_BASE_URL}/api/admin/riders/${riderId}/earnings`);
       if (response.ok) {
         const data = await response.json();
         return data;
@@ -3043,7 +3044,7 @@ ${earnings.earnings
                           onClick={async () => {
                             setIsLoading(true);
                             try {
-                              await fetch('/api/admin/rider-activities');
+                              await fetch(`${API_BASE_URL}/api/admin/rider-activities`);
                               await fetchActivities();
                             } catch (error) {
                               console.error('Error refreshing activities:', error);
@@ -3090,7 +3091,7 @@ ${earnings.earnings
                               try {
                                 const text = await file.text();
                                 const parsed = JSON.parse(text);
-                                const res = await fetch('/api/admin/rider-activities/import', {
+                                const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/import`, {
                                   method: 'POST',
                                   headers: { 'Content-Type': 'application/json' },
                                   body: JSON.stringify(parsed),
@@ -3136,7 +3137,7 @@ ${earnings.earnings
                                 amount: newActivity.amount ? Number(newActivity.amount) : undefined,
                               };
 
-                              const res = await fetch('/api/admin/rider-activities/log', {
+                              const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/log`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload),
@@ -3414,7 +3415,7 @@ ${earnings.earnings
                                     onClick={async () => {
                                       if (!confirm('Delete this activity?')) return;
                                       try {
-                                        const res = await fetch(`/api/admin/rider-activities/${activity.id}`, { method: 'DELETE' });
+                                        const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/${activity.id}`, { method: 'DELETE' });
                                         if (res.ok) {
                                           alert('Activity deleted');
                                           await fetchActivities();
