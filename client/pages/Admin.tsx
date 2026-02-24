@@ -124,7 +124,9 @@ export default function Admin() {
   useEffect(() => {
     fetchActivities();
   }, []);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("adminAuth") === "true";
+  });
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<
@@ -177,6 +179,7 @@ export default function Admin() {
     e.preventDefault();
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
+      sessionStorage.setItem("adminAuth", "true");
       setError("");
     } else {
       setError("Invalid password");
@@ -186,6 +189,7 @@ export default function Admin() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    sessionStorage.removeItem("adminAuth");
     setPassword("");
   };
 
@@ -777,8 +781,21 @@ export default function Admin() {
     );
   };
 
-  const deleteMessage = (messageId: string) => {
-    setMessages(messages.filter((msg) => msg.id !== messageId));
+  const deleteMessage = async (messageId: string) => {
+    if (!confirm("Are you sure you want to delete this message?")) return;
+    try {
+      const res = await fetchWithCsrf(`/api/admin/messages/${messageId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setMessages(messages.filter((msg) => msg.id !== messageId));
+      } else {
+        alert("Failed to delete message from server");
+      }
+    } catch (e) {
+      console.error("Delete message failed", e);
+      alert("Error deleting message");
+    }
   };
 
   // User management functions

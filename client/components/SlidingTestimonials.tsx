@@ -203,17 +203,16 @@ export default function SlidingTestimonials() {
         >
           <div className="overflow-hidden">
             <div
-              className="flex transition-transform duration-500 ease-in-out"
+              className="flex transition-transform duration-700 ease-in-out"
               style={{
-                transform: `translateX(-${currentSlide * 100}%)`,
-                width: `${testimonials.length * 100}%`,
+                transform: `translateX(-${currentSlide * (100 / visibleTestimonials)}%)`,
               }}
             >
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="px-2 md:px-3"
-                  style={{ width: `${100 / testimonials.length}%` }}
+                  className="px-2 md:px-3 flex-shrink-0"
+                  style={{ width: `${100 / visibleTestimonials}%` }}
                 >
                   <div className="bg-card rounded-2xl p-4 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-border">
                     {/* Quote Icon */}

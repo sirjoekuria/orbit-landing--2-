@@ -8,6 +8,7 @@ import {
   createMessage,
   getMessages,
   updateMessageStatus,
+  deleteMessage,
 } from "./routes/messages";
 import {
   createOrder,
@@ -179,6 +180,7 @@ export function createServer() {
   app.post("/api/messages", createMessage);
   app.get("/api/admin/messages", getMessages);
   app.patch("/api/admin/messages/:id", updateMessageStatus);
+  app.delete("/api/admin/messages/:id", deleteMessage);
 
   // Order routes
   app.post("/api/orders", createOrder);

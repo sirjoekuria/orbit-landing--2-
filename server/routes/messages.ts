@@ -142,3 +142,27 @@ export const updateMessageStatus: RequestHandler = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// DELETE /api/admin/messages/:id - Delete a message
+export const deleteMessage: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const messages = loadMessages();
+    const messageIndex = messages.findIndex(msg => msg.id === id);
+    if (messageIndex === -1) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    messages.splice(messageIndex, 1);
+    saveMessages(messages);
+
+    res.json({
+      success: true,
+      message: 'Message deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting message:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
