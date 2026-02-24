@@ -5,4 +5,4 @@ import { Capacitor } from '@capacitor/core';
 // development Netlify URL if you are testing on a staging environment.
 export const API_BASE_URL = Capacitor.getPlatform() === 'web'
     ? ''
-    : 'https://rocscrew.com';
+    : 'https://rocscrewdelivery.netlify.app';
