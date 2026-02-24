@@ -28,6 +28,7 @@ import { AuthProvider } from "./lib/AuthContext";
 import { ThemeProvider } from "./components/ThemeContext";
 import OfflineNotice from "./components/Mobile/OfflineNotice";
 import FloatingLogo from "./components/Mobile/FloatingLogo";
+import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "./components/ui/toaster";
 import { setupPushNotifications } from "./lib/pushNotifications";
 
@@ -41,6 +42,7 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <AutoLogout />
             <OfflineNotice />
             <FloatingLogo />
