@@ -63,7 +63,7 @@ export default function RiderLogin() {
       setLoading(true);
       setMessage(null);
       try {
-        const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+        const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
         const { token } = await csrfRes.json();
 
         const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
@@ -72,7 +72,8 @@ export default function RiderLogin() {
             'Content-Type': 'application/json',
             'x-csrf-token': token
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          credentials: 'include'
         });
         const result = await res.json();
         setMessage(result.message || 'If the email exists, a reset link has been sent.');
@@ -135,7 +136,7 @@ export default function RiderLogin() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
       const { token } = await csrfRes.json();
 
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {

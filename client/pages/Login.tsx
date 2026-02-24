@@ -147,7 +147,7 @@ export default function Login() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
       const { token } = await csrfRes.json();
 
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
@@ -160,6 +160,7 @@ export default function Login() {
           ...data,
           userType: userType === 'rider' ? 'rider' : undefined
         }),
+        credentials: 'include'
       });
 
       if (response.ok) {

@@ -45,7 +45,7 @@ export default function ResetPassword() {
     setMessage(null);
     setLoading(true);
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
       const { token: csrfToken } = await csrfRes.json();
 
       const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
@@ -55,6 +55,7 @@ export default function ResetPassword() {
           'x-csrf-token': csrfToken
         },
         body: JSON.stringify({ token: data.token, newPassword: data.newPassword }),
+        credentials: 'include'
       });
       const result = await res.json();
       if (res.ok) {

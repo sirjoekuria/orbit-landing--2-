@@ -301,8 +301,14 @@ export function createServer() {
   app.post("/api/ai/bulk-sentiment-analysis", bulkSentimentAnalysis);
   app.get("/api/ai/insights", getAIInsights);
 
-  // Initialize the automated payment scheduler
-  initializeScheduler();
+  // Initialize the automated payment scheduler only if not in a serverless environment
+  if (
+    !process.env.AWS_LAMBDA_FUNCTION_VERSION &&
+    !process.env.NETLIFY &&
+    process.env.NODE_ENV !== "production" // Often we don't want this running on every express instance if scaled
+  ) {
+    initializeScheduler();
+  }
 
   // Error handling for CSRF
   app.use((err: any, req: any, res: any, next: any) => {

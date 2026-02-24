@@ -128,7 +128,7 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
       const { token: csrfToken } = await csrfRes.json();
 
       const endpoint =
@@ -161,6 +161,7 @@ export default function Signup() {
             'x-csrf-token': csrfToken
           },
           body: submitData,
+          credentials: 'include'
         });
       } else {
         // Send JSON for customer signup
@@ -177,6 +178,7 @@ export default function Signup() {
             'x-csrf-token': csrfToken
           },
           body: JSON.stringify(jsonData),
+          credentials: 'include'
         });
       }
 

@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     setLoading(true);
     setMessage(null);
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
       const { token } = await csrfRes.json();
 
       const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
@@ -40,6 +40,7 @@ export default function ForgotPassword() {
           'x-csrf-token': token
         },
         body: JSON.stringify(data),
+        credentials: 'include'
       });
       const result = await res.json();
 
