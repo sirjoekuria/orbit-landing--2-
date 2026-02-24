@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import SlidingHero from "../components/SlidingHero";
 import FeaturesSection from "../components/FeaturesSection";
 import SlidingTestimonials from "../components/SlidingTestimonials";
 
@@ -10,6 +11,7 @@ export default function Index() {
         <title>Orbit Delivery | Fast & Reliable Logistics in Kenya</title>
         <meta name="description" content="Orbit Delivery provides professional courier and logistics services across Kenya. Fast, secure, and reliable deliveries for businesses and individuals." />
       </Helmet>
+      <SlidingHero />
       <FeaturesSection />
       <SlidingTestimonials />
     </div>
