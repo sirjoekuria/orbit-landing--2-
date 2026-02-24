@@ -1,7 +1,9 @@
-import { PushNotifications } from '@capacitor/push-notifications';
+// import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 
 export const setupPushNotifications = async () => {
+    console.log('Push notifications temporarily disabled pending Firebase setup');
+    /*
     if (Capacitor.getPlatform() === 'web') {
         console.log('Push notifications not supported on web');
         return;
@@ -40,4 +42,5 @@ export const setupPushNotifications = async () => {
     PushNotifications.addListener('pushNotificationActionPerformed', notification => {
         console.log('Push action performed: ' + JSON.stringify(notification));
     });
+    */
 };

@@ -37,7 +37,6 @@
     "@capacitor/filesystem": "^8.1.2",
     "@capacitor/haptics": "^8.0.0",
     "@capacitor/network": "^8.0.1",
-    "@capacitor/push-notifications": "^8.0.1",
     "@capacitor/toast": "^8.0.1",
     "@google/generative-ai": "^0.24.1",
     "@mapbox/mapbox-gl-geocoder": "^5.1.2",

@@ -29,7 +29,7 @@ export default function Header() {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/logo.png" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
+            <img src="/logo.webp" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
             <span className="text-2xl font-bold text-foreground">Rocs Crew</span>
           </Link>
 
