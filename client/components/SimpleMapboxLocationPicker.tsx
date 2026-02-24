@@ -2057,13 +2057,12 @@ export default function SimpleMapboxLocationPicker({
           dropoff.lat,
           dropoff.lng,
         );
-        const estimatedDuration = (straightLineDistance / 25) * 60; // Assume 25 km/h average speed
-
-        setDistance(straightLineDistance);
-        setDuration(estimatedDuration);
+        const bufferedDistance = straightLineDistance * 1.3;
+        setDistance(bufferedDistance);
+        setDuration((bufferedDistance / 25) * 60);
 
         if (onDistanceCalculated) {
-          onDistanceCalculated(straightLineDistance, estimatedDuration);
+          onDistanceCalculated(bufferedDistance, (bufferedDistance / 25) * 60);
         }
         return;
       }
@@ -2113,13 +2112,12 @@ export default function SimpleMapboxLocationPicker({
           dropoff.lat,
           dropoff.lng,
         );
-        const estimatedDuration = (straightLineDistance / 25) * 60; // Assume 25 km/h average speed
-
-        setDistance(straightLineDistance);
-        setDuration(estimatedDuration);
+        const bufferedDistance = straightLineDistance * 1.3;
+        setDistance(bufferedDistance);
+        setDuration((bufferedDistance / 25) * 60);
 
         if (onDistanceCalculated) {
-          onDistanceCalculated(straightLineDistance, estimatedDuration);
+          onDistanceCalculated(bufferedDistance, (bufferedDistance / 25) * 60);
         }
       }
     },

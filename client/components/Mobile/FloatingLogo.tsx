@@ -19,9 +19,9 @@ const FloatingLogo: React.FC = () => {
     return (
         <AnimatePresence>
             <motion.div
-                drag="y"
-                dragConstraints={{ top: 0, bottom: 200 }}
-                dragElastic={0.1}
+                drag
+                dragConstraints={{ top: -500, bottom: 500, left: -500, right: 500 }}
+                whileDrag={{ scale: 1.1 }}
                 onDragEnd={handleDragEnd}
                 style={{ y, opacity }}
                 className="fixed bottom-24 right-6 z-[60] cursor-grab active:cursor-grabbing"

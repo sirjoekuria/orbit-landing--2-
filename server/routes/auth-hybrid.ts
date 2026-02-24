@@ -146,7 +146,8 @@ export const userSignup: RequestHandler = async (req, res) => {
 // User login
 export const login: RequestHandler = async (req, res) => {
   try {
-    const { email, password, userType } = req.body;
+    const email = req.body.email?.toLowerCase();
+    const { password, fullName, phone, userType } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -183,7 +184,15 @@ export const login: RequestHandler = async (req, res) => {
         });
       }
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      let isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword && !user.password.startsWith('$2b$')) {
+        isValidPassword = password === user.password;
+        if (isValidPassword) {
+          const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+          await DatabaseService.updateUserPassword(user.id, hashedPassword);
+        }
+      }
       if (!isValidPassword) {
         const attempts = await DatabaseService.incrementFailedLoginAttempts(user.id, user.user_type);
 
@@ -245,7 +254,18 @@ export const login: RequestHandler = async (req, res) => {
         });
       }
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      let isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword && !user.password.startsWith('$2b$')) {
+        isValidPassword = password === user.password;
+        if (isValidPassword) {
+          const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+          user.password = hashedPassword;
+          user.failedAttempts = 0;
+          user.lockoutUntil = null;
+          saveUsers(users);
+        }
+      }
       if (!isValidPassword) {
         user.failedAttempts = (user.failedAttempts || 0) + 1;
 
@@ -291,7 +311,7 @@ export const login: RequestHandler = async (req, res) => {
 // Forgot password
 export const forgotPassword: RequestHandler = async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = req.body.email?.toLowerCase();
 
     if (!email) {
       return res.status(400).json({

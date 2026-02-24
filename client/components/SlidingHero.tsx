@@ -87,16 +87,15 @@ export default function SlidingHero() {
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-            index === currentSlide
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${index === currentSlide
               ? "opacity-100 scale-100"
               : "opacity-0 scale-105"
-          }`}
+            }`}
         >
           <div className="relative h-full">
             {/* Background Image with Overlay */}
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat sm:bg-cover bg-[length:auto_100%] sm:bg-center"
               style={{
                 backgroundImage: `url(${slide.image})`,
               }}
@@ -172,11 +171,10 @@ export default function SlidingHero() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
                 ? "bg-rocs-yellow scale-125"
                 : "bg-white/50 hover:bg-white/70"
-            }`}
+              }`}
           />
         ))}
       </div>

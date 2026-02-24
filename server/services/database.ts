@@ -80,6 +80,15 @@ export class DatabaseService {
     if (error) throw error;
   }
 
+  static async updateUserPassword(id: string, passwordHash: string): Promise<void> {
+    const { error } = await supabase
+      .from('users')
+      .update({ password: passwordHash })
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+
   // Riders
   static async getRiders(): Promise<Rider[]> {
     const { data, error } = await supabase
