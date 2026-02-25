@@ -4,12 +4,14 @@ import { API_BASE_URL } from '../lib/api';
 import { Helmet } from 'react-helmet-async';
 import {
   Printer,
-  ChevronRight,
   CheckCircle2,
-  AlertCircle,
   Star,
   MapPin,
-  Clock
+  Clock,
+  ScanLine,
+  ArrowRight,
+  Info,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from "../components/ui/button";
 import { useToast } from "../hooks/use-toast";
@@ -176,158 +178,197 @@ export default function Tracking() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0a110d] text-white flex flex-col pt-10">
       <Helmet>
         <title>Track Order {id ? `#${id}` : ''} | Rocs Crew</title>
         <meta name="description" content="Track your Rocs Crew package in real-time." />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="py-16 bg-gray-50 min-h-screen">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl font-bold text-rocs-green mb-4">Track Your Order</h1>
-              <p className="text-lg text-gray-600">Enter your tracking ID to see real-time updates on your delivery</p>
-            </div>
+      {/* Main Content Area */}
+      <section className="flex-1 w-full max-w-lg mx-auto px-4 pb-20">
 
-            {/* Search Form */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <form onSubmit={handleTrackOrder} className="space-y-4">
-                <div>
-                  <label htmlFor="trackingId" className="block text-rocs-green font-semibold mb-2">Tracking ID</label>
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <input
-                        id="trackingId"
-                        type="text"
-                        placeholder="Enter your tracking ID (e.g., RC-2024-001)"
-                        value={trackingId}
-                        onChange={(e) => setTrackingId(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rocs-green"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={isLoading || !trackingId.trim()}
-                      className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      {isLoading ? "Tracking..." : "Track Order"}
-                    </button>
-                  </div>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-3">Track Your Order</h1>
+          <p className="text-sm md:text-base text-[#8b9d93] max-w-xs mx-auto">
+            Enter your tracking ID below to see real-time updates on your delivery.
+          </p>
+        </div>
+
+        {/* Tracking Input Card */}
+        <div className="bg-[#112417] rounded-[2rem] p-6 shadow-2xl border border-white/5 mb-10">
+          <form onSubmit={handleTrackOrder} className="flex flex-col space-y-6">
+            <div>
+              <label htmlFor="trackingId" className="block text-[#eab308] font-bold text-xs tracking-widest uppercase mb-3">
+                Tracking ID
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <ScanLine className="h-5 w-5 text-gray-500" />
                 </div>
-              </form>
-              {lastUpdated && (
-                <p className="mt-2 text-xs text-gray-400 flex items-center gap-1">
-                  {autoRefreshing && orderData?.currentStatus !== 'delivered' && (
-                    <span className="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  )}
-                  Last updated: {lastUpdated.toLocaleTimeString('en-KE')}
-                  {autoRefreshing && orderData?.currentStatus !== 'delivered' && ' · Auto-refreshing every 10s'}
-                </p>
-              )}
-              {error && (
-                <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-                  {error}
-                </div>
-              )}
-              <div className="mt-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-md text-sm">
-                <strong>Try these sample tracking IDs:</strong> RC-2024-001, RC-2024-002
+                <input
+                  id="trackingId"
+                  type="text"
+                  placeholder="e.g., RC-2024-001"
+                  value={trackingId}
+                  onChange={(e) => setTrackingId(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 bg-[#0a110d] text-white border border-white/10 rounded-2xl focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] placeholder-gray-600 transition-all font-medium text-[15px]"
+                />
               </div>
             </div>
 
-            {/* Order Details */}
-            {orderData && (
-              <div className="space-y-8">
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="text-xl font-semibold text-rocs-green mb-4">Order Details</h3>
-                      <div className="space-y-3">
-                        <div><span className="text-sm font-medium text-gray-600">Order ID:</span><p className="text-gray-800">{orderData.id}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Customer:</span><p className="text-gray-800">{orderData.customerName}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Phone:</span><p className="text-gray-800">{orderData.customerPhone}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Distance:</span><p className="text-gray-800">{orderData.distance} km</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Cost:</span><p className="text-gray-800 font-semibold">KES {orderData.cost.toLocaleString()}</p></div>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-rocs-green mb-4">Delivery Information</h3>
-                      <div className="space-y-3">
-                        <div><span className="text-sm font-medium text-gray-600">Pickup:</span><p className="text-gray-800">{orderData.pickup}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Delivery:</span><p className="text-gray-800">{orderData.delivery}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Order Date:</span><p className="text-gray-800">{formatDate(orderData.createdAt)}</p></div>
-                        <div><span className="text-sm font-medium text-gray-600">Estimated:</span><p className="text-gray-800">{formatDate(orderData.estimatedDelivery)}</p></div>
-                        {orderData.riderName && (
-                          <>
-                            <div><span className="text-sm font-medium text-gray-600">Rider:</span><p className="text-gray-800">{orderData.riderName}</p></div>
-                            <div><span className="text-sm font-medium text-gray-600">Phone:</span><p className="text-gray-800">{orderData.riderPhone}</p></div>
-                          </>
+            <button
+              type="submit"
+              disabled={isLoading || !trackingId.trim()}
+              className="w-full bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg py-4 rounded-full transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:opacity-50 disabled:shadow-none flex items-center justify-center space-x-2"
+            >
+              {isLoading ? (
+                <span className="flex items-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                  Tracking...
+                </span>
+              ) : (
+                <>
+                  <span>Track Order</span>
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Sample IDs Block */}
+          <div className="mt-8 p-4 rounded-xl border border-white/5 bg-white/5 flex items-start space-x-3">
+            <Info className="w-5 h-5 text-[#8b9d93] shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="text-white font-medium mb-3">Try sample tracking IDs:</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setTrackingId("RC-2024-001")}
+                  className="px-4 py-2 bg-[#1a3824] hover:bg-[#204a2e] text-[#8b9d93] hover:text-white rounded-full transition-colors border border-white/10"
+                >
+                  RC-2024-001
+                </button>
+                <button
+                  onClick={() => setTrackingId("RC-2024-002")}
+                  className="px-4 py-2 bg-[#1a3824] hover:bg-[#204a2e] text-[#8b9d93] hover:text-white rounded-full transition-colors border border-white/10"
+                >
+                  RC-2024-002
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {error && (
+            <div className="mt-6 bg-red-900/30 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm text-center">
+              {error}
+            </div>
+          )}
+        </div>
+
+        {/* Order Details - Conditionally Rendered */}
+        {orderData ? (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Real Order Results translated to Dark Theme */}
+            <div className="bg-[#112417] rounded-3xl p-6 md:p-8 border border-white/5 shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-white tracking-wide">Order Details</h3>
+                {autoRefreshing && orderData?.currentStatus !== 'delivered' && (
+                  <div className="flex items-center text-xs text-[#eab308]">
+                    <span className="w-2 h-2 rounded-full bg-[#eab308] animate-pulse mr-2" />
+                    Live
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-sm p-4 bg-[#0a110d] rounded-2xl border border-white/5 mb-6">
+                <div><span className="text-[#8b9d93] block text-xs uppercase tracking-wider mb-1">Order ID</span><span className="font-semibold">{orderData.id}</span></div>
+                <div><span className="text-[#8b9d93] block text-xs uppercase tracking-wider mb-1">Cost</span><span className="font-semibold text-[#eab308]">KES {orderData.cost.toLocaleString()}</span></div>
+                <div><span className="text-[#8b9d93] block text-xs uppercase tracking-wider mb-1">Pickup</span><span className="block truncate">{orderData.pickup}</span></div>
+                <div><span className="text-[#8b9d93] block text-xs uppercase tracking-wider mb-1">Delivery</span><span className="block truncate">{orderData.delivery}</span></div>
+              </div>
+
+              <h4 className="font-bold text-white mb-4">Delivery Progress</h4>
+              <div className="mb-8 p-4 rounded-xl bg-gradient-to-r border border-[#eab308]/30 from-[#eab308]/20 to-[#ca8a04]/10 text-white flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-[#eab308]">Current Status</h4>
+                  <p className="text-sm font-medium">{orderData.currentStatus.replace('_', ' ').toUpperCase()}</p>
+                </div>
+                <div className="text-3xl drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]">
+                  {orderData.currentStatus === 'delivered' ? '🎉' : '🚚'}
+                </div>
+              </div>
+
+              <div className="space-y-6 pl-2 relative border-l-2 border-white/10 ml-4 pb-4">
+                {[
+                  { key: "pending", label: "Order Received", icon: "📋" },
+                  { key: "confirmed", label: "Order Confirmed", icon: "✅" },
+                  { key: "picked_up", label: "Package Picked Up", icon: "📦" },
+                  { key: "in_transit", label: "In Transit", icon: "🚚" },
+                  { key: "delivered", label: "Delivered", icon: "🎉" },
+                ].map((step, index) => {
+                  const isCompleted = getStepStatus(step.key, orderData.currentStatus);
+                  const isCurrent = step.key === orderData.currentStatus;
+                  return (
+                    <div key={step.key} className="flex items-start relative">
+                      <div className={`absolute -left-6 top-1 w-4 h-4 rounded-full border-4 border-[#112417] ${isCompleted ? (isCurrent ? "bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.8)] scale-125" : "bg-[#8b9d93]") : "bg-[#1a3824]"}`}></div>
+                      <div className="ml-2">
+                        <h4 className={`font-semibold ${isCompleted ? (isCurrent ? "text-[#eab308]" : "text-white") : "text-gray-600"}`}>{step.label}</h4>
+                        {isCompleted && orderData.statusHistory?.find((h: any) => h.status === step.key) && (
+                          <p className="text-[11px] text-[#8b9d93] mt-1">{formatDate(orderData.statusHistory.find((h: any) => h.status === step.key).timestamp)}</p>
                         )}
                       </div>
                     </div>
-                  </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                <Button variant="outline" size="sm" onClick={() => window.print()} className="items-center justify-center gap-2 border-white/20 text-[#8b9d93] hover:text-white hover:bg-white/10 w-full sm:w-auto">
+                  <Printer className="w-4 h-4" /> Print Receipt
+                </Button>
+                <Button onClick={() => navigate('/book-delivery')} className="bg-[#1a3824] hover:bg-[#204a2e] text-white w-full sm:w-auto">
+                  Book Another Delivery
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Recent Searches - Static Mock Section shown when no active search */
+          <div className="mt-8 animate-in fade-in duration-500">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold text-xl tracking-tight">Recent Searches</h3>
+              <button className="text-[#eab308] text-sm font-bold hover:text-[#ca8a04] transition-colors">
+                Clear All
+              </button>
+            </div>
+
+            <div className="bg-[#112417] rounded-3xl p-5 border border-white/5 flex items-center justify-between group hover:border-white/20 transition-colors cursor-pointer" onClick={() => {
+              setTrackingId("RC-2023-884");
+              setTimeout(() => {
+                document.getElementById('trackingId')?.focus();
+              }, 100);
+            }}>
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-full bg-[#1a3824] flex items-center justify-center border border-white/5 shrink-0 group-hover:bg-[#204a2e] transition-colors">
+                  <CheckCircle2 className="w-6 h-6 text-green-400" />
                 </div>
-
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                  <h3 className="text-xl font-semibold text-rocs-green mb-6">Delivery Progress</h3>
-                  <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-rocs-green to-rocs-green-dark text-white flex items-center justify-between">
-                    <div>
-                      <h4 className="font-semibold">Current Status</h4>
-                      <p className="text-sm opacity-90">{orderData.currentStatus.replace('_', ' ').toUpperCase()}</p>
-                    </div>
-                    <div className="text-2xl">
-                      {orderData.currentStatus === 'delivered' ? '🎉' : '🚚'}
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    {[
-                      { key: "pending", label: "Order Received", icon: "📋" },
-                      { key: "confirmed", label: "Order Confirmed", icon: "✅" },
-                      { key: "picked_up", label: "Package Picked Up", icon: "📦" },
-                      { key: "in_transit", label: "In Transit", icon: "🚚" },
-                      { key: "delivered", label: "Delivered", icon: "🎉" },
-                    ].map((step, index) => {
-                      const isCompleted = getStepStatus(step.key, orderData.currentStatus);
-                      const isCurrent = step.key === orderData.currentStatus;
-                      return (
-                        <div key={step.key} className="flex items-start">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isCompleted ? "bg-rocs-green text-white" : isCurrent ? "bg-rocs-yellow text-gray-800" : "bg-gray-200 text-gray-500"}`}>
-                            {isCompleted ? "✓" : step.icon}
-                          </div>
-                          <div className="ml-4">
-                            <h4 className={`font-semibold ${isCompleted ? "text-gray-800" : isCurrent ? "text-rocs-green" : "text-gray-500"}`}>{step.label}</h4>
-                            {isCompleted && orderData.statusHistory?.find((h: any) => h.status === step.key) && (
-                              <p className="text-xs text-gray-400">{formatDate(orderData.statusHistory.find((h: any) => h.status === step.key).timestamp)}</p>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="flex flex-wrap gap-3 mt-8">
-                    <Button variant="outline" size="sm" onClick={() => window.print()} className="items-center gap-2">
-                      <Printer className="w-4 h-4" /> Print Receipt
-                    </Button>
-                    <Button onClick={() => navigate('/book-delivery')} className="bg-rocs-green hover:bg-rocs-green-dark text-white">
-                      Book Another Delivery
-                    </Button>
-                  </div>
+                <div>
+                  <h4 className="text-white font-bold text-lg mb-0.5">RC-2023-884</h4>
+                  <p className="text-[#8b9d93] text-sm font-medium">Delivered · Yesterday</p>
                 </div>
               </div>
-            )}
+              <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Rating Prompt Overlay */}
       {orderData?.currentStatus === 'delivered' && !ratingSubmitted && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-500">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-2xl max-w-sm">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">Package Delivered! 🎉</h3>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">How was your experience with Rocs Crew? Please rate your rider.</p>
+        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-5 duration-500 max-w-[calc(100%-3rem)] mx-auto w-full sm:w-auto">
+          <div className="bg-[#112417] border border-[#eab308]/30 rounded-2xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-sm">
+            <h3 className="text-lg font-bold text-white mb-2">Package Delivered! 🎉</h3>
+            <p className="text-sm text-[#8b9d93] mb-4">How was your experience with Rocs Crew? Please rate your rider.</p>
             <div className="flex justify-center gap-2 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -338,11 +379,11 @@ export default function Tracking() {
                   }}
                   className="p-1 hover:scale-110 transition-transform"
                 >
-                  <Star className={`w-8 h-8 ${star <= ratingValue ? 'fill-rocs-yellow text-rocs-yellow' : 'text-zinc-300'}`} />
+                  <Star className={`w-8 h-8 ${star <= ratingValue ? 'fill-[#eab308] text-[#eab308] drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]' : 'text-gray-600'}`} />
                 </button>
               ))}
             </div>
-            <button onClick={() => setRatingSubmitted(true)} className="text-xs text-zinc-400 hover:text-zinc-600 block mx-auto underline">Maybe later</button>
+            <button onClick={() => setRatingSubmitted(true)} className="text-xs text-gray-500 hover:text-white block mx-auto underline">Maybe later</button>
           </div>
         </div>
       )}

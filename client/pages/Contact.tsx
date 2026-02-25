@@ -107,235 +107,197 @@ export default function Contact() {
   }
 
   return (
-    <section className="py-16 bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-rocs-green mb-4">
+    <section className="py-16 bg-[#0a110d] min-h-screen relative overflow-hidden">
+      {/* Central glow effect */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-rocs-green/10 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-md mx-auto">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
               Get In Touch
             </h1>
-            <p className="text-lg text-gray-600 mb-6">
+            <p className="text-sm md:text-base text-[#8b9d93] mb-8 max-w-xs mx-auto">
               Have questions about our delivery services? We're here to help!
             </p>
 
             {/* Rider Signup Button */}
-            <div className="mb-8">
+            <div className="mb-10">
               <Button
                 onClick={() => setShowRiderSignup(!showRiderSignup)}
-                className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold"
+                className="bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold h-12 px-8 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all"
               >
-                <UserPlus className="w-5 h-5 mr-2" />
+                <Upload className="w-5 h-5 mr-2" />
                 {showRiderSignup ? "Hide Rider Signup" : "Join Our Riders Team"}
               </Button>
             </div>
           </div>
 
           {/* Rider Signup Form */}
-          {showRiderSignup && <RiderSignupForm />}
+          {showRiderSignup && (
+            <div className="mb-12 border border-[#eab308]/30 rounded-3xl p-6 bg-[#0a110d]">
+              <RiderSignupForm />
+            </div>
+          )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-2xl font-semibold text-rocs-green mb-6">
-                  Contact Information
-                </h3>
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-rocs-yellow p-3 rounded-lg">
-                      <Phone className="w-6 h-6 text-gray-800" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-1">
-                        Phone
-                      </h4>
-                      <a href="tel:+254700898950" className="text-gray-600 hover:text-rocs-green transition-colors">+254 700 898 950</a>
-                      <p className="text-sm text-gray-500">
-                        Available 24/7 for emergency deliveries
-                      </p>
-                    </div>
-                  </div>
+          <div className="flex flex-col gap-4 mb-10">
+            {/* Contact Information Vertical Stack */}
 
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-rocs-yellow p-3 rounded-lg">
-                      <Mail className="w-6 h-6 text-gray-800" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-1">
-                        Email
-                      </h4>
-                      <a href="mailto:Kuriajoe85@gmail.com" className="text-gray-600 hover:text-rocs-green transition-colors">Kuriajoe85@gmail.com</a>
-                      <p className="text-sm text-gray-500">
-                        We'll respond within 24 hours
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-rocs-yellow p-3 rounded-lg">
-                      <MapPin className="w-6 h-6 text-gray-800" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-1">
-                        Service Area
-                      </h4>
-                      <p className="text-gray-600">
-                        Nairobi & Surrounding Areas
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Same-day delivery available
-                      </p>
-                    </div>
-                  </div>
-                </div>
+            {/* Phone */}
+            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
+              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
+                <Phone className="w-5 h-5 text-[#eab308]" />
               </div>
-
-              {/* Business Hours */}
-              <div className="bg-rocs-green-light p-6 rounded-xl">
-                <h4 className="font-semibold text-rocs-green mb-4">
-                  Business Hours
-                </h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Monday - Friday:</span>
-                    <span>6:00 AM - 10:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday:</span>
-                    <span>7:00 AM - 9:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday:</span>
-                    <span>8:00 AM - 8:00 PM</span>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-rocs-green text-rocs-green font-medium">
-                    Emergency deliveries available 24/7
-                  </div>
-                </div>
+              <div>
+                <a href="tel:+254700898950" className="text-white font-semibold block mb-0.5 hover:text-[#eab308] transition-colors">+254 700 898 950</a>
+                <p className="text-sm text-[#8b9d93]">
+                  Available 24/7 for emergency deliveries
+                </p>
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <h3 className="text-2xl font-semibold text-rocs-green mb-6">
-                Send Us a Message
-              </h3>
+            {/* Email */}
+            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
+              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
+                <Mail className="w-5 h-5 text-[#eab308]" />
+              </div>
+              <div>
+                <a href="mailto:Kuriajoe85@gmail.com" className="text-white font-semibold block mb-0.5 hover:text-[#eab308] transition-colors">Kuriajoe85@gmail.com</a>
+                <p className="text-sm text-[#8b9d93]">
+                  We'll respond within 24 hours
+                </p>
+              </div>
+            </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name" className="text-gray-700 font-medium">
-                      Full Name *
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="mt-1 border-gray-300 focus:border-rocs-green"
-                      placeholder="Your full name"
-                    />
-                  </div>
+            {/* Area */}
+            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
+              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
+                <MapPin className="w-5 h-5 text-[#eab308]" />
+              </div>
+              <div>
+                <span className="text-white font-semibold block mb-0.5">Nairobi & Surrounding Areas</span>
+                <p className="text-sm text-[#8b9d93]">
+                  Same-day delivery available
+                </p>
+              </div>
+            </div>
 
-                  <div>
-                    <Label
-                      htmlFor="email"
-                      className="text-gray-700 font-medium"
-                    >
-                      Email Address *
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="mt-1 border-gray-300 focus:border-rocs-green"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
+            {/* Business Hours */}
+            <div className="border border-[#eab308]/50 rounded-2xl p-5 md:p-6 bg-gradient-to-br from-[#112417] to-[#0a110d]">
+              <h4 className="font-semibold text-white text-center mb-4 text-lg">
+                Business Hours
+              </h4>
+              <div className="space-y-2 text-sm max-w-[280px] mx-auto">
+                <div className="flex justify-between items-center">
+                  <span className="text-[#8b9d93] font-medium">Monday - Friday:</span>
+                  <span className="text-white">6:00 AM - 10:00 PM</span>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label
-                      htmlFor="phone"
-                      className="text-gray-700 font-medium"
-                    >
-                      Phone Number
-                    </Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="mt-1 border-gray-300 focus:border-rocs-green"
-                      placeholder="+254 7XX XXX XXX"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="subject"
-                      className="text-gray-700 font-medium"
-                    >
-                      Subject *
-                    </Label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      type="text"
-                      required
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className="mt-1 border-gray-300 focus:border-rocs-green"
-                      placeholder="What's this about?"
-                    />
-                  </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#eab308] font-medium">Saturday:</span>
+                  <span className="text-white">7:00 AM - 9:00 PM</span>
                 </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#eab308] font-medium">Sunday:</span>
+                  <span className="text-white">8:00 AM - 8:00 PM</span>
+                </div>
+                <div className="pt-4 mt-2 border-t border-white/5 text-center text-[#8b9d93]">
+                  Emergency deliveries available 24/7
+                </div>
+              </div>
+            </div>
+          </div>
 
+          {/* Contact Form */}
+          <div className="mb-10">
+            <h3 className="text-xl font-bold text-white mb-6">
+              Send Us a Message
+            </h3>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label
-                    htmlFor="message"
-                    className="text-gray-700 font-medium"
-                  >
-                    Message *
-                  </Label>
-                  <Textarea
-                    id="message"
-                    name="message"
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
                     required
-                    value={formData.message}
+                    value={formData.name}
                     onChange={handleInputChange}
-                    rows={5}
-                    className="mt-1 border-gray-300 focus:border-rocs-green resize-none"
-                    placeholder="Tell us about your delivery needs or ask any questions..."
+                    className="bg-transparent border-[#8b9d93]/30 text-white placeholder:text-[#8b9d93] focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl h-12"
+                    placeholder="Full Name *"
                   />
                 </div>
+                <div>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="bg-transparent border-[#8b9d93]/30 text-white placeholder:text-[#8b9d93] focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl h-12"
+                    placeholder="Email Address *"
+                  />
+                </div>
+              </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold py-3"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-800 mr-2"></div>
-                      Sending...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      <Send className="w-4 h-4 mr-2" />
-                      Send Message
-                    </span>
-                  )}
-                </Button>
-              </form>
-            </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="bg-transparent border-[#8b9d93]/30 text-white placeholder:text-[#8b9d93] focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl h-12"
+                    placeholder="Phone Number"
+                  />
+                </div>
+                <div>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    required
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    className="bg-transparent border-[#8b9d93]/30 text-white placeholder:text-[#8b9d93] focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl h-12"
+                    placeholder="Subject *"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Textarea
+                  id="message"
+                  name="message"
+                  required
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="bg-transparent border-[#8b9d93]/30 text-white placeholder:text-[#8b9d93] focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl resize-none py-3"
+                  placeholder="Message *"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold h-14 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.2)] mt-2 transition-all"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                    Sending...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center space-x-2 text-lg">
+                    <Send className="w-5 h-5 -mt-0.5" />
+                    <span>Send Message</span>
+                  </span>
+                )}
+              </Button>
+            </form>
           </div>
         </div>
       </div>
