@@ -1,97 +1,54 @@
 import { useState, useEffect } from "react";
-import {
-  Star,
-  Quote,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  Calendar,
-} from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 
 const testimonials = [
   {
     id: 1,
-    name: "Grace Wanjiku",
-    role: "Small Business Owner",
-    company: "Grace's Boutique",
-    location: "Westlands, Nairobi",
+    name: "Sarah Akinyi",
+    role: "Online Seller",
+    company: "Sarah's Fashion",
     rating: 5,
     content:
-      "Rocs Crew has been amazing for my business. Their riders are professional and my packages always arrive on time. The tracking system gives me peace of mind and my customers love the transparency.",
+      "The real-time tracking is fantastic! My customers love being able to see exactly where orders are. Rocs Crew has helped grow my business significantly with their reliable service.",
     avatar:
-      "https://images.unsplash.com/photo-1494790108755-2616b9090fd8?w=150&h=150&fit=crop&crop=face",
-    deliveries: 45,
-    joinDate: "March 2024",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    deliveries: "78+",
   },
   {
     id: 2,
+    name: "Michael Kiprop",
+    role: "Restaurant Owner",
+    company: "Mama's Kitchen",
+    rating: 5,
+    content:
+      "The real-time tracking is fantastic! My customers love being able to see exactly where orders are. Rocs Crew has helped grow my business significantly with their reliable service.",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    deliveries: "200+",
+  },
+  {
+    id: 3,
     name: "David Muturi",
     role: "E-commerce Manager",
     company: "TechMart Kenya",
-    location: "CBD, Nairobi",
     rating: 5,
     content:
       "Fast, reliable, and affordable. We've been using Rocs Crew for our daily deliveries for 6 months now. Their rates are unbeatable at KES 30 per km and the service quality is consistently excellent.",
     avatar:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    deliveries: 120,
-    joinDate: "January 2024",
-  },
-  {
-    id: 3,
-    name: "Sarah Akinyi",
-    role: "Online Seller",
-    company: "Sarah's Fashion",
-    location: "Kilimani, Nairobi",
-    rating: 5,
-    content:
-      "The real-time tracking is fantastic! My customers love being able to see exactly where their orders are. Rocs Crew has helped grow my business significantly with their reliable service.",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    deliveries: 78,
-    joinDate: "February 2024",
+    deliveries: "120+",
   },
   {
     id: 4,
-    name: "Michael Kiprop",
-    role: "Restaurant Owner",
-    company: "Mama's Kitchen",
-    location: "Karen, Nairobi",
+    name: "Grace Wanjiku",
+    role: "Small Business Owner",
+    company: "Grace's Boutique",
     rating: 5,
     content:
-      "We use Rocs Crew for all our food deliveries. Their motorcycles are perfect for navigating Nairobi traffic, and they always handle our orders with care. Hot food arrives hot!",
+      "Rocs Crew has been amazing for my business. Their riders are professional and my packages always arrive on time. The tracking system gives me peace of mind and my customers love the transparency.",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    deliveries: 200,
-    joinDate: "December 2023",
-  },
-  {
-    id: 5,
-    name: "Jane Njoki",
-    role: "Freelance Designer",
-    company: "Creative Studio",
-    location: "Kileleshwa, Nairobi",
-    rating: 5,
-    content:
-      "Excellent service! I regularly send documents and design materials to clients across Nairobi and Rocs Crew never disappoints. Professional, punctual, and reasonably priced.",
-    avatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-    deliveries: 89,
-    joinDate: "March 2024",
-  },
-  {
-    id: 6,
-    name: "Peter Macharia",
-    role: "IT Consultant",
-    company: "Tech Solutions Ltd",
-    location: "Upperhill, Nairobi",
-    rating: 5,
-    content:
-      "The admin dashboard for tracking orders is intuitive and the customer service is top-notch. Rocs Crew understands the needs of modern businesses and delivers accordingly.",
-    avatar:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
-    deliveries: 156,
-    joinDate: "November 2023",
+      "https://images.unsplash.com/photo-1494790108755-2616b9090fd8?w=150&h=150&fit=crop&crop=face",
+    deliveries: "45+",
   },
 ];
 
@@ -101,7 +58,7 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < rating ? "text-rocs-yellow fill-current" : "text-gray-300"
+          className={`w-5 h-5 ${i < rating ? "text-[#eab308] fill-current drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]" : "text-gray-600"
             }`}
         />
       ))}
@@ -113,20 +70,17 @@ export default function SlidingTestimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [visibleTestimonials, setVisibleTestimonials] = useState(() => {
-    // Initialize with correct value based on screen size
     if (typeof window !== "undefined") {
-      return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+      return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 2;
     }
-    return 3;
+    return 2;
   });
 
-  // Responsive testimonials per view
   useEffect(() => {
     const handleResize = () => {
       const newVisible =
-        window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+        window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 2;
       setVisibleTestimonials(newVisible);
-      // Reset to first slide when changing responsive view
       setCurrentSlide(0);
     };
 
@@ -135,7 +89,6 @@ export default function SlidingTestimonials() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-play functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
 
@@ -144,20 +97,10 @@ export default function SlidingTestimonials() {
         const maxSlide = testimonials.length - visibleTestimonials;
         return prev >= maxSlide ? 0 : prev + 1;
       });
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(timer);
   }, [isAutoPlaying, visibleTestimonials]);
-
-  const nextSlide = () => {
-    const maxSlide = testimonials.length - visibleTestimonials;
-    setCurrentSlide((prev) => (prev >= maxSlide ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    const maxSlide = testimonials.length - visibleTestimonials;
-    setCurrentSlide((prev) => (prev <= 0 ? maxSlide : prev - 1));
-  };
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -166,42 +109,34 @@ export default function SlidingTestimonials() {
   const maxSlides = testimonials.length - visibleTestimonials + 1;
 
   return (
-    <section className="py-10 md:py-20 bg-background relative overflow-hidden transition-colors duration-300">
-      {/* Background Elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-rocs-green rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-rocs-yellow rounded-full blur-3xl" />
-      </div>
+    <section className="py-20 bg-[#0a110d] relative overflow-hidden">
+      {/* Background Ambient Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-[#1a3824] rounded-full blur-[150px] opacity-30 pointer-events-none" />
 
-      <div className="container mx-auto px-2 md:px-4 relative">
+      <div className="container mx-auto px-4 relative z-10 max-w-5xl">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-16">
-          <div className="inline-flex items-center space-x-2 bg-rocs-yellow/20 border border-rocs-yellow/30 rounded-full px-4 py-2 mb-4">
-            <Quote className="w-4 h-4 text-rocs-green" />
-            <span className="text-rocs-green font-medium text-sm md:text-base">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center space-x-2 bg-[#eab308] rounded-full px-5 py-2 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.4)]">
+            <CheckCircle2 className="w-4 h-4 text-black fill-black/10" />
+            <span className="text-black font-extrabold text-sm uppercase tracking-wide">
               Customer Stories
             </span>
           </div>
 
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-rocs-green mb-4 md:mb-6">
-            What Our Customers Say
+          <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
+            What Our<br />Customers Say
           </h2>
-          <p className="text-sm md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-            Join thousands of satisfied customers who trust Rocs Crew for their
-            delivery needs across Nairobi. Here's what they have to say about
-            our service.
-          </p>
         </div>
 
         {/* Testimonials Slider */}
         <div
-          className="relative min-h-[400px] md:min-h-[500px]"
+          className="relative max-w-4xl mx-auto"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
           onTouchStart={() => setIsAutoPlaying(false)}
           onTouchEnd={() => setIsAutoPlaying(true)}
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden px-2 py-4">
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{
@@ -211,65 +146,46 @@ export default function SlidingTestimonials() {
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="px-2 md:px-3 flex-shrink-0"
+                  className="px-4 flex-shrink-0"
                   style={{ width: `${100 / visibleTestimonials}%` }}
                 >
-                  <div className="bg-card rounded-2xl p-4 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-border">
-                    {/* Quote Icon */}
-                    <div className="flex items-start justify-between mb-6">
-                      <Quote className="w-10 h-10 text-rocs-yellow flex-shrink-0" />
+                  <div className="bg-[#112417] rounded-[2rem] p-8 md:p-10 h-full border border-[#eab308]/40 shadow-[0_0_30px_rgba(234,179,8,0.15)] flex flex-col relative transition-transform hover:scale-[1.02] duration-300">
+
+                    {/* Header: Quote and Stars */}
+                    <div className="flex items-start justify-between mb-8">
+                      <div className="w-14 h-14 rounded-full bg-[#1a3824] flex items-center justify-center border border-[#eab308]/30 shrink-0">
+                        <Quote className="w-6 h-6 text-[#eab308] fill-[#eab308]" />
+                      </div>
                       <StarRating rating={testimonial.rating} />
                     </div>
 
                     {/* Testimonial Content */}
-                    <blockquote className="text-muted-foreground mb-6 md:mb-8 leading-relaxed text-sm md:text-lg italic">
+                    <blockquote className="text-[#8b9d93] mb-10 leading-relaxed text-lg font-normal flex-grow">
                       "{testimonial.content}"
                     </blockquote>
 
                     {/* Customer Info */}
-                    <div className="flex items-center space-x-3 md:space-x-4">
+                    <div className="flex items-center space-x-4 mb-8">
                       <img
                         src={testimonial.avatar}
                         alt={testimonial.name}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-4 border-rocs-yellow/20"
+                        className="w-16 h-16 rounded-full object-cover border-2 border-[#1a3824]"
                       />
-                      <div className="flex-1">
-                        <h4 className="font-bold text-rocs-green text-base md:text-lg">
+                      <div>
+                        <h4 className="font-bold text-white text-lg">
                           {testimonial.name}
                         </h4>
-                        <p className="text-gray-600 font-medium text-sm md:text-base">
-                          {testimonial.role}
-                        </p>
-                        <p className="text-xs md:text-sm text-gray-500">
-                          {testimonial.company}
+                        <p className="text-[#8b9d93] text-sm">
+                          {testimonial.role}, {testimonial.company}
                         </p>
                       </div>
                     </div>
 
-                    {/* Stats */}
-                    <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-100">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm">
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <MapPin className="w-3 h-3 md:w-4 md:h-4 text-rocs-green" />
-                          <span className="truncate">
-                            {testimonial.location}
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <Calendar className="w-3 h-3 md:w-4 md:h-4 text-rocs-green" />
-                          <span>Since {testimonial.joinDate}</span>
-                        </div>
-                      </div>
-                      <div className="mt-3 bg-rocs-green/10 rounded-lg p-2 md:p-3">
-                        <div className="text-center">
-                          <div className="text-xl md:text-2xl font-bold text-rocs-green">
-                            {testimonial.deliveries}+
-                          </div>
-                          <div className="text-xs text-gray-600">
-                            Successful Deliveries
-                          </div>
-                        </div>
-                      </div>
+                    {/* Successful Deliveries Badge */}
+                    <div className="inline-flex items-center self-start bg-gradient-to-r from-[#eab308] to-[#ca8a04] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(234,179,8,0.3)]">
+                      <span className="text-black font-bold text-sm">
+                        {testimonial.deliveries} Successful Deliveries
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -277,61 +193,60 @@ export default function SlidingTestimonials() {
             </div>
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            disabled={currentSlide === 0}
-            className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 shadow-lg rounded-full p-2 md:p-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed z-10"
-          >
-            <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-rocs-green" />
-          </button>
-          <button
-            onClick={nextSlide}
-            disabled={currentSlide >= testimonials.length - visibleTestimonials}
-            className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 shadow-lg rounded-full p-2 md:p-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed z-10"
-          >
-            <ChevronRight className="w-4 h-4 md:w-6 md:h-6 text-rocs-green" />
-          </button>
+          {/* Slide Indicators */}
+          <div className="flex justify-center items-center mt-12 space-x-2">
+            {Array.from({ length: maxSlides }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`transition-all duration-300 rounded-full ${index === currentSlide
+                    ? "w-8 h-2 bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.6)]"
+                    : "w-2 h-2 bg-gray-600 hover:bg-gray-400"
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Slide Indicators */}
-        <div className="flex justify-center mt-6 md:mt-8 space-x-2 md:space-x-3">
-          {Array.from({ length: maxSlides }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-4 h-4 md:w-3 md:h-3 rounded-full transition-all duration-300 touch-manipulation ${index === currentSlide
-                ? "bg-rocs-green scale-125"
-                : "bg-gray-300 hover:bg-gray-400"
-                }`}
-            />
-          ))}
-        </div>
+        {/* Bottom Statistics Divider separating sections */}
+        <div className="w-full h-px bg-white/10 mt-20 mb-12" />
 
-        {/* Trust Indicators */}
-        <div className="mt-20 bg-card rounded-2xl p-8 shadow-lg border border-border">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-rocs-green mb-2">
-                5000+
-              </div>
-              <div className="text-gray-600">Deliveries Completed</div>
+        {/* Trust Indicators (4 Column Clean Row) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-4 text-center">
+          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
+            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
+              5000+
             </div>
-            <div>
-              <div className="text-4xl font-bold text-rocs-green mb-2">98%</div>
-              <div className="text-gray-600">Customer Satisfaction</div>
+            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
+              Deliveries Completed
             </div>
-            <div>
-              <div className="text-4xl font-bold text-rocs-green mb-2">
-                24/7
-              </div>
-              <div className="text-gray-600">Customer Support</div>
+          </div>
+
+          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
+            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
+              98%
             </div>
-            <div>
-              <div className="text-4xl font-bold text-rocs-green mb-2">
-                500+
-              </div>
-              <div className="text-gray-600">Happy Businesses</div>
+            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
+              Customer Satisfaction
+            </div>
+          </div>
+
+          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
+            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
+              24/7
+            </div>
+            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
+              Customer Support
+            </div>
+          </div>
+
+          <div className="px-4 flex flex-col items-center justify-center">
+            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
+              500+
+            </div>
+            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
+              Happy Businesses
             </div>
           </div>
         </div>

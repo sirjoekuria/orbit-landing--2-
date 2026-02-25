@@ -1,173 +1,191 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+
+// Using simple SVG icons for Socials to exactly match the white thin-line circular aesthetic
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="hover:text-white text-white">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="hover:text-white text-white">
+    <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+  </svg>
+);
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="hover:text-white text-white">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+const LinkedinIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="hover:text-white text-white">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+  </svg>
+);
 
 export default function Footer() {
   return (
-    <footer className="bg-rocs-green text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
-              <span className="text-2xl font-bold">Rocs Crew</span>
-            </div>
-            <p className="text-rocs-green-light mb-6">
-              Nairobi's premier motorcycle delivery service. Fast, reliable, and affordable parcel delivery across the city.
-            </p>
-            <div className="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-rocs-yellow transition-all duration-200 hover:scale-110 active:scale-95">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-rocs-yellow transition-all duration-200 hover:scale-110 active:scale-95">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-rocs-yellow transition-all duration-200 hover:scale-110 active:scale-95">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-rocs-yellow transition-all duration-200 hover:scale-110 active:scale-95">
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
+    <footer className="bg-[#0a110d] text-white pt-16 pb-12 mt-auto">
+      <div className="container mx-auto px-4 max-w-6xl">
 
-          {/* Quick Links */}
+        {/* Top Section - Logo & Socials */}
+        <div className="mb-12 max-w-sm">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-10 h-10 bg-[#eab308] rounded-full flex items-center justify-center p-1.5 shrink-0">
+              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain filter brightness-0" />
+            </div>
+            <span className="text-2xl font-bold tracking-tight">Rocs Crew</span>
+          </div>
+          <p className="text-[#8b9d93] mb-8 text-sm md:text-base leading-relaxed">
+            Nairobi's premier motorcycle delivery service.<br />
+            Fast, reliable, and affordable.
+          </p>
+          <div className="flex space-x-5">
+            <a href="https://facebook.com" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-white transition-colors group">
+              <FacebookIcon />
+            </a>
+            <a href="https://twitter.com" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-white transition-colors group">
+              <XIcon />
+            </a>
+            <a href="https://instagram.com" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-white transition-colors group">
+              <InstagramIcon />
+            </a>
+            <a href="https://linkedin.com" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-white transition-colors group">
+              <LinkedinIcon />
+            </a>
+          </div>
+        </div>
+
+        {/* Middle Section - 4 Column Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 pb-12 border-b border-white/10">
+
+          {/* Column 1: Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="text-white font-bold mb-6 text-base tracking-wide">Quick Links</h3>
+            <ul className="space-y-4">
               <li>
-                <Link to="/" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/tracking" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/tracking" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Track Order
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Our Services
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/signup" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Join as Rider
-                </Link>
-              </li>
-              <li>
-                <Link to="/rider-login" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Rider Sign In
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Column 2: Our Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">Our Services</h3>
-            <ul className="space-y-3">
+            <h3 className="text-white font-bold mb-6 text-base tracking-wide">Our Services</h3>
+            <ul className="space-y-4">
               <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/services" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Same-day Delivery
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/services" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Express Delivery
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Document Delivery
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Package Delivery
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
-                  Food Delivery
-                </Link>
-              </li>
-              <li>
-                <Link to="/tracking" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-x-1 hover:underline active:scale-95">
+                <Link to="/tracking" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
                   Real-time Tracking
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Column 3: Company */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">Contact Information</h3>
-            <div className="space-y-4">
+            <h3 className="text-white font-bold mb-6 text-base tracking-wide">Company</h3>
+            <ul className="space-y-4">
+              <li>
+                <Link to="/" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/tracking" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
+                  Track Order
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-[#8b9d93] hover:text-white transition-colors text-sm">
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Information */}
+          <div className="col-span-2 md:col-span-1">
+            <h3 className="text-white font-bold mb-6 text-base tracking-wide">Contact Information</h3>
+            <div className="space-y-5">
               <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Phone</div>
-                  <a href="tel:+254700898950" className="text-rocs-green-light hover:text-rocs-yellow transition-colors">+254 700 898 950</a>
+                <Phone className="w-5 h-5 text-[#eab308] mt-0.5 shrink-0" />
+                <a href="tel:+254700898950" className="text-[#8b9d93] hover:text-white transition-colors text-sm mt-0.5">
+                  +254 700 898 950
+                </a>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <Mail className="w-5 h-5 text-[#eab308] mt-0.5 shrink-0" />
+                <a href="mailto:Kuriajoe85@gmail.com" className="text-[#8b9d93] hover:text-white transition-colors text-sm break-all mt-0.5">
+                  Kuriajoe85@gmail.com
+                </a>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-5 h-5 text-[#eab308] mt-0.5 shrink-0" />
+                <div className="text-[#8b9d93] text-sm mt-0.5 leading-snug">
+                  Nairobi & Surrounding<br />Areas
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Email</div>
-                  <a href="mailto:Kuriajoe85@gmail.com" className="text-rocs-green-light hover:text-rocs-yellow transition-colors">Kuriajoe85@gmail.com</a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Service Area</div>
-                  <div className="text-rocs-green-light">Nairobi & Surrounding Areas</div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <Clock className="w-5 h-5 text-rocs-yellow mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Operating Hours</div>
-                  <div className="text-rocs-green-light">24/7 Service Available</div>
+                <Clock className="w-5 h-5 text-[#eab308] mt-0.5 shrink-0" />
+                <div className="text-[#8b9d93] text-sm mt-0.5">
+                  24/7 Service Available
                 </div>
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-rocs-green-dark mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-rocs-green-light text-sm mb-4 md:mb-0">
-              © 2024 Rocs Crew. All rights reserved.
+        <div className="pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm">
+            <div className="text-[#8b9d93] tracking-wider text-center md:text-left">
+              © {new Date().getFullYear()} Rocs Crew. All rights reserved.
             </div>
-            <div className="flex space-x-6 text-sm">
-              <Link to="/privacy" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
+            <div className="flex space-x-6 md:space-x-8">
+              <Link to="/privacy" className="text-[#8b9d93] hover:text-white transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
+              <Link to="/terms" className="text-[#8b9d93] hover:text-white transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/contact" className="text-rocs-green-light hover:text-rocs-yellow transition-all duration-200 hover:translate-y-[-2px] hover:underline active:scale-95">
+              <Link to="/contact" className="text-[#8b9d93] hover:text-white transition-colors">
                 Support
               </Link>
             </div>
           </div>
         </div>
+
       </div>
     </footer>
   );
