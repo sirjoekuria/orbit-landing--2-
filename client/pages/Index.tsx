@@ -12,7 +12,6 @@ export default function Index() {
         <meta name="description" content="Rocs Crew provides professional courier and logistics services across Kenya. Fast, secure, and reliable deliveries for businesses and individuals." />
       </Helmet>
       <SlidingHero />
-      <FeaturesSection />
       <SlidingTestimonials />
     </div>
   );

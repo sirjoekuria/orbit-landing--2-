@@ -1,193 +1,104 @@
-import { useState, useEffect } from "react";
-import { Zap, Phone } from "lucide-react";
-
-const heroSlides = [
-  {
-    id: 1,
-    title: "Fast & Reliable Delivery",
-    subtitle: "Your parcels delivered safely across Nairobi",
-    description:
-      "Professional motorcycle delivery service with real-time tracking and guaranteed safety. Experience the fastest delivery in Kenya.",
-    image: "https://images.pexels.com/photos/7363190/pexels-photo-7363190.jpeg",
-    cta: "Book Delivery Now",
-    features: [
-      "Same Day Delivery",
-      "Real-time Tracking",
-      "Professional Riders",
-    ],
-  },
-  {
-    id: 2,
-    title: "Track Your Order Live",
-    subtitle: "Real-time updates on your delivery",
-    description:
-      "Know exactly where your parcel is with our advanced GPS tracking system. Get live updates from pickup to delivery.",
-    image:
-      "https://images.pexels.com/photos/29019655/pexels-photo-29019655.jpeg",
-    cta: "Track Order",
-    features: ["GPS Tracking", "Live Updates", "Delivery Confirmation"],
-  },
-  {
-    id: 3,
-    title: "Affordable Rates",
-    subtitle: "KES 30 per kilometer",
-    description:
-      "Transparent pricing with no hidden fees. Calculate your delivery cost instantly and enjoy competitive rates across Nairobi.",
-    image: "https://images.pexels.com/photos/6868558/pexels-photo-6868558.jpeg",
-    cta: "Calculate Price",
-    features: ["Transparent Pricing", "No Hidden Fees", "Instant Quotes"],
-  },
-  {
-    id: 4,
-    title: "Professional Service",
-    subtitle: "Trained & experienced riders",
-    description:
-      "Our team of professional motorcycle riders ensures your packages are handled with care and delivered on time, every time.",
-    image: "https://images.pexels.com/photos/6169056/pexels-photo-6169056.jpeg",
-    cta: "Learn More",
-    features: ["Trained Riders", "Insured Packages", "24/7 Support"],
-  },
-];
+import { useRef } from "react";
+import { Clock, ShieldCheck, Zap, MapPin } from "lucide-react";
 
 export default function SlidingHero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
-
-    return () => clearInterval(timer);
-  }, [isAutoPlaying]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + heroSlides.length) % heroSlides.length,
-    );
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
+  const features = [
+    {
+      icon: Clock,
+      title: "Quick Delivery",
+      description: "Same-day delivery across Nairobi.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Secure & Safe",
+      description: "Insured and protected parcels.",
+    },
+    {
+      icon: Zap,
+      title: "Real-time Tracking",
+      description: "Track live on our platform.",
+    },
+    {
+      icon: MapPin,
+      title: "Wide Coverage",
+      description: "Nairobi and suburbs.",
+    },
+  ];
 
   return (
-    <section
-      className="relative h-[85vh] md:h-screen overflow-hidden bg-black"
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
-    >
-      {/* Slides */}
-      {heroSlides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${index === currentSlide
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-105"
-            }`}
-        >
-          <div className="relative h-full">
-            {/* Background Image with Overlay */}
+    <section className="relative min-h-[90vh] md:min-h-screen bg-[#0a110d] flex items-center pt-24 pb-16 overflow-hidden">
+      {/* Subtle top background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[500px] bg-[#1a3824] rounded-[100%] blur-[120px] opacity-40 pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto text-center space-y-8 md:space-y-12">
+
+          {/* Header Typography */}
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1]">
+              Experience<br />Fast Delivery
+            </h1>
+            <p className="text-lg md:text-xl text-gray-400 font-medium">
+              Nairobi's most trusted motorcycle service.
+            </p>
+          </div>
+
+          {/* Horizontal Scrolling Feature Cards */}
+          <div className="relative w-full max-w-5xl mx-auto mt-8 mb-4">
+            {/* Scrollable Container */}
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${slide.image})`,
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+              ref={scrollRef}
+              className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x snap-mandatory hide-scrollbar pt-4 px-4 -mx-4 md:mx-0 md:px-0"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <style dangerouslySetInnerHTML={{
+                __html: `
+                .hide-scrollbar::-webkit-scrollbar { display: none; }
+              `}} />
 
-            {/* Content */}
-            <div className="absolute inset-0 flex items-center">
-              <div className="container mx-auto px-4">
-                <div className="max-w-4xl">
-                  <div className="text-white space-y-6">
-                    {/* Badge */}
-                    <div className="inline-flex items-center space-x-2 bg-rocs-yellow/20 backdrop-blur-sm border border-rocs-yellow/30 rounded-full px-4 py-2">
-                      <Zap className="w-4 h-4 text-rocs-yellow" />
-                      <span className="text-rocs-yellow font-medium">
-                        Rocs Crew Delivery
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-                      {slide.title}
-                    </h1>
-
-                    {/* Subtitle */}
-                    <p className="text-xl md:text-3xl text-rocs-yellow font-semibold">
-                      {slide.subtitle}
-                    </p>
-
-                    {/* Description */}
-                    <p className="text-lg md:text-xl leading-relaxed max-w-2xl opacity-90">
-                      {slide.description}
-                    </p>
-
-                    {/* Features */}
-                    <div className="flex flex-wrap gap-4">
-                      {slide.features.map((feature, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1"
-                        >
-                          <div className="w-2 h-2 bg-rocs-yellow rounded-full" />
-                          <span className="text-sm font-medium">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <a href="/book-delivery">
-                        <button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
-                          {slide.cta}
-                        </button>
-                      </a>
-                      <button className="border-2 border-white text-white hover:bg-white hover:text-gray-800 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 backdrop-blur-sm">
-                        <div className="flex items-center space-x-2">
-                          <Phone className="w-5 h-5" />
-                          <span>Call +254 700 898 950</span>
-                        </div>
-                      </button>
-                    </div>
+              {features.map((feature, idx) => (
+                <div
+                  key={idx}
+                  className="flex-none w-[200px] sm:w-[220px] bg-[#112417] border border-green-900/50 rounded-2xl p-6 text-left flex flex-col justify-start shadow-[0_4px_20px_rgba(26,56,36,0.5)] snap-center transition-transform hover:scale-105 duration-300 pointer-events-auto"
+                >
+                  <div className="w-10 h-10 rounded-full border border-[#eab308]/30 flex items-center justify-center mb-4">
+                    <feature.icon className="w-5 h-5 text-[#eab308]" />
                   </div>
+                  <h3 className="text-white font-bold text-lg leading-tight mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-snug">
+                    {feature.description}
+                  </p>
                 </div>
-              </div>
+              ))}
+            </div>
+
+            {/* Pagination Indicators (Mockup shows a pill and dots) */}
+            <div className="flex justify-center items-center space-x-2 -mt-2 mb-8">
+              <div className="w-8 h-1.5 bg-white rounded-full opacity-80" />
+              <div className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+              <div className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
             </div>
           </div>
+
+          {/* Call to Action Buttons */}
+          <div className="flex flex-row justify-center items-center gap-4 sm:gap-6 pt-4">
+            <a href="/book-delivery">
+              <button className="bg-gradient-to-b from-[#fde047] to-[#ca8a04] hover:brightness-110 text-black font-bold px-6 sm:px-10 py-3.5 sm:py-4 rounded-full text-sm sm:text-base transition-all duration-300 shadow-[0_0_20px_rgba(234,179,8,0.3)] whitespace-nowrap">
+                Calculate Price
+              </button>
+            </a>
+            <a href="/tracking">
+              <button className="bg-transparent border border-white/40 text-white hover:bg-white/10 font-bold px-6 sm:px-10 py-3.5 sm:py-4 rounded-full text-sm sm:text-base transition-all duration-300 whitespace-nowrap">
+                Track Your Order
+              </button>
+            </a>
+          </div>
+
         </div>
-      ))}
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
-        {heroSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-              ? "bg-rocs-yellow scale-125"
-              : "bg-white/50 hover:bg-white/70"
-              }`}
-          />
-        ))}
-      </div>
-
-      {/* Progress Bar */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-white/20">
-        <div
-          className="h-full bg-rocs-yellow transition-all duration-6000 ease-linear"
-          style={{
-            width: `${((currentSlide + 1) / heroSlides.length) * 100}%`,
-            transition: isAutoPlaying ? "width 6s linear" : "width 0.3s ease",
-          }}
-        />
       </div>
     </section>
   );
