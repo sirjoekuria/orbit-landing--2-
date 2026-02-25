@@ -18,6 +18,10 @@ export const apiFetch = async (input: RequestInfo | URL, init?: RequestInit) => 
     if (!headers.has('ngrok-skip-browser-warning')) {
         headers.set('ngrok-skip-browser-warning', 'true');
     }
+    // Bypass LocalTunnel Proxy Warning
+    if (!headers.has('Bypass-Tunnel-Reminder')) {
+        headers.set('Bypass-Tunnel-Reminder', 'true');
+    }
 
     return fetch(input, {
         ...init,
