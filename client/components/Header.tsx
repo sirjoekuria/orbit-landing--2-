@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, LogIn, LogOut, UserPlus, User, Menu, X, LayoutDashboard, Sun, Moon } from 'lucide-react';
+import { Phone, LogIn, LogOut, UserPlus, User, Menu, X, LayoutDashboard, Sun, Moon, Home, Truck, Wrench, Info, HelpCircle, Shield, Facebook, Twitter, Instagram } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../lib/AuthContext';
 import { useTheme } from './ThemeContext';
@@ -122,99 +122,153 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Backdrop */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <nav className="flex flex-col space-y-4">
-              <Link
-                to="/"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link to="/book-delivery" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="border-rocs-green text-rocs-green hover:border-rocs-green/70 hover:bg-transparent transition-all font-semibold w-fit">
-                  Book Now
-                </Button>
-              </Link>
-              <Link
-                to="/tracking"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Track Order
-              </Link>
-              <Link
-                to="/admin"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Admin
-              </Link>
-              <Link
-                to="/contact"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
-              </Link>
-              <Link
-                to="/services"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Our Services
-              </Link>
-              <Link
-                to="/about"
-                className="text-foreground/80 hover:text-rocs-green transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About Us
-              </Link>
+          <div
+            className="fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
 
+        {/* Mobile Sidebar (Drawer) */}
+        <div
+          className={`fixed inset-y-0 left-0 w-[280px] bg-[#274033] shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+        >
+          {/* Sidebar Header */}
+          <div className="flex items-center justify-between p-6 pb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1">
+                <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="text-xl font-bold text-white">Rocs Crew</span>
+            </div>
+            <button
+              className="text-white drop-shadow-md p-1"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Sidebar Navigation Links */}
+          <nav className="flex-1 overflow-y-auto py-4 px-6 space-y-6">
+            <Link
+              to="/"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Home className="w-5 h-5 text-[#eab308]" />
+              <span>Home</span>
+            </Link>
+
+            <Link
+              to="/tracking"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Truck className="w-5 h-5 text-[#eab308]" />
+              <span>Track Order</span>
+            </Link>
+
+            <Link
+              to="/services"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Wrench className="w-5 h-5 text-[#eab308]" />
+              <span>Our Services</span>
+            </Link>
+
+            <Link
+              to="/about"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Info className="w-5 h-5 text-[#eab308]" />
+              <span>About Us</span>
+            </Link>
+
+            <Link
+              to="/contact"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <HelpCircle className="w-5 h-5 text-[#eab308]" />
+              <span>Contact</span>
+            </Link>
+
+            <Link
+              to="/admin"
+              className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Shield className="w-5 h-5 text-[#eab308]" />
+              <span>Admin Panel</span>
+            </Link>
+
+            {/* User Account / Authentication Area */}
+            <div className="pt-4 space-y-4">
               {user ? (
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <User className="w-4 h-4" />
-                    <span>{user.name}</span>
+                <>
+                  <div className="flex items-center space-x-3 text-white px-2 mb-2">
+                    <User className="w-5 h-5 text-[#eab308]" />
+                    <span className="font-semibold">{user.name}</span>
                   </div>
                   <Button
                     onClick={handleLogout}
-                    variant="outline"
-                    size="sm"
-                    className="border-gray-300 text-gray-600 hover:bg-gray-50 w-fit"
+                    className="w-full justify-center bg-transparent border border-white text-white hover:bg-white/10 h-12 rounded-xl"
                   >
-                    <LogOut className="w-4 h-4 mr-1" />
+                    <LogOut className="w-5 h-5 mr-3 text-white" />
                     Logout
                   </Button>
-                </div>
+                </>
               ) : (
-                <div className="space-y-2">
-                  <a href="tel:+254700898950" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-rocs-green transition-colors">
-                    <Phone className="w-4 h-4" />
-                    <span>+254 700 898 950</span>
-                  </a>
-                  <div className="flex space-x-2">
-                    <Link to="/login">
-                      <Button variant="outline" size="sm" className="border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white">
-                        <LogIn className="w-4 h-4 mr-1" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link to="/signup">
-                      <Button size="sm" className="bg-rocs-green hover:bg-rocs-green-dark text-white">
-                        <UserPlus className="w-4 h-4 mr-1" />
-                        Sign Up
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
+                <>
+                  <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full justify-center bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold h-12 rounded-xl mb-4 shadow-md">
+                      <UserPlus className="w-5 h-5 mr-3" />
+                      Sign Up Now
+                    </Button>
+                  </Link>
+
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-center bg-transparent border border-white text-white hover:bg-white/10 h-12 rounded-xl"
+                    >
+                      <LogIn className="w-5 h-5 mr-3" />
+                      Sign In
+                    </Button>
+                  </Link>
+                </>
               )}
-            </nav>
+            </div>
+          </nav>
+
+          {/* Sidebar Footer */}
+          <div className="border-t border-white/10 p-6 space-y-6">
+            <a
+              href="tel:+254700898950"
+              className="flex items-center space-x-3 text-white hover:text-[#eab308] transition-colors font-medium"
+            >
+              <Phone className="w-5 h-5 text-[#eab308]" />
+              <span>+254 700 898 950</span>
+            </a>
+
+            <div className="flex space-x-5 text-[#a3b1a8]">
+              <a href="#" className="hover:text-white transition-colors">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                <Twitter className="w-6 h-6" />
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                <Instagram className="w-6 h-6" />
+              </a>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </header >
   );
