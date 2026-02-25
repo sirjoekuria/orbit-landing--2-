@@ -114,6 +114,18 @@ export default function Header() {
               )}
             </div>
 
+            {/* Mobile Actions: Notifications & Profile */}
+            <div className="flex md:hidden items-center space-x-3 pr-2">
+              <button className="w-10 h-10 rounded-full bg-[#112417] flex items-center justify-center border border-white/5 text-[#8b9d93] hover:text-[#eab308] transition-colors">
+                <Bell className="w-5 h-5" />
+              </button>
+              <Link to={user ? "/dashboard" : "/login"}>
+                <button className="w-10 h-10 rounded-full bg-gradient-to-br from-[#eab308] to-[#ca8a04] flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+                  <UserIcon className="w-5 h-5 text-black" />
+                </button>
+              </Link>
+            </div>
+
             {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2 -mr-2 text-white hover:text-[#eab308] transition-colors relative z-50"

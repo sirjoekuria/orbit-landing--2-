@@ -16,7 +16,7 @@ interface MapboxMapProps {
 }
 
 const MAPBOX_ACCESS_TOKEN =
-  "pk.eyJ1Ijoic2lyam9la3VyaWEiLCJhIjoiY21laGxzZnI0MDBjZzJqcXczc2NtdHZqZCJ9.FhRc9jUcHnkTPuauJrP-Qw";
+  import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 export default function MapboxMap({
   pickup,
@@ -121,9 +121,9 @@ export default function MapboxMap({
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
@@ -434,9 +434,9 @@ export default function MapboxMap({
     try {
       const response = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/driving/${pickup.lng},${pickup.lat};${dropoff.lng},${dropoff.lat}?` +
-          `access_token=${MAPBOX_ACCESS_TOKEN}&` +
-          `geometries=geojson&` +
-          `overview=full`,
+        `access_token=${MAPBOX_ACCESS_TOKEN}&` +
+        `geometries=geojson&` +
+        `overview=full`,
       );
 
       const data = await response.json();
