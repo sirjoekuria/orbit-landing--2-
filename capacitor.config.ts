@@ -5,9 +5,14 @@ const config: CapacitorConfig = {
   appName: 'Orbit Landing',
   webDir: 'dist/spa',
   server: {
-    androidScheme: 'https',
+    androidScheme: 'http',
     cleartext: true
-  }
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;

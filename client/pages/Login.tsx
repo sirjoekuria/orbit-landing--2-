@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../lib/api';
+import { API_BASE_URL, apiFetch } from '../lib/api';
 import { LogIn, Mail, Lock, Eye, EyeOff, User, Bike } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -82,10 +82,10 @@ export default function Login() {
       setLoading(true);
       setMessage(null);
       try {
-        const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+        const csrfRes = await apiFetch(`${API_BASE_URL}/api/csrf-token`);
         const { token } = await csrfRes.json();
 
-        const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
+        const res = await apiFetch(`${API_BASE_URL}/api/auth/forgot-password`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -146,11 +146,17 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
+      const csrfRes = await apiFetch(`${API_BASE_URL}/api/csrf-token`, {
+        credentials: 'include',
+        signal: controller.signal
+      });
       const { token } = await csrfRes.json();
 
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -160,8 +166,11 @@ export default function Login() {
           ...data,
           userType: userType === 'rider' ? 'rider' : undefined
         }),
-        credentials: 'include'
+        credentials: 'include',
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const result = await response.json();
@@ -185,9 +194,14 @@ export default function Login() {
         throw new Error(error.error || 'Invalid credentials');
       }
     } catch (error) {
+      clearTimeout(timeoutId);
+      let errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      if (error instanceof Error && error.name === 'AbortError') {
+        errorMessage = "Connection timed out. Ensure your phone and PC are on the same Wi-Fi and Windows Firewall isn't blocking port 3001.";
+      }
       toast({
         title: "Login failed",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

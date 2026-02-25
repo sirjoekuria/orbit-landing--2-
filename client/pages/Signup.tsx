@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from '../lib/api';
+import { API_BASE_URL, apiFetch } from '../lib/api';
 import {
   UserPlus,
   Mail,
@@ -128,7 +128,9 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
+      const csrfRes = await apiFetch(`${API_BASE_URL}/api/csrf-token`, {
+        credentials: 'include'
+      });
       const { token: csrfToken } = await csrfRes.json();
 
       const endpoint =
@@ -155,7 +157,7 @@ export default function Signup() {
           }
         });
 
-        response = await fetch(endpoint, {
+        response = await apiFetch(endpoint, {
           method: "POST",
           headers: {
             'x-csrf-token': csrfToken
@@ -171,7 +173,7 @@ export default function Signup() {
           timestamp: new Date().toISOString()
         };
 
-        response = await fetch(endpoint, {
+        response = await apiFetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

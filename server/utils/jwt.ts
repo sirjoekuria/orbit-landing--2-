@@ -23,9 +23,7 @@ export function setAuthCookie(res: Response, token: string): void {
 
     res.cookie('auth_token', token, {
         httpOnly: true,
-        // Always use secure: true because the site is served over HTTPS 
-        // via basicSsl in dev, and browsers require it for HTTPS.
-        secure: true,
+        secure: isProduction, // Use secure: false when in dev so HTTP IP requests work!
         sameSite: 'lax',     // 'lax' allows cookie on page refresh/navigation
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         path: '/',

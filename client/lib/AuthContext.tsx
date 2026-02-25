@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { API_BASE_URL } from './api';
+import { API_BASE_URL, apiFetch } from './api';
 
 interface User {
     id: string;
@@ -31,7 +31,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const checkSession = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/auth/me`, { credentials: 'include' });
+            const response = await apiFetch(`${API_BASE_URL}/api/auth/me`, {
+                credentials: 'include'
+            });
 
             if (response.ok) {
                 const data = await response.json();
@@ -104,11 +106,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = async () => {
         try {
-            const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
+            const csrfRes = await apiFetch(`${API_BASE_URL}/api/csrf-token`);
             const { token } = await csrfRes.json();
-            await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            await apiFetch(`${API_BASE_URL}/api/auth/logout`, {
                 method: 'POST',
-                headers: { 'x-csrf-token': token }
+                headers: {
+                    'x-csrf-token': token
+                }
             }); // We should implement this
         } catch (e) {
             console.error('Logout request failed:', e);

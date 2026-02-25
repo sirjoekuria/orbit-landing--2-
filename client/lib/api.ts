@@ -6,3 +6,21 @@ import { Capacitor } from '@capacitor/core';
 export const API_BASE_URL = Capacitor.getPlatform() === 'web'
     ? ''
     : (import.meta.env.VITE_API_BASE_URL || 'https://rocscrewdelivery.netlify.app');
+
+/**
+ * Global wrapper for fetch to automatically add ngrok bypass headers
+ * and avoid "Unexpected token '<', <!DOCTYPE" HTML errors.
+ */
+export const apiFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const headers = new Headers(init?.headers || {});
+
+    // Bypass Ngrok HTML Interstitial Warn Page
+    if (!headers.has('ngrok-skip-browser-warning')) {
+        headers.set('ngrok-skip-browser-warning', 'true');
+    }
+
+    return fetch(input, {
+        ...init,
+        headers
+    });
+};

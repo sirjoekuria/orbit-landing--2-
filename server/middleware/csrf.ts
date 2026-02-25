@@ -14,8 +14,9 @@ export const {
     cookieOptions: {
         httpOnly: false, // CSRF token needs to be accessible by client-side JS
         // Since the site is served over HTTPS via basicSsl in dev, 
-        // we should keep secure: true to avoid browser rejection.
-        secure: true,
+        // we should keep secure: true to avoid browser rejection. But we will disable
+        // it if not in production to allow the Android App to pass it over HTTP.
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
     },
