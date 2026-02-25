@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, LogIn, LogOut, UserPlus, User, Menu, X, LayoutDashboard, Sun, Moon, Home, Truck, Wrench, Info, HelpCircle, Shield, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Phone, LogIn, LogOut, UserPlus, User, Menu, X, LayoutDashboard, Sun, Moon, Home, Truck, Wrench, Info, HelpCircle, Shield, Facebook, Twitter, Instagram, Bell, User as UserIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../lib/AuthContext';
 import { useTheme } from './ThemeContext';
