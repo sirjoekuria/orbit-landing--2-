@@ -77,16 +77,13 @@ export default function BookDelivery() {
 
   // If user is logged in, show the order form
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-[#0a110d] py-16">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-rocs-green mb-2">
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-[#eab308]">
               Book Your Delivery
             </h1>
-            <p className="text-gray-600">
-              Welcome back, <span className="font-semibold text-rocs-green">{user.name}</span>!
-            </p>
           </div>
           <OrderForm />
         </div>

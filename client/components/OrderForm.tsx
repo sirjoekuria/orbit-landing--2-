@@ -359,56 +359,41 @@ export default function OrderForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-rocs-green mb-4">
-          Book Your Delivery
-        </h2>
-        <p className="text-gray-600">
-          Fill in the details below to create your delivery order
-        </p>
-
-        {/* Progress indicator */}
-        <div className="flex items-center justify-center mt-6 space-x-4">
-          <div className="flex items-center space-x-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === "details" ? "bg-rocs-green text-white" : "bg-rocs-green text-white"}`}
-            >
-              <User className="w-4 h-4" />
-            </div>
-            <span className="text-sm font-medium text-rocs-green">
-              Order Details
-            </span>
+    <div className="bg-[#0a110d] w-full">
+      {/* Progress Pill Tabs */}
+      <div className="flex bg-[#1c2c1a] rounded-full p-1 mb-8">
+        <div
+          className={`flex-1 flex items-center justify-center space-x-2 py-2 rounded-full cursor-pointer transition-all ${currentStep === "details"
+            ? "bg-gradient-to-r from-[#eab308] to-[#9a6b0c] text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+            : "text-[#8b9d93] hover:text-white"
+            }`}
+          onClick={() => setCurrentStep("details")}
+        >
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${currentStep === "details" ? "border-black" : "border-[#8b9d93]"}`}>
+            {currentStep === "details" && <div className="w-2 h-2 bg-black rounded-full" />}
           </div>
-
-          <div className="w-8 h-0.5 bg-gray-300"></div>
-
-          <div className="flex items-center space-x-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === "payment" ? "bg-rocs-green text-white" : "bg-gray-300 text-gray-500"}`}
-            >
-              <CreditCard className="w-4 h-4" />
-            </div>
-            <span
-              className={`text-sm font-medium ${currentStep === "payment" ? "text-rocs-green" : "text-gray-500"}`}
-            >
-              Payment
-            </span>
-          </div>
+          <span className="font-bold text-sm">Order Details</span>
+        </div>
+        <div
+          className={`flex-1 flex items-center justify-center space-x-2 py-2 rounded-full cursor-not-allowed transition-all ${currentStep === "payment"
+            ? "bg-gradient-to-r from-[#eab308] to-[#9a6b0c] text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+            : "text-[#8b9d93]"
+            }`}
+        >
+          <span className="font-bold text-sm opacity-50">Payment</span>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Customer Information */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <User className="w-5 h-5 mr-2" />
+        <div className="bg-[#112417] border border-[#eab308] rounded-2xl p-6 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+          <h3 className="text-lg font-bold text-white mb-4">
             Customer Information
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-4">
             <div>
-              <Label htmlFor="customerName" className="text-gray-700">
-                Full Name *
+              <Label htmlFor="customerName" className="text-white text-sm mb-1.5 block">
+                Full Name <span className="text-[#eab308]">*</span>
               </Label>
               <Input
                 id="customerName"
@@ -417,13 +402,13 @@ export default function OrderForm() {
                 required
                 value={formData.customerName}
                 onChange={handleInputChange}
-                className="mt-1"
+                className="bg-transparent border-[#8b9d93]/40 text-white focus:border-[#eab308] rounded-lg h-11"
                 placeholder="John Doe"
               />
             </div>
             <div>
-              <Label htmlFor="customerEmail" className="text-gray-700">
-                Email Address *
+              <Label htmlFor="customerEmail" className="text-white text-sm mb-1.5 block">
+                Email Address <span className="text-[#eab308]">*</span>
               </Label>
               <Input
                 id="customerEmail"
@@ -432,13 +417,13 @@ export default function OrderForm() {
                 required
                 value={formData.customerEmail}
                 onChange={handleInputChange}
-                className="mt-1"
+                className="bg-transparent border-[#8b9d93]/40 text-white focus:border-[#eab308] rounded-lg h-11"
                 placeholder="john@example.com"
               />
             </div>
             <div>
-              <Label htmlFor="customerPhone" className="text-gray-700">
-                Phone Number *
+              <Label htmlFor="customerPhone" className="text-white text-sm mb-1.5 block">
+                Phone Number <span className="text-[#eab308]">*</span>
               </Label>
               <Input
                 id="customerPhone"
@@ -447,29 +432,32 @@ export default function OrderForm() {
                 required
                 value={formData.customerPhone}
                 onChange={handleInputChange}
-                className="mt-1"
+                className="bg-transparent border-[#8b9d93]/40 text-white focus:border-[#eab308] rounded-lg h-11"
                 placeholder="+254 7XX XXX XXX"
               />
             </div>
           </div>
-        </div>
 
-        {/* Saved Addresses Option */}
-        <div className="flex items-center space-x-2 mt-4">
-          <input
-            type="checkbox"
-            id="saveAddresses"
-            checked={saveAddresses}
-            onChange={(e) => setSaveAddresses(e.target.checked)}
-            className="w-4 h-4 text-rocs-green border-gray-300 rounded focus:ring-rocs-green"
-          />
-          <Label htmlFor="saveAddresses" className="text-sm text-gray-600 cursor-pointer">
-            Save these addresses for future deliveries
-          </Label>
+          {/* Saved Addresses Option */}
+          <div className="flex items-center space-x-3 mt-4">
+            <input
+              type="checkbox"
+              id="saveAddresses"
+              checked={saveAddresses}
+              onChange={(e) => setSaveAddresses(e.target.checked)}
+              className="w-4 h-4 text-[#eab308] bg-transparent border-[#eab308] rounded focus:ring-[#eab308] focus:ring-offset-[#112417]"
+            />
+            <Label htmlFor="saveAddresses" className="text-sm text-[#8b9d93] cursor-pointer">
+              Save these addresses for future deliveries
+            </Label>
+          </div>
         </div>
 
         {/* Location Selection */}
-        <div>
+        <div className="bg-[#112417] border border-[#eab308] rounded-2xl p-6 shadow-[0_0_15px_rgba(234,179,8,0.1)] relative">
+          <h3 className="text-lg font-bold text-white mb-4">
+            Select Pickup & Drop-off Locations
+          </h3>
           <SimpleMapboxLocationPicker
             onLocationSelect={handleLocationSelect}
             onDistanceCalculated={handleDistanceCalculated}
@@ -477,15 +465,14 @@ export default function OrderForm() {
         </div>
 
         {/* Package Information */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Package className="w-5 h-5 mr-2" />
+        <div className="bg-[#112417] border border-[#eab308] rounded-2xl p-6 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+          <h3 className="text-lg font-bold text-white mb-4">
             Package Information
           </h3>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="packageDetails" className="text-gray-700">
-                Package Details *
+              <Label htmlFor="packageDetails" className="text-white text-sm mb-1.5 block">
+                Package Details <span className="text-[#eab308]">*</span>
               </Label>
               <Textarea
                 id="packageDetails"
@@ -494,12 +481,12 @@ export default function OrderForm() {
                 value={formData.packageDetails}
                 onChange={handleInputChange}
                 rows={3}
-                className="mt-1"
+                className="bg-transparent border-[#8b9d93]/40 text-white focus:border-[#eab308] rounded-lg resize-none placeholder:text-gray-500"
                 placeholder="Describe your package (type, size, weight, etc.)"
               />
             </div>
             <div>
-              <Label htmlFor="notes" className="text-gray-700">
+              <Label htmlFor="notes" className="text-white text-sm mb-1.5 block">
                 Special Instructions (Optional)
               </Label>
               <Textarea
@@ -508,46 +495,45 @@ export default function OrderForm() {
                 value={formData.notes}
                 onChange={handleInputChange}
                 rows={2}
-                className="mt-1"
+                className="bg-transparent border-[#8b9d93]/40 text-white focus:border-[#eab308] rounded-lg resize-none placeholder:text-gray-500"
                 placeholder="Any special handling instructions"
               />
             </div>
           </div>
         </div>
 
-        {/* Price Calculation */}
+        {/* Price Calculation Summary - Modified for Dark Theme */}
         {estimatedPrice && (
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-              <Calculator className="w-5 h-5 mr-2" />
+          <div className="bg-[#112417] border border-[#eab308]/50 rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4">
               Delivery Summary
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-rocs-green">
+                <div className="text-2xl font-bold text-white">
                   {distance?.toFixed(1)} km
                 </div>
-                <div className="text-sm text-gray-600">Distance</div>
+                <div className="text-xs text-[#8b9d93] uppercase tracking-wider font-bold">Distance</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-rocs-green">
+                <div className="text-2xl font-bold text-white">
                   {duration ? Math.round(duration) : "--"} min
                 </div>
-                <div className="text-sm text-gray-600">Est. Time</div>
+                <div className="text-xs text-[#8b9d93] uppercase tracking-wider font-bold">Est. Time</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-rocs-yellow">
+                <div className="text-3xl font-bold text-[#eab308]">
                   KES {estimatedPrice?.toLocaleString()}
                 </div>
-                <div className="text-sm text-gray-600">Total Cost</div>
+                <div className="text-xs text-[#8b9d93] uppercase tracking-wider font-bold">Total Cost</div>
               </div>
             </div>
           </div>
         )}
 
         {/* Submit Button */}
-        <div className="text-center pt-6">
+        <div className="pt-4">
           <Button
             type="submit"
             disabled={
@@ -559,11 +545,11 @@ export default function OrderForm() {
             onClick={() => {
               triggerHaptic();
             }}
-            className="bg-rocs-green hover:bg-rocs-green-dark text-white px-8 py-3 text-lg"
+            className="w-full bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold h-14 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.3)] text-lg transition-all"
           >
             {isSubmitting ? (
-              <span className="flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <span className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
                 Creating Order...
               </span>
             ) : (
@@ -572,7 +558,7 @@ export default function OrderForm() {
           </Button>
 
           {estimatedPrice && (
-            <p className="text-sm text-gray-600 mt-4">
+            <p className="text-xs text-[#8b9d93] text-center mt-4">
               By placing this order, you agree to pay KES {estimatedPrice} upon
               delivery
             </p>

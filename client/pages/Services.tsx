@@ -67,163 +67,107 @@ const coverage = [
 
 export default function Services() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-rocs-green to-rocs-green-dark py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-bold mb-6">Our Delivery Services</h1>
-            <p className="text-xl mb-8 max-w-3xl mx-auto">
-              From same-day delivery to bulk shipments, we provide comprehensive motorcycle
-              delivery solutions across Nairobi at competitive rates.
-            </p>
-            <button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-bold px-8 py-4 rounded-lg text-lg transition-all">
-              Get Quote Now
-            </button>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[#0a110d] pb-24 relative overflow-x-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#22c55e]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Services Grid */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-rocs-green mb-4">Choose Your Service</h2>
-            <p className="text-lg text-gray-600">
-              Select from our range of delivery options designed to meet your specific needs
-            </p>
-          </div>
+      <div className="container mx-auto px-4 pt-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-white text-center mb-10">
+          Premium Services
+        </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <div
-                key={service.id}
-                className={`relative bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 ${service.popular ? 'border-2 border-rocs-yellow' : 'border border-gray-200'
-                  }`}
-              >
-                {service.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-rocs-yellow text-gray-800 px-4 py-1 rounded-full text-sm font-bold">
-                      Popular
-                    </span>
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-rocs-green rounded-full mb-4">
-                    <service.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{service.name}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  {service.features.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <Check className="w-5 h-5 text-rocs-green flex-shrink-0" />
-                      <span className="text-sm text-gray-700">{feature}</span>
-                    </div>
+        {/* Horizontal Service Cards */}
+        <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory hide-scrollbar -mx-4 px-4">
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className="snap-center shrink-0 w-[140px] md:w-[160px] bg-gradient-to-b from-[#112417] to-[#0a110d] border border-[#22c55e]/30 p-4 rounded-3xl flex flex-col items-center justify-between shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:border-[#22c55e]/80 transition-all group"
+            >
+              <div className="w-12 h-12 bg-transparent rounded-full flex items-center justify-center mb-3">
+                <service.icon className="w-6 h-6 text-[#eab308] group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="text-center flex-grow flex flex-col justify-center mb-4">
+                <h3 className="text-sm font-bold text-white mb-1 leading-tight">
+                  {service.name.split(' ').map((word, i) => (
+                    <span key={i} className="block">{word}</span>
                   ))}
-                </div>
-
-                <div className="text-center border-t pt-6">
-                  <div className="text-2xl font-bold text-rocs-green mb-4">{service.price}</div>
-                  <Link to="/book-delivery">
-                    <button className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3 rounded-lg transition-colors">
-                      Book Now
-                    </button>
-                  </Link>
-                </div>
+                </h3>
+                <p className="text-[10px] text-[#8b9d93] leading-tight">
+                  {service.description.split('.')[0]} {/* Keep it very short */}
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Coverage Area */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-rocs-green mb-4">Service Coverage</h2>
-            <p className="text-lg text-gray-600">
-              We deliver across Nairobi and its surrounding areas
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {coverage.map((area, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4 text-center hover:bg-rocs-green hover:text-white transition-colors">
-                <span className="font-medium">{area}</span>
+              <div className="w-full bg-[#1c2c1a] border border-[#eab308]/60 text-[#eab308] text-[10px] font-bold py-1.5 px-2 rounded-full text-center whitespace-nowrap shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                {service.price}
               </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-6">Don't see your area? Contact us for custom delivery solutions.</p>
-            <button className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-bold px-6 py-3 rounded-lg">
-              Contact Us
-            </button>
-          </div>
+            </div>
+          ))}
         </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-rocs-green mb-4">How It Works</h2>
-            <p className="text-lg text-gray-600">
-              Simple steps to get your packages delivered
-            </p>
-          </div>
+        {/* How It Works */}
+        <div className="mt-12 max-w-2xl mx-auto">
+          <h2 className="text-xl font-bold text-white mb-8">How It Works</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { step: 1, title: "Book Online", description: "Place your order through our website or call us", icon: Phone },
-              { step: 2, title: "Package Pickup", description: "Our rider collects your package from the pickup location", icon: Package },
-              { step: 3, title: "Real-time Tracking", description: "Track your delivery live with GPS updates", icon: MapPin },
-              { step: 4, title: "Safe Delivery", description: "Package delivered safely to the destination", icon: Shield }
-            ].map((item, index) => (
-              <div key={index} className="text-center">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="w-8 h-8 text-white" />
+          <div className="relative pl-4">
+            {/* Vertical Line */}
+            <div className="absolute left-[34px] top-6 bottom-6 w-[2px] bg-[#eab308]/40" />
+
+            <div className="space-y-8">
+              {[
+                { step: 1, title: "Book Online", description: "Book your delivery online through our app or mobile phone.", icon: Phone },
+                { step: 2, title: "Package Pickup", description: "Choose early pickup for your package driver delivery.", icon: Package },
+                { step: 3, title: "Real-time Tracking", description: "Real-time tracking pin and real time in our platform.", icon: MapPin },
+                { step: 4, title: "Safe Delivery", description: "Secure checkmark  meaning you're tracking and protects delivery.", icon: Shield }
+              ].map((item, index) => (
+                <div key={index} className="flex flex-row items-center relative z-10 w-full">
+                  <div className="w-10 h-10 bg-gradient-to-b from-[#eab308] to-[#9a6b0c] rounded-full flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(234,179,8,0.4)] mr-6 border-2 border-[#112417]">
+                    <span className="text-black font-bold text-lg">{item.step}</span>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-rocs-yellow rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-gray-800">{item.step}</span>
+                  <div className="bg-transparent flex-grow flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-transparent rounded-lg flex items-center justify-center border border-white/10 shrink-0">
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-base mb-1">{item.title}</h3>
+                      <p className="text-[#8b9d93] text-xs leading-relaxed max-w-[260px]">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Service Coverage */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <h2 className="text-xl font-bold text-white mb-6">Service Coverage</h2>
+          <div className="flex flex-wrap gap-3">
+            {[...coverage].slice(0, 12).map((area, index) => (
+              <div
+                key={index}
+                className="bg-[#112417] border border-[#22c55e]/30 px-4 py-2 rounded-full text-sm text-[#8b9d93] hover:text-white hover:border-[#22c55e] transition-colors"
+              >
+                {area}
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-rocs-green">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Ready to Send Your Package?</h2>
-          <p className="text-xl text-white mb-8 opacity-90">
-            Get started with Rocs Crew today and experience reliable delivery service
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/calculate-price"
-              className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-bold px-8 py-4 rounded-lg text-lg transition-colors"
-            >
+      {/* Ready to Send CTA */}
+      <div className="container mx-auto px-4 mt-16 mt-auto">
+        <div className="max-w-md mx-auto bg-gradient-to-b from-[#112417] to-[#0a110d] rounded-t-[2.5rem] rounded-b-xl border border-white/5 p-8 text-center shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative z-20">
+          <h2 className="text-2xl font-bold text-white mb-6">
+            Ready to Send Your Package?
+          </h2>
+          <Link to="/calculate-price" className="block w-full">
+            <button className="w-full bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold py-4 rounded-full shadow-[0_0_30px_rgba(234,179,8,0.3)] text-lg transition-all">
               Calculate Price
-            </Link>
-            <a
-              href="tel:+254700898950"
-              className="border-2 border-white text-white hover:bg-white hover:text-rocs-green font-bold px-8 py-4 rounded-lg text-lg transition-colors"
-            >
-              Call +254 700 898 950
-            </a>
-          </div>
+            </button>
+          </Link>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

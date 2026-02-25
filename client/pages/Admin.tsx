@@ -42,7 +42,11 @@ import {
   RefreshCw,
   Plus,
   Zap,
-  Skeleton as SkeletonIcon
+  Skeleton as SkeletonIcon,
+  Lock,
+  EyeOff,
+  ArrowRight,
+  ShieldAlert
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import PullToRefresh from "../components/Mobile/PullToRefresh";
@@ -129,6 +133,7 @@ export default function Admin() {
     return sessionStorage.getItem("adminAuth") === "true";
   });
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<
     | "overview"
@@ -881,62 +886,92 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-        <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center">
-                <span className="text-white text-2xl font-bold">🔒</span>
-              </div>
+      <div className="min-h-screen bg-[#0a110d] flex flex-col items-center justify-center p-4">
+        {/* Main Admin Card */}
+        <div className="w-full max-w-md bg-[#0d1610] rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden border border-[#ffffff0a]">
+          {/* Subtle top glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-rocs-green/20 blur-[50px] rounded-full pointer-events-none" />
+
+          {/* Icon */}
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-[#112417] rounded-full flex items-center justify-center border border-[#eab308]/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+              <Lock className="w-7 h-7 text-[#eab308]" />
             </div>
-            <h2 className="text-3xl font-bold text-rocs-green">
+          </div>
+
+          <div className="text-center mb-8 relative z-10">
+            <h2 className="text-3xl font-bold text-white mb-2">
               Admin Dashboard
             </h2>
-            <p className="mt-2 text-gray-600">
-              Enter your password to access the admin panel
+            <p className="text-[#8b9d93] text-sm md:text-base px-2">
+              Enter your password to access the secure admin panel for Rocs Crew.
             </p>
           </div>
 
-          <div className="bg-white py-8 px-6 shadow-lg rounded-xl">
+          <div className="bg-[#112417] p-6 rounded-3xl border border-white/5 shadow-inner relative z-10">
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-gray-700 font-medium mb-2"
+                  className="block text-[#eab308] font-bold text-xs tracking-widest mb-2 uppercase"
                 >
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rocs-green"
-                  placeholder="Enter admin password"
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-5 py-4 bg-black/20 border border-[#8b9d93]/20 text-white placeholder:text-[#8b9d93] rounded-2xl focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all pr-12"
+                    placeholder="Enter admin password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
+                  >
+                    {showPassword ? (
+                      <Eye className="w-5 h-5" />
+                    ) : (
+                      <EyeOff className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-2xl text-sm text-center">
                   {error}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(234,179,8,0.2)]"
               >
-                Access Dashboard
+                <span className="text-lg">Access Dashboard</span>
+                <ArrowRight className="w-5 h-5" />
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-xs text-gray-500">
-                Authorized personnel only. All access attempts are logged.
+            <div className="mt-8 text-center border-t border-white/5 pt-6">
+              <div className="flex items-center justify-center space-x-2 text-[#8b9d93] mb-2 uppercase tracking-wider text-xs font-semibold">
+                <ShieldAlert className="w-4 h-4" />
+                <span>Authorized Personnel Only</span>
+              </div>
+              <p className="text-[#8b9d93]/60 italic text-xs">
+                All access attempts are monitored and logged.
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Footer Text */}
+        <div className="mt-10 flex items-center justify-center space-x-3 text-[#8b9d93] uppercase tracking-[0.2em] text-xs font-bold">
+          <div className="w-2 h-2 rounded-full bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.8)]" />
+          <span>Rocs Crew Network</span>
         </div>
       </div>
     );

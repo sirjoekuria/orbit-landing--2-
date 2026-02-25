@@ -2299,8 +2299,8 @@ export default function SimpleMapboxLocationPicker({
                 onBlur={() =>
                   setTimeout(() => setShowPickupResults(false), 200)
                 }
-                placeholder="Type pickup location..."
-                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-rocs-green focus:border-transparent text-sm"
+                placeholder="Pickup Location"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-white placeholder:text-gray-500 text-sm h-12"
               />
               {pickupQuery && (
                 <button
@@ -2313,9 +2313,8 @@ export default function SimpleMapboxLocationPicker({
             </div>
             <button
               onClick={() => getCurrentLocation(true)}
-              className="px-4 py-3 bg-rocs-yellow text-gray-800 rounded-r-lg hover:bg-rocs-yellow/90 transition-colors flex items-center text-sm"
+              className="px-6 py-3 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold rounded-r-full transition-colors flex items-center text-sm h-12 shadow-[0_0_15px_rgba(234,179,8,0.3)] border border-[#eab308]"
             >
-              <Navigation className="w-4 h-4 mr-1" />
               Current
             </button>
           </div>
@@ -2367,17 +2366,12 @@ export default function SimpleMapboxLocationPicker({
           )}
         </div>
 
-        {/* Arrow indicator */}
-        <div className="flex justify-center">
-          <div className="w-8 h-8 bg-rocs-green/10 rounded-full flex items-center justify-center">
-            <ArrowDown className="w-4 h-4 text-rocs-green" />
-          </div>
-        </div>
+        {/* Arrow indicator (Removed for sleekness in mockup) */}
 
         {/* Dropoff Location */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Drop-off Location *
+          <label className="block text-sm text-white mb-1.5 mt-4">
+            Drop-off Location <span className="text-[#eab308]">*</span>
           </label>
           <div className="flex">
             <div className="relative flex-1">
@@ -2392,8 +2386,8 @@ export default function SimpleMapboxLocationPicker({
                 onBlur={() =>
                   setTimeout(() => setShowDropoffResults(false), 200)
                 }
-                placeholder="Type drop-off location..."
-                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-rocs-green focus:border-transparent text-sm"
+                placeholder="Drop-off Location"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-white placeholder:text-gray-500 text-sm h-12"
               />
               {dropoffQuery && (
                 <button
@@ -2406,9 +2400,8 @@ export default function SimpleMapboxLocationPicker({
             </div>
             <button
               onClick={() => getCurrentLocation(false)}
-              className="px-4 py-3 bg-rocs-yellow text-gray-800 rounded-r-lg hover:bg-rocs-yellow/90 transition-colors flex items-center text-sm"
+              className="px-6 py-3 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold rounded-r-full transition-colors flex items-center text-sm h-12 shadow-[0_0_15px_rgba(234,179,8,0.3)] border border-[#eab308]"
             >
-              <Navigation className="w-4 h-4 mr-1" />
               Current
             </button>
           </div>
@@ -2507,59 +2500,36 @@ export default function SimpleMapboxLocationPicker({
         </div>
       )}
 
-      {/* Distance and Time Display */}
-      {distance && duration && (
-        <div className="bg-rocs-green/10 border border-rocs-green/20 rounded-lg p-4 mb-6">
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-rocs-green">
-                {distance.toFixed(1)} km
-              </div>
-              <div className="text-sm text-gray-600">Distance</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-rocs-green">
-                {Math.round(duration)} min
-              </div>
-              <div className="text-sm text-gray-600">Est. Time</div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Distance and Time Display - Hidden here as it's rendered cleanly in OrderForm.tsx separately */}
 
       {/* Interactive Mapbox Map */}
-      <div className="relative">
+      <div className="relative mt-4">
         <MapboxMap
           pickup={pickupLocation}
           dropoff={dropoffLocation}
-          height="400px"
-          className="border border-gray-200 rounded-lg overflow-hidden"
+          height="140px"
+          className="border border-[#112417] rounded-xl overflow-hidden opacity-60 mix-blend-screen"
         />
 
         {/* Map Status Overlay */}
         {!pickupLocation && !dropoffLocation && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg pointer-events-none">
-            <div className="text-center text-white bg-black bg-opacity-75 p-4 rounded-lg pointer-events-none">
-              <MapPin className="w-8 h-8 mx-auto mb-2" />
-              <div className="font-medium">
-                Select pickup and dropoff locations
-              </div>
-              <div className="text-sm opacity-90">
-                to see them on the map with route
+          <div className="absolute inset-0 bg-transparent flex items-center justify-center rounded-xl pointer-events-none p-4">
+            <div className="text-center text-[#eab308] bg-[#112417]/80 backdrop-blur-md px-6 py-3 rounded-2xl pointer-events-none mx-8 border border-[#eab308]/30">
+              <div className="text-sm font-bold leading-tight">
+                Select pickup and dropoff locations to see them on the map with route
               </div>
             </div>
           </div>
         )}
 
         {pickupLocation && dropoffLocation && (
-          <div className="absolute bottom-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg text-sm">
-            <div className="font-medium text-rocs-green">
-              Route: {pickupLocation.name} → {dropoffLocation.name}
+          <div className="absolute bottom-4 right-4 bg-[#112417]/90 px-3 py-2 rounded-lg border border-[#eab308]/30 shadow-lg text-sm">
+            <div className="font-bold text-[#eab308] text-xs">
+              {pickupLocation.name} → {dropoffLocation.name}
             </div>
             {distance && (
-              <div className="text-gray-600">
-                Distance: {distance.toFixed(1)} km • Time: ~
-                {Math.round(duration || 0)} min
+              <div className="text-[#8b9d93] text-[10px]">
+                {distance.toFixed(1)} km • ~{Math.round(duration || 0)} min
               </div>
             )}
           </div>
