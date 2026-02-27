@@ -2300,7 +2300,7 @@ export default function SimpleMapboxLocationPicker({
                   setTimeout(() => setShowPickupResults(false), 200)
                 }
                 placeholder="Pickup Location"
-                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-white placeholder:text-gray-500 text-sm h-12"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-gray-900 placeholder:text-gray-500 text-sm h-12"
               />
               {pickupQuery && (
                 <button
@@ -2387,7 +2387,7 @@ export default function SimpleMapboxLocationPicker({
                   setTimeout(() => setShowDropoffResults(false), 200)
                 }
                 placeholder="Drop-off Location"
-                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-white placeholder:text-gray-500 text-sm h-12"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-gray-900 placeholder:text-gray-500 text-sm h-12"
               />
               {dropoffQuery && (
                 <button

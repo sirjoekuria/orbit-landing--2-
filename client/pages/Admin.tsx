@@ -978,1256 +978,1383 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0a110d]">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="hidden lg:block bg-[#0a110d] border-b border-[#ffffff05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-rocs-green rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">RC</span>
-              </div>
-              <h1 className="text-2xl font-bold text-rocs-green">
-                Admin Dashboard
-              </h1>
-            </div>
+            <h1 className="text-2xl font-bold text-white tracking-wide">
+              Admin Dashboard
+            </h1>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center space-x-2 bg-[#112417] hover:bg-[#152e1d] text-white font-bold px-4 py-2 rounded-xl border border-[#ffffff05] transition-all"
             >
-              <LogOut className="w-4 h-4" />
-              <span>Logout</span>
+              <LogOut className="w-4 h-4 text-[#eab308]" />
+              <span className="uppercase text-xs tracking-wider">Logout</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform flex flex-col justify-between ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
-      >
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-rocs-green rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">RC</span>
-            </div>
-            <h2 className="text-lg font-semibold text-rocs-green">
-              Admin Panel
-            </h2>
-          </div>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-gray-500 hover:text-gray-700"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="flex h-[calc(100vh-73px)] lg:h-screen">
 
-        <nav className="mt-6 px-3">
-          {/* Overview */}
-          <button
-            onClick={() => {
-              triggerSelectionHaptic();
-              setActiveTab("overview");
-              setSidebarOpen(false);
-            }}
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors mb-1 ${activeTab === "overview"
-              ? "bg-rocs-green text-white"
-              : "text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            <Home className="w-5 h-5" />
-            <span>Dashboard Overview</span>
-          </button>
-
-          {/* Operations Menu */}
-          <div className="mb-2">
-            <button
-              onClick={() =>
-                setExpandedMenus((prev) => ({
-                  ...prev,
-                  operations: !prev.operations,
-                }))
-              }
-              className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Package className="w-5 h-5" />
-                <span className="font-medium">Operations</span>
+        {/* Sidebar */}
+        <div
+          className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0a110d] shadow-2xl transform flex flex-col justify-between ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-[#ffffff05]`}
+        >
+          <div className="flex items-center justify-between pt-10 pb-6 px-8">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-[#0a110d] rounded-full flex items-center justify-center border border-[#eab308]/30 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                <span className="text-[#eab308] font-bold text-sm">RC</span>
               </div>
-              {expandedMenus.operations ? (
-                <ChevronDown className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
-              )}
-            </button>
-            {expandedMenus.operations && (
-              <div className="ml-6 mt-1 space-y-1">
-                <button
-                  onClick={() => {
-                    setActiveTab("orders");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "orders"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  {stats.pendingOrders > 0 ? (
-                    <PendingBookingDot>Orders Management</PendingBookingDot>
-                  ) : (
-                    "Orders Management"
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("messages");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "messages"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  {stats.unreadMessages > 0 ? (
-                    <UnreadMessageDot>Customer Messages</UnreadMessageDot>
-                  ) : (
-                    "Customer Messages"
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* People Management Menu */}
-          <div className="mb-2">
-            <button
-              onClick={() =>
-                setExpandedMenus((prev) => ({ ...prev, people: !prev.people }))
-              }
-              className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Users className="w-5 h-5" />
-                <span className="font-medium">People</span>
-              </div>
-              {expandedMenus.people ? (
-                <ChevronDown className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
-              )}
-            </button>
-            {expandedMenus.people && (
-              <div className="ml-6 mt-1 space-y-1">
-                <button
-                  onClick={() => {
-                    setActiveTab("users");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "users"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Customer Users
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("riders");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "riders"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Rider Management
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("partnerships");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "partnerships"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Business Partners
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Financial Menu */}
-          <div className="mb-2">
-            <button
-              onClick={() =>
-                setExpandedMenus((prev) => ({
-                  ...prev,
-                  financial: !prev.financial,
-                }))
-              }
-              className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <DollarSign className="w-5 h-5" />
-                <span className="font-medium">Financial</span>
-              </div>
-              {expandedMenus.financial ? (
-                <ChevronDown className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
-              )}
-            </button>
-            {expandedMenus.financial && (
-              <div className="ml-6 mt-1 space-y-1">
-                <button
-                  onClick={() => {
-                    setActiveTab("rider-earnings");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "rider-earnings"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Rider Earnings
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("rider-activity");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "rider-activity"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Rider Activity Log
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("withdrawal-requests");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "withdrawal-requests"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Withdrawal Requests
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("automated-payments");
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${activeTab === "automated-payments"
-                    ? "bg-rocs-green text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  Automated Payments
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* Logout Button - moved to bottom area within sidebar */}
-        <div className="px-3 pb-6">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 lg:ml-0">
-        {/* Mobile Header */}
-        <div className="lg:hidden bg-white shadow-sm border-b">
-          <div className="flex items-center justify-between px-4 py-3">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 bg-rocs-green rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs">RC</span>
-              </div>
-              <h1 className="text-lg font-bold text-rocs-green">
-                Admin Dashboard
-              </h1>
-            </div>
-            <div className="w-6"></div>
-          </div>
-        </div>
-
-        {/* Desktop Header */}
-        <div className="hidden lg:block bg-white shadow-sm border-b">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-rocs-green capitalize">
-                {activeTab === "rider-earnings"
-                  ? "Rider Earnings"
-                  : activeTab === "rider-activity"
-                    ? "Rider Activity Log"
-                    : activeTab === "withdrawal-requests"
-                      ? "Withdrawal Requests"
-                      : activeTab === "automated-payments"
-                        ? "Automated Payments"
-                        : activeTab.replace("-", " ")}
-              </h1>
-              <div className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleTimeString()}
+              <div className="flex flex-col">
+                <h2 className="text-xl font-bold text-white leading-tight">
+                  Admin Panel
+                </h2>
+                <span className="text-[10px] uppercase tracking-[0.1em] text-[#8b9d93] font-bold mt-1">
+                  Nairobi Logistics
+                </span>
               </div>
             </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden text-gray-500 hover:text-[#eab308]"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-        </div>
 
-        <PullToRefresh onRefresh={loadData}>
-          <div className="p-4 lg:p-6">
-            {/* Overview Tab */}
-            {activeTab === "overview" && (
-              <AnimatedPage>
-                <div className="space-y-8">
-                  {/* Stats Cards */}
-                  {/* Dashboard Header */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200 mb-6">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h2 className="text-xl font-semibold text-gray-900">Dashboard Overview</h2>
-                        <p className="text-sm text-gray-600">Quick summary of your business performance</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          setIsLoading(true);
-                          try {
-                            await loadData();
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-                      >
-                        {isLoading ? (
-                          <RefreshCw className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <RefreshCw className="w-4 h-4" />
-                        )}
-                        <span>{isLoading ? "Refreshing..." : "Refresh Dashboard"}</span>
-                      </button>
-                    </div>
-                  </div>
+          <nav className="mt-4 px-6 flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+            {/* Overview */}
+            <button
+              onClick={() => {
+                triggerSelectionHaptic();
+                setActiveTab("overview");
+                setSidebarOpen(false);
+              }}
+              className={`w-full flex items-center space-x-4 px-5 py-4 rounded-xl text-left transition-all mb-6 ${activeTab === "overview"
+                ? "bg-[#112417] text-white shadow-[0_0_15px_rgba(234,179,8,0.05)] border border-[#eab308]/20"
+                : "text-[#8b9d93] hover:bg-[#112417]/50 hover:text-white"
+                }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className={`w-5 h-5 ${activeTab === "overview" ? "text-[#eab308]" : "text-[#eab308]/70"}`}>
+                <rect width="8" height="8" x="3" y="3" rx="1.5" />
+                <rect width="8" height="8" x="13" y="3" rx="1.5" />
+                <rect width="8" height="8" x="13" y="13" rx="1.5" />
+                <rect width="8" height="8" x="3" y="13" rx="1.5" />
+              </svg>
+              <span className="font-bold text-sm tracking-wide">Dashboard Overview</span>
+            </button>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    {isLoading ? (
-                      <>
-                        <CardSkeleton /> <CardSkeleton /> <CardSkeleton /> <CardSkeleton />
-                      </>
-                    ) : (
-                      <>
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                              <Users className="h-8 w-8 text-blue-600" />
-                            </div>
-                            <div className="ml-5 w-0 flex-1">
-                              <dl>
-                                <dt className="text-sm font-medium text-gray-500 truncate">
-                                  Total Users
-                                </dt>
-                                <dd className="text-lg font-medium text-gray-900">
-                                  {stats.totalUsers}
-                                </dd>
-                              </dl>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                              <Package className="h-8 w-8 text-green-600" />
-                            </div>
-                            <div className="ml-5 w-0 flex-1">
-                              <dl>
-                                <dt className="text-sm font-medium text-gray-500 truncate">
-                                  Total Orders
-                                </dt>
-                                <dd className="text-lg font-medium text-gray-900">
-                                  {stats.totalOrders}
-                                </dd>
-                              </dl>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                              <MessageSquare className="h-8 w-8 text-yellow-600" />
-                            </div>
-                            <div className="ml-5 w-0 flex-1">
-                              <dl>
-                                <dt className="text-sm font-medium text-gray-500 truncate">
-                                  New Messages
-                                </dt>
-                                <dd className="text-lg font-medium text-gray-900">
-                                  {stats.unreadMessages}
-                                </dd>
-                              </dl>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                              <TrendingUp className="h-8 w-8 text-purple-600" />
-                            </div>
-                            <div className="ml-5 w-0 flex-1">
-                              <dl>
-                                <dt className="text-sm font-medium text-gray-500 truncate">
-                                  Total Revenue
-                                </dt>
-                                <dd className="text-lg font-medium text-gray-900">
-                                  KES {stats.totalRevenue.toLocaleString()}
-                                </dd>
-                              </dl>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Recent Activity */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="bg-white rounded-lg shadow border border-gray-200">
-                      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          Recent Orders
-                        </h3>
-                        <button
-                          onClick={() => setActiveTab("orders")}
-                          className="text-sm text-rocs-green hover:underline font-medium"
-                        >
-                          View All
-                        </button>
-                      </div>
-                      <div className="p-6">
-                        <div className="space-y-4">
-                          {isLoading ? (
-                            <div className="space-y-4">
-                              <Skeleton className="h-12 w-full" />
-                              <Skeleton className="h-12 w-full" />
-                              <Skeleton className="h-12 w-full" />
-                            </div>
-                          ) : orders.length === 0 ? (
-                            <p className="text-sm text-gray-500 text-center py-4">No recent orders</p>
-                          ) : (
-                            orders.slice(0, 5).map((order) => (
-                              <div
-                                key={order.id}
-                                className="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors"
-                              >
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">
-                                    {order.id}
-                                  </p>
-                                  <p className="text-sm text-gray-500">
-                                    {order.customerName}
-                                  </p>
-                                  <p className="text-xs text-gray-400">
-                                    <Clock className="w-3 h-3 inline mr-1" />
-                                    {formatDate(order.timestamp)}
-                                  </p>
-                                </div>
-                                <span
-                                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}
-                                >
-                                  {order.status}
-                                </span>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white rounded-lg shadow border border-gray-200">
-                      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          Recent Messages
-                        </h3>
-                        <button
-                          onClick={() => setActiveTab("messages")}
-                          className="text-sm text-rocs-green hover:underline font-medium"
-                        >
-                          View All
-                        </button>
-                      </div>
-                      <div className="p-6">
-                        <div className="space-y-4">
-                          {isLoading ? (
-                            <div className="space-y-4">
-                              <Skeleton className="h-12 w-full" />
-                              <Skeleton className="h-12 w-full" />
-                              <Skeleton className="h-12 w-full" />
-                            </div>
-                          ) : messages.length === 0 ? (
-                            <p className="text-sm text-gray-500 text-center py-4">No recent messages</p>
-                          ) : (
-                            messages.slice(0, 5).map((message) => (
-                              <div
-                                key={message.id}
-                                className="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors"
-                              >
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">
-                                    {message.name}
-                                  </p>
-                                  <p className="text-sm text-gray-500">
-                                    {message.subject}
-                                  </p>
-                                  <p className="text-xs text-gray-400">
-                                    <Clock className="w-3 h-3 inline mr-1" />
-                                    {formatDate(message.timestamp)}
-                                  </p>
-                                </div>
-                                <span
-                                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(message.status)}`}
-                                >
-                                  {message.status}
-                                </span>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Operations Menu */}
+            <div className="mb-6">
+              <button
+                onClick={() =>
+                  setExpandedMenus((prev) => ({
+                    ...prev,
+                    operations: !prev.operations,
+                  }))
+                }
+                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+              >
+                <div className="flex items-center space-x-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="w-5 h-5 text-[#eab308]">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                  <span className="font-bold text-sm tracking-wide">Operations</span>
                 </div>
-              </AnimatedPage>
-            )}
+                {expandedMenus.operations ? (
+                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                )}
+              </button>
+              {expandedMenus.operations && (
+                <div className="ml-[18px] pl-5 mt-4 space-y-5">
+                  <button
+                    onClick={() => {
+                      setActiveTab("orders");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "orders"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "orders" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    {stats.pendingOrders > 0 ? (
+                      <PendingBookingDot>Orders Management</PendingBookingDot>
+                    ) : (
+                      "Orders Management"
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("messages");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "messages"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "messages" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    {stats.unreadMessages > 0 ? (
+                      <UnreadMessageDot>Customer Messages</UnreadMessageDot>
+                    ) : (
+                      "Customer Messages"
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
 
-            {/* Orders Tab */}
-            {activeTab === "orders" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Search and Filter */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Order Management
-                      </h2>
-                      <button
-                        onClick={async () => {
-                          setIsLoading(true);
-                          try {
-                            await fetchOrders(1);
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-                      >
-                        {isLoading ? (
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                        ) : null}
-                        <span>
-                          {isLoading ? "Refreshing..." : "Refresh Orders"}
-                        </span>
-                      </button>
+            {/* People Management Menu */}
+            <div className="mb-6">
+              <button
+                onClick={() =>
+                  setExpandedMenus((prev) => ({ ...prev, people: !prev.people }))
+                }
+                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+              >
+                <div className="flex items-center space-x-3">
+                  <Users className="w-5 h-5 text-[#eab308]" />
+                  <span className="font-bold text-sm tracking-wide">People</span>
+                </div>
+                {expandedMenus.people ? (
+                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                )}
+              </button>
+              {expandedMenus.people && (
+                <div className="ml-[18px] pl-5 mt-4 space-y-5">
+                  <button
+                    onClick={() => {
+                      setActiveTab("users");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "users"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "users" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Customer Users
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("riders");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "riders"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "riders" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Rider Management
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("partnerships");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "partnerships"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "partnerships" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Business Partners
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Financial Menu */}
+            <div className="mb-6">
+              <button
+                onClick={() =>
+                  setExpandedMenus((prev) => ({
+                    ...prev,
+                    financial: !prev.financial,
+                  }))
+                }
+                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+              >
+                <div className="flex items-center space-x-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#eab308]">
+                    <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+                    <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+                    <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+                  </svg>
+                  <span className="font-bold text-sm tracking-wide">Financial</span>
+                </div>
+                {expandedMenus.financial ? (
+                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                )}
+              </button>
+              {expandedMenus.financial && (
+                <div className="ml-[18px] pl-5 mt-4 space-y-5">
+                  <button
+                    onClick={() => {
+                      setActiveTab("rider-earnings");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "rider-earnings"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-earnings" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Rider Earnings
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("rider-activity");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "rider-activity"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-activity" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Rider Activity Log
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("withdrawal-requests");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "withdrawal-requests"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "withdrawal-requests" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Withdrawal Requests
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("automated-payments");
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "automated-payments"
+                      ? "text-white font-semibold"
+                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      }`}
+                  >
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "automated-payments" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    Automated Payments
+                  </button>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          {/* Logout Button - moved to bottom area within sidebar */}
+          <div className="px-6 pb-8 pt-4">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center space-x-3 bg-[#112417] hover:bg-[#152e1d] text-white font-bold px-4 py-4 rounded-xl transition-all border border-[#ffffff0a] shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+            >
+              <LogOut className="w-5 h-5 text-[#eab308]" />
+              <span className="tracking-widest uppercase text-sm">Logout</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 w-full lg:ml-0 overflow-y-auto overflow-x-hidden custom-scrollbar bg-[#0a110d]">
+          {/* Mobile Header */}
+          <div className="lg:hidden bg-[#0a110d] border-b border-[#ffffff05]">
+            <div className="flex items-center justify-between px-6 py-5">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="text-[#eab308] hover:text-[#c48a04]"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+              <div className="flex flex-col items-center">
+                <h1 className="text-xl font-bold text-white tracking-wide">
+                  Admin Panel
+                </h1>
+                <span className="text-[9px] uppercase tracking-widest text-[#eab308] font-bold mt-1">
+                  Dashboard
+                </span>
+              </div>
+              <div className="w-6"></div>
+            </div>
+          </div>
+
+          {/* Desktop Header */}
+          <div className="hidden lg:block bg-[#0a110d] border-b border-[#ffffff05] sticky top-0 z-40 backdrop-blur-md bg-opacity-90">
+            <div className="px-8 py-6">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-white tracking-wide capitalize">
+                  {activeTab === "rider-earnings"
+                    ? "Rider Earnings"
+                    : activeTab === "rider-activity"
+                      ? "Rider Activity Log"
+                      : activeTab === "withdrawal-requests"
+                        ? "Withdrawal Requests"
+                        : activeTab === "automated-payments"
+                          ? "Automated Payments"
+                          : activeTab.replace("-", " ")}
+                </h1>
+                <div className="flex items-center space-x-3 bg-[#112417] px-4 py-2 rounded-full border border-white/5">
+                  <div className="w-2 h-2 bg-[#eab308] rounded-full shadow-[0_0_10px_rgba(234,179,8,0.8)] animate-pulse" />
+                  <span className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest">
+                    Live System Check
+                  </span>
+                  <span className="text-xs text-[#596960] border-l border-[#ffffff10] pl-3 ml-1">
+                    {new Date().toLocaleTimeString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <PullToRefresh onRefresh={loadData}>
+            <div className="p-4 lg:p-8">
+              {/* Overview Tab */}
+              {activeTab === "overview" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Stats Cards */}
+                    {/* Dashboard Header */}
+                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_40px_rgba(0,0,0,0.3)] mb-8 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
+
+                      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center relative z-10 gap-6">
+                        <div>
+                          <h2 className="text-2xl font-bold text-white tracking-wide mb-2">Dashboard Overview</h2>
+                          <p className="text-[#8b9d93] text-sm">Real-time summary of Nairobi Logistics performance</p>
+                        </div>
+                        <button
+                          onClick={async () => {
+                            setIsLoading(true);
+                            try {
+                              await loadData();
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={isLoading}
+                          className="flex items-center space-x-3 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-3 rounded-full transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:opacity-50 w-full sm:w-auto justify-center"
+                        >
+                          {isLoading ? (
+                            <RefreshCw className="w-5 h-5 animate-spin" />
+                          ) : (
+                            <RefreshCw className="w-5 h-5" />
+                          )}
+                          <span>{isLoading ? "Refreshing..." : "Refresh Dashboard"}</span>
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <div className="flex-1">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="Search orders..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-rocs-green"
-                          />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                      {isLoading ? (
+                        <>
+                          <CardSkeleton /> <CardSkeleton /> <CardSkeleton /> <CardSkeleton />
+                        </>
+                      ) : (
+                        <>
+                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all pointer-events-none" />
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-14 h-14 bg-blue-500/10 rounded-full flex items-center justify-center border border-blue-500/20 text-blue-400">
+                                <Users className="h-7 w-7" />
+                              </div>
+                              <div className="ml-5 w-0 flex-1">
+                                <dl>
+                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                    Total Users
+                                  </dt>
+                                  <dd className="text-3xl font-bold text-white">
+                                    {stats.totalUsers}
+                                  </dd>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#eab308]/10 rounded-full blur-xl group-hover:bg-[#eab308]/20 transition-all pointer-events-none" />
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-14 h-14 bg-[#eab308]/10 rounded-full flex items-center justify-center border border-[#eab308]/20 text-[#eab308]">
+                                <Package className="h-7 w-7" />
+                              </div>
+                              <div className="ml-5 w-0 flex-1">
+                                <dl>
+                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                    Total Orders
+                                  </dt>
+                                  <dd className="text-3xl font-bold text-white">
+                                    {stats.totalOrders}
+                                  </dd>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-green-500/10 rounded-full blur-xl group-hover:bg-green-500/20 transition-all pointer-events-none" />
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20 text-green-400">
+                                <MessageSquare className="h-7 w-7" />
+                              </div>
+                              <div className="ml-5 w-0 flex-1">
+                                <dl>
+                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                    New Messages
+                                  </dt>
+                                  <dd className="text-3xl font-bold text-white">
+                                    {stats.unreadMessages}
+                                  </dd>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center border border-purple-500/20 text-purple-400">
+                                <TrendingUp className="h-7 w-7" />
+                              </div>
+                              <div className="ml-5 w-0 flex-1">
+                                <dl>
+                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                    Total Revenue
+                                  </dt>
+                                  <dd className="text-xl font-bold text-white">
+                                    KES {stats.totalRevenue.toLocaleString()}
+                                  </dd>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Recent Activity */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      <div className="bg-[#112417] rounded-[24px] border border-[#ffffff05] overflow-hidden">
+                        <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
+                          <h3 className="text-lg font-bold text-white tracking-wide">
+                            Recent Orders
+                          </h3>
+                          <button
+                            onClick={() => setActiveTab("orders")}
+                            className="text-sm text-[#eab308] hover:text-white font-bold tracking-wider uppercase transition-colors"
+                          >
+                            View All
+                          </button>
+                        </div>
+                        <div className="p-4 lg:p-6">
+                          <div className="space-y-3">
+                            {isLoading ? (
+                              <div className="space-y-4">
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                              </div>
+                            ) : orders.length === 0 ? (
+                              <div className="py-12 text-center">
+                                <Package className="w-12 h-12 text-[#3a4f41] mx-auto mb-3" />
+                                <p className="text-sm font-bold text-[#8b9d93]">No recent orders</p>
+                              </div>
+                            ) : (
+                              orders.slice(0, 5).map((order) => (
+                                <div
+                                  key={order.id}
+                                  className="flex items-center justify-between p-4 bg-[#0a110d]/50 hover:bg-[#0a110d] rounded-xl border border-[#ffffff05] transition-all"
+                                >
+                                  <div>
+                                    <p className="text-sm font-bold text-white mb-1">
+                                      {order.id}
+                                    </p>
+                                    <p className="text-sm text-[#8b9d93]">
+                                      {order.customerName}
+                                    </p>
+                                    <p className="text-xs text-[#596960] mt-1 font-mono">
+                                      <Clock className="w-3 h-3 inline mr-1" />
+                                      {formatDate(order.timestamp)}
+                                    </p>
+                                  </div>
+                                  <span
+                                    className={`px-3 py-1.5 text-xs font-bold rounded-full border ${order.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
+                                        order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                          order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
+                                            order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                                              order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                                "bg-red-500/10 text-red-400 border-red-500/20"
+                                      }`}
+                                  >
+                                    {order.status.replace("_", " ")}
+                                  </span>
+                                </div>
+                              ))
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <div className="sm:w-48">
-                        <select
-                          value={statusFilter}
-                          onChange={(e) => setStatusFilter(e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-rocs-green"
-                        >
-                          <option value="all">All Status</option>
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="picked_up">Picked Up</option>
-                          <option value="in_transit">In Transit</option>
-                          <option value="delivered">Delivered</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
+
+                      <div className="bg-[#112417] rounded-[24px] border border-[#ffffff05] overflow-hidden">
+                        <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
+                          <h3 className="text-lg font-bold text-white tracking-wide">
+                            Recent Messages
+                          </h3>
+                          <button
+                            onClick={() => setActiveTab("messages")}
+                            className="text-sm text-[#eab308] hover:text-white font-bold tracking-wider uppercase transition-colors"
+                          >
+                            View All
+                          </button>
+                        </div>
+                        <div className="p-4 lg:p-6">
+                          <div className="space-y-3">
+                            {isLoading ? (
+                              <div className="space-y-4">
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                                <Skeleton className="h-16 w-full rounded-xl bg-[#ffffff0a]" />
+                              </div>
+                            ) : messages.length === 0 ? (
+                              <div className="py-12 text-center">
+                                <MessageSquare className="w-12 h-12 text-[#3a4f41] mx-auto mb-3" />
+                                <p className="text-sm font-bold text-[#8b9d93]">No recent messages</p>
+                              </div>
+                            ) : (
+                              messages.slice(0, 5).map((message) => (
+                                <div
+                                  key={message.id}
+                                  className="flex items-center justify-between p-4 bg-[#0a110d]/50 hover:bg-[#0a110d] rounded-xl border border-[#ffffff05] transition-all"
+                                >
+                                  <div>
+                                    <p className="text-sm font-bold text-white mb-1">
+                                      {message.name}
+                                    </p>
+                                    <p className="text-sm text-[#eab308]">
+                                      {message.subject}
+                                    </p>
+                                    <p className="text-xs text-[#596960] mt-1 font-mono">
+                                      <Clock className="w-3 h-3 inline mr-1" />
+                                      {formatDate(message.timestamp)}
+                                    </p>
+                                  </div>
+                                  <span
+                                    className={`px-3 py-1.5 text-xs font-bold rounded-full border ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                        message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                          "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                      }`}
+                                  >
+                                    {message.status}
+                                  </span>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </AnimatedPage>
+              )}
 
-                  {/* Orders List */}
-                  <div className="space-y-4">
-                    {isLoading ? (
-                      <CardSkeleton />
-                    ) : filteredOrders.length === 0 ? (
-                      <div className="bg-white p-12 rounded-lg shadow border border-gray-200 text-center">
-                        <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          No orders found
-                        </h3>
-                        <p className="text-gray-500">
-                          Try adjusting your search or filters to find what you're
-                          looking for.
-                        </p>
-                      </div>
-                    ) : (
-                      filteredOrders.map((order) => (
-                        <div
-                          key={order.id}
-                          className="bg-white rounded-lg shadow border border-gray-200 p-6"
+              {/* Orders Tab */}
+              {activeTab === "orders" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Search and Filter */}
+                    <div className="flex flex-col gap-6">
+                      <div className="flex lg:hidden items-center justify-between">
+                        <h2 className="text-3xl font-bold text-white">Order<br />Management</h2>
+                        <button
+                          onClick={async () => {
+                            setIsLoading(true);
+                            try {
+                              await fetchOrders(1);
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={isLoading}
+                          className="flex items-center space-x-2 bg-[#eab308] text-black font-bold px-5 py-2.5 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.3)] disabled:opacity-50"
                         >
-                          <div className="flex justify-between items-start mb-4">
-                            <div>
-                              <h3 className="text-lg font-semibold text-gray-900">
-                                {order.id}
-                              </h3>
-                              <p className="text-gray-600">
-                                {order.customerName} • {order.customerPhone}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                <Clock className="w-3 h-3 inline mr-1" />
-                                Created: {formatDate(order.timestamp)}
-                              </p>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <span
-                                className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(order.status)}`}
-                              >
-                                {order.status.replace("_", " ")}
-                              </span>
-                              <button
-                                onClick={() =>
-                                  setEditingOrder(
-                                    editingOrder === order.id ? null : order.id,
-                                  )
-                                }
-                                className="p-2 text-gray-400 hover:text-gray-600"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => deleteOrder(order.id)}
-                                className="p-2 text-red-400 hover:text-red-600"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Pickup
-                              </p>
-                              <p className="text-sm text-gray-900">{order.pickup}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Delivery
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {order.delivery}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Cost
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                KES {order.cost} ({order.distance}km)
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Status Updated
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {order.updatedAt
-                                  ? formatDate(order.updatedAt)
-                                  : "Not updated"}
-                              </p>
-                            </div>
-                          </div>
-
-                          {order.riderName && (
-                            <div className="mb-4 p-3 bg-gray-50 rounded">
-                              <p className="text-sm font-medium text-gray-600">
-                                Assigned Rider
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {order.riderName} • {order.riderPhone}
-                              </p>
-                            </div>
-                          )}
-
-                          {order.notes && (
-                            <div className="mb-4 p-3 bg-yellow-50 rounded">
-                              <p className="text-sm font-medium text-yellow-800">
-                                Notes
-                              </p>
-                              <p className="text-sm text-yellow-700">{order.notes}</p>
-                            </div>
-                          )}
-
-                          {/* Order Actions */}
-                          {editingOrder === order.id ? (
-                            <div className="border-t pt-4 space-y-4">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Update Status
-                                  </label>
-                                  <select
-                                    value={order.status}
-                                    onChange={(e) =>
-                                      updateOrderStatus(
-                                        order.id,
-                                        e.target.value as Order["status"],
-                                      )
-                                    }
-                                    className="w-full border border-gray-300 rounded px-3 py-2"
-                                  >
-                                    <option value="pending">Pending</option>
-                                    <option value="confirmed">Confirmed</option>
-                                    <option value="picked_up">Picked Up</option>
-                                    <option value="in_transit">In Transit</option>
-                                    <option value="delivered">Delivered</option>
-                                    <option value="cancelled">Cancelled</option>
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Assign Rider
-                                  </label>
-                                  {order.riderName ? (
-                                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                                      <p className="text-sm font-medium text-green-800">
-                                        {order.riderName}
-                                      </p>
-                                      <p className="text-sm text-green-600">
-                                        {order.riderPhone}
-                                      </p>
-                                      <button
-                                        onClick={() => setAssigningRider(order.id)}
-                                        className="text-xs text-green-600 hover:text-green-800 mt-1"
-                                      >
-                                        Change Rider
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => setAssigningRider(order.id)}
-                                      className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-rocs-green hover:text-rocs-green transition-colors"
-                                    >
-                                      + Assign Rider
-                                    </button>
-                                  )}
-
-                                  {assigningRider === order.id && (
-                                    <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                                      <label className="block text-xs font-medium text-gray-600 mb-2">
-                                        Select Available Rider:
-                                      </label>
-                                      <select
-                                        onChange={(e) => {
-                                          if (e.target.value) {
-                                            assignRiderToOrder(
-                                              order.id,
-                                              e.target.value,
-                                            );
-                                          }
-                                        }}
-                                        className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                                        defaultValue=""
-                                      >
-                                        <option value="">Choose a rider...</option>
-                                        {availableRiders.map((rider) => (
-                                          <option key={rider.id} value={rider.id}>
-                                            {rider.fullName} - {rider.area} (Rating:{" "}
-                                            {rider.rating})
-                                          </option>
-                                        ))}
-                                      </select>
-                                      <button
-                                        onClick={() => setAssigningRider(null)}
-                                        className="mt-2 text-xs text-gray-500 hover:text-gray-700"
-                                      >
-                                        Cancel
-                                      </button>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              <button
-                                onClick={() => setEditingOrder(null)}
-                                className="bg-rocs-green text-white px-4 py-2 rounded hover:bg-rocs-green-dark"
-                              >
-                                Save Changes
-                              </button>
-                            </div>
+                          {isLoading ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
                           ) : (
-                            <div className="border-t pt-4">
-                              {/* Payment Confirmation Section */}
-                              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                <h4 className="font-semibold text-yellow-800 mb-2 flex items-center">
-                                  💰 Payment Management
-                                </h4>
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() =>
-                                      confirmPaymentAndSendReceipt(order.id)
-                                    }
-                                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium flex items-center space-x-2"
-                                  >
-                                    <span>✅ Confirm Payment & Send Receipt</span>
-                                  </button>
-                                  <button
-                                    onClick={() => resendReceipt(order.id)}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium flex items-center space-x-2"
-                                  >
-                                    <span>📧 Resend Receipt</span>
-                                  </button>
-                                </div>
-                                <p className="text-yellow-700 text-xs mt-2">
-                                  Click "Confirm Payment" to send a receipt email to{" "}
-                                  <strong>{order.customerEmail}</strong>
+                            <RefreshCw className="w-4 h-4" />
+                          )}
+                          <span className="text-sm">Refresh</span>
+                        </button>
+                      </div>
+
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <input
+                          type="text"
+                          placeholder="Search orders..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full bg-transparent border border-[#eab308]/30 text-white placeholder:text-[#3a4f41] rounded-[16px] pl-12 pr-4 py-4 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                        />
+                      </div>
+
+                      <div className="flex space-x-3 overflow-x-auto pb-2 custom-scrollbar hide-scrollbar">
+                        <div className="relative min-w-[120px]">
+                          <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            className="w-full appearance-none bg-[#112417] border border-[#eab308]/30 text-[#eab308] font-bold rounded-full px-5 py-2 pr-10 focus:outline-none focus:border-[#eab308]"
+                          >
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="picked_up">Picked Up</option>
+                            <option value="in_transit">In Transit</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                          </select>
+                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#eab308] pointer-events-none" />
+                        </div>
+                        <button className="whitespace-nowrap bg-[#0a110d] border border-[#ffffff10] text-white font-bold rounded-full px-5 py-2 hover:bg-[#112417]">
+                          Today
+                        </button>
+                        <button className="whitespace-nowrap bg-[#0a110d] border border-[#ffffff10] text-white font-bold rounded-full px-5 py-2 hover:bg-[#112417]">
+                          Completed
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Orders List */}
+                    <div className="space-y-4">
+                      {isLoading ? (
+                        <CardSkeleton />
+                      ) : filteredOrders.length === 0 ? (
+                        <div className="bg-[#112417] rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
+
+                          <div className="w-24 h-24 bg-[#eab308] rounded-[24px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(234,179,8,0.2)] relative z-10 border-4 border-[#112417] outline outline-1 outline-[#eab308]/20">
+                            <Package className="w-12 h-12 text-black" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                            No orders found
+                          </h3>
+                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-8 relative z-10 text-sm">
+                            Try adjusting your search or filters to find what you're looking for.
+                          </p>
+
+                          <button
+                            onClick={() => {
+                              setSearchTerm("");
+                              setStatusFilter("all");
+                            }}
+                            className="flex items-center space-x-2 mx-auto text-[#eab308] font-bold text-sm tracking-wide relative z-10 hover:text-white transition-colors"
+                          >
+                            <Filter className="w-4 h-4" />
+                            <span>Reset Filters</span>
+                          </button>
+                        </div>
+                      ) : (
+                        filteredOrders.map((order) => (
+                          <div
+                            key={order.id}
+                            className="bg-[#112417] rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                          >
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
+                              <div>
+                                <h3 className="text-xl font-bold text-white mb-1">
+                                  {order.id}
+                                </h3>
+                                <p className="text-[#8b9d93] font-medium">
+                                  {order.customerName} • <span className="text-[#eab308]">{order.customerPhone}</span>
+                                </p>
+                                <p className="text-xs text-[#596960] mt-2 font-mono">
+                                  <Clock className="w-3 h-3 inline mr-1" />
+                                  Created: {formatDate(order.timestamp)}
                                 </p>
                               </div>
-
-                              {/* Order Status Management */}
-                              <div className="flex space-x-2 flex-wrap">
-                                {order.status === "pending" && (
+                              <div className="flex items-center space-x-3 self-start">
+                                <span
+                                  className={`px-4 py-1.5 text-xs font-bold rounded-full border tracking-wide uppercase ${order.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
+                                      order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                        order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
+                                          order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                                            order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                              "bg-red-500/10 text-red-400 border-red-500/20"
+                                    }`}
+                                >
+                                  {order.status.replace("_", " ")}
+                                </span>
+                                <div className="flex bg-[#0a110d] rounded-lg border border-[#ffffff05] overflow-hidden">
                                   <button
                                     onClick={() =>
-                                      updateOrderStatus(order.id, "confirmed")
+                                      setEditingOrder(
+                                        editingOrder === order.id ? null : order.id,
+                                      )
                                     }
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+                                    className="p-2.5 text-[#8b9d93] hover:text-[#eab308] hover:bg-white/5 transition-colors border-r border-[#ffffff05]"
                                   >
-                                    Confirm Order
+                                    <Edit className="w-4 h-4" />
                                   </button>
-                                )}
-                                {order.status === "confirmed" && (
                                   <button
-                                    onClick={() =>
-                                      updateOrderStatus(order.id, "picked_up")
-                                    }
-                                    className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 text-sm"
+                                    onClick={() => deleteOrder(order.id)}
+                                    className="p-2.5 text-red-500/70 hover:text-red-400 hover:bg-white/5 transition-colors"
                                   >
-                                    Mark Picked Up
+                                    <Trash2 className="w-4 h-4" />
                                   </button>
-                                )}
-                                {order.status === "picked_up" && (
-                                  <button
-                                    onClick={() =>
-                                      updateOrderStatus(order.id, "in_transit")
-                                    }
-                                    className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 text-sm"
-                                  >
-                                    In Transit
-                                  </button>
-                                )}
-                                {order.status === "in_transit" && (
-                                  <button
-                                    onClick={() =>
-                                      updateOrderStatus(order.id, "delivered")
-                                    }
-                                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
-                                  >
-                                    Mark Delivered
-                                  </button>
-                                )}
+                                </div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
 
-                  {/* Pagination Controls */}
-                  <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
-                    <div className="flex flex-1 justify-between sm:hidden">
-                      <button
-                        onClick={() => fetchOrders(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Previous
-                      </button>
-                      <button
-                        onClick={() => fetchOrders(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Next
-                      </button>
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-xl border border-[#ffffff05]">
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
+                                  Pickup
+                                </p>
+                                <p className="text-sm text-white font-medium">{order.pickup}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
+                                  Delivery
+                                </p>
+                                <p className="text-sm text-white font-medium">
+                                  {order.delivery}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
+                                  Cost
+                                </p>
+                                <p className="text-sm text-[#eab308] font-bold">
+                                  KES {order.cost} <span className="text-[#8b9d93] font-normal">({order.distance}km)</span>
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
+                                  Status Updated
+                                </p>
+                                <p className="text-sm text-white font-mono">
+                                  {order.updatedAt
+                                    ? formatDate(order.updatedAt)
+                                    : "Not updated"}
+                                </p>
+                              </div>
+                            </div>
+
+                            {order.riderName && (
+                              <div className="mb-6 p-4 bg-[#1a2b20] border border-green-500/20 rounded-xl flex items-center space-x-4">
+                                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-green-400">
+                                  <Bike className="w-5 h-5" />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-bold text-green-400 uppercase tracking-wider mb-0.5">
+                                    Assigned Rider
+                                  </p>
+                                  <p className="text-sm text-white font-medium">
+                                    {order.riderName} • <span className="text-gray-400">{order.riderPhone}</span>
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+
+                            {order.notes && (
+                              <div className="mb-6 p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-xl">
+                                <p className="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-2 flex items-center">
+                                  <MessageSquare className="w-3 h-3 mr-1.5" /> Notes
+                                </p>
+                                <p className="text-sm text-yellow-100">{order.notes}</p>
+                              </div>
+                            )}
+
+                            {/* Order Actions */}
+                            {editingOrder === order.id ? (
+                              <div className="border-t border-[#ffffff10] pt-6 space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                  <div>
+                                    <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                      Update Status
+                                    </label>
+                                    <select
+                                      value={order.status}
+                                      onChange={(e) =>
+                                        updateOrderStatus(
+                                          order.id,
+                                          e.target.value as Order["status"],
+                                        )
+                                      }
+                                      className="w-full bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                                    >
+                                      <option value="pending">Pending</option>
+                                      <option value="confirmed">Confirmed</option>
+                                      <option value="picked_up">Picked Up</option>
+                                      <option value="in_transit">In Transit</option>
+                                      <option value="delivered">Delivered</option>
+                                      <option value="cancelled">Cancelled</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                      Assign Rider
+                                    </label>
+                                    {order.riderName ? (
+                                      <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
+                                        <p className="text-sm font-bold text-green-400">
+                                          {order.riderName}
+                                        </p>
+                                        <p className="text-xs text-green-300 mb-2">
+                                          {order.riderPhone}
+                                        </p>
+                                        <button
+                                          onClick={() => setAssigningRider(order.id)}
+                                          className="text-xs bg-green-500/20 hover:bg-green-500/30 text-green-300 px-3 py-1.5 rounded-lg font-bold transition-colors"
+                                        >
+                                          Change Rider
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => setAssigningRider(order.id)}
+                                        className="w-full p-4 border-2 border-dashed border-[#ffffff15] rounded-xl text-[#8b9d93] font-bold hover:border-[#eab308] hover:text-[#eab308] transition-colors"
+                                      >
+                                        + Assign Rider
+                                      </button>
+                                    )}
+
+                                    {assigningRider === order.id && (
+                                      <div className="mt-3 p-4 bg-[#0a110d] rounded-xl border border-[#ffffff10]">
+                                        <label className="block text-xs font-bold text-[#eab308] mb-3">
+                                          Select Available Rider:
+                                        </label>
+                                        <select
+                                          onChange={(e) => {
+                                            if (e.target.value) {
+                                              assignRiderToOrder(
+                                                order.id,
+                                                e.target.value,
+                                              );
+                                            }
+                                          }}
+                                          className="w-full bg-[#112417] border border-[#ffffff15] text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#eab308]"
+                                          defaultValue=""
+                                        >
+                                          <option value="">Choose a rider...</option>
+                                          {availableRiders.map((rider) => (
+                                            <option key={rider.id} value={rider.id}>
+                                              {rider.fullName} - {rider.area} ({rider.rating}★)
+                                            </option>
+                                          ))}
+                                        </select>
+                                        <button
+                                          onClick={() => setAssigningRider(null)}
+                                          className="mt-3 w-full text-xs font-bold text-[#8b9d93] hover:text-white bg-white/5 py-2 rounded-lg"
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => setEditingOrder(null)}
+                                  className="w-full bg-[#eab308] text-black font-bold px-4 py-3 rounded-xl hover:bg-[#ca8a04] transition-colors"
+                                >
+                                  Save Changes
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="border-t border-[#ffffff10] pt-6 mt-2">
+                                {/* Payment Confirmation Section */}
+                                <div className="mb-6 p-5 bg-[#eab308]/5 border border-[#eab308]/20 rounded-xl relative overflow-hidden">
+                                  <div className="absolute right-0 top-0 w-32 h-32 bg-[#eab308]/10 rounded-full blur-2xl pointer-events-none" />
+                                  <h4 className="font-bold text-[#eab308] mb-3 flex items-center tracking-wide relative z-10">
+                                    <DollarSign className="w-4 h-4 mr-2" /> Payment Management
+                                  </h4>
+                                  <div className="flex flex-col sm:flex-row gap-3 relative z-10">
+                                    <button
+                                      onClick={() =>
+                                        confirmPaymentAndSendReceipt(order.id)
+                                      }
+                                      className="flex-1 bg-green-500/20 text-green-400 border border-green-500/30 px-4 py-3 rounded-xl hover:bg-green-500/30 text-sm font-bold flex items-center justify-center transition-colors"
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" /> Confirm Payment
+                                    </button>
+                                    <button
+                                      onClick={() => resendReceipt(order.id)}
+                                      className="flex-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 px-4 py-3 rounded-xl hover:bg-blue-500/30 text-sm font-bold flex items-center justify-center transition-colors"
+                                    >
+                                      <Mail className="w-4 h-4 mr-2" /> Resend Receipt
+                                    </button>
+                                  </div>
+                                  <p className="text-[#8b9d93] text-xs mt-3 relative z-10">
+                                    Receipts are linked to <strong>{order.customerEmail}</strong>
+                                  </p>
+                                </div>
+
+                                {/* Order Status Management */}
+                                <div className="flex flex-wrap gap-3">
+                                  {order.status === "pending" && (
+                                    <button
+                                      onClick={() =>
+                                        updateOrderStatus(order.id, "confirmed")
+                                      }
+                                      className="flex-1 min-w-[140px] bg-blue-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-blue-700 text-sm flex justify-center items-center shadow-lg"
+                                    >
+                                      Confirm Order
+                                    </button>
+                                  )}
+                                  {order.status === "confirmed" && (
+                                    <button
+                                      onClick={() =>
+                                        updateOrderStatus(order.id, "picked_up")
+                                      }
+                                      className="flex-1 min-w-[140px] bg-purple-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-purple-700 text-sm flex justify-center items-center shadow-lg"
+                                    >
+                                      Mark Picked Up
+                                    </button>
+                                  )}
+                                  {order.status === "picked_up" && (
+                                    <button
+                                      onClick={() =>
+                                        updateOrderStatus(order.id, "in_transit")
+                                      }
+                                      className="flex-1 min-w-[140px] bg-orange-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-orange-700 text-sm flex justify-center items-center shadow-lg"
+                                    >
+                                      In Transit
+                                    </button>
+                                  )}
+                                  {order.status === "in_transit" && (
+                                    <button
+                                      onClick={() =>
+                                        updateOrderStatus(order.id, "delivered")
+                                      }
+                                      className="flex-1 min-w-[140px] bg-green-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-green-700 text-sm flex justify-center items-center shadow-lg"
+                                    >
+                                      Mark Delivered
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      )}
                     </div>
-                    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-sm text-gray-700">
-                          Showing page <span className="font-medium">{currentPage}</span> of{' '}
-                          <span className="font-medium">{totalPages}</span>
+
+                    {/* Pagination Controls */}
+                    <div className="mt-10 bg-[#112417] p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <p className="text-sm font-bold text-[#8b9d93]">
+                          Showing page <span className="text-white">{currentPage}</span> of{' '}
+                          <span className="text-white">{totalPages}</span>
                         </p>
-                      </div>
-                      <div>
-                        <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                        <div className="flex items-center space-x-2">
                           <button
                             onClick={() => fetchOrders(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
-                            <span className="sr-only">Previous</span>
-                            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                            <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchOrders(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
-                            <span className="sr-only">Next</span>
-                            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                            <ChevronRight className="h-5 w-5" />
                           </button>
-                        </nav>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
+                </AnimatedPage>
+              )}
 
-            {/* Messages Tab */}
-            {activeTab === "messages" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Search */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <input
-                        type="text"
-                        placeholder="Search messages..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-rocs-green"
-                      />
-                    </div>
-                  </div>
+              {/* Messages Tab */}
+              {activeTab === "messages" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Search */}
+                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
+                      <div className="absolute top-0 left-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
 
-                  {/* Messages List */}
-                  <div className="space-y-4">
-                    {isLoading ? (
-                      <CardSkeleton />
-                    ) : filteredMessages.length === 0 ? (
-                      <div className="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
-                        <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No messages found</h3>
-                        <p className="text-gray-600">You're all caught up! No new messages from customers.</p>
+                      <div className="relative w-full sm:w-2/3">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <input
+                          type="text"
+                          placeholder="Search messages by name, subject or email..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-12 w-full bg-[#0a110d] border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-white placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                        />
                       </div>
-                    ) : (
-                      filteredMessages.map((message) => (
-                        <div
-                          key={message.id}
-                          className="bg-white rounded-lg shadow border border-gray-200 p-6"
-                        >
-                          <div className="flex justify-between items-start mb-3">
-                            <div className="flex items-center space-x-3">
-                              <h4 className="font-semibold text-gray-900">
-                                {message.name}
-                              </h4>
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs ${getStatusColor(message.status)}`}
-                              >
-                                {message.status}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="flex items-center text-xs text-gray-500">
-                                <Clock className="w-3 h-3 mr-1" />
-                                {formatDate(message.timestamp)}
-                              </div>
-                              <button
-                                onClick={() => deleteMessage(message.id)}
-                                className="p-1 text-red-400 hover:text-red-600"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
+
+                      <button
+                        onClick={async () => {
+                          setIsLoading(true);
+                          try {
+                            await fetchMessages(1);
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={isLoading}
+                        className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-[#eab308] text-black font-bold px-6 py-4 rounded-[16px] shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all hover:bg-[#ca8a04] disabled:opacity-50 relative z-10"
+                      >
+                        {isLoading ? (
+                          <RefreshCw className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <RefreshCw className="w-5 h-5" />
+                        )}
+                        <span>Refresh</span>
+                      </button>
+                    </div>
+
+                    {/* Messages List */}
+                    <div className="space-y-4">
+                      {isLoading ? (
+                        <CardSkeleton />
+                      ) : filteredMessages.length === 0 ? (
+                        <div className="bg-[#112417] rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-500/5 blur-[80px] rounded-full pointer-events-none" />
+
+                          <div className="w-24 h-24 bg-green-500/10 rounded-[24px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(34,197,94,0.1)] relative z-10 border-4 border-[#112417] outline outline-1 outline-green-500/20">
+                            <MessageSquare className="w-12 h-12 text-green-400" />
                           </div>
-
-                          <div className="text-sm text-gray-600 mb-2">
-                            <div className="flex items-center space-x-4">
-                              <span className="flex items-center">
-                                <Mail className="w-3 h-3 mr-1" />
-                                {message.email}
-                              </span>
-                              {message.phone && (
-                                <span className="flex items-center">
-                                  <Phone className="w-3 h-3 mr-1" />
-                                  {message.phone}
+                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                            No messages found
+                          </h3>
+                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-8 relative z-10 text-sm">
+                            You're all caught up! No new messages from customers matching your search.
+                          </p>
+                        </div>
+                      ) : (
+                        filteredMessages.map((message) => (
+                          <div
+                            key={message.id}
+                            className="bg-[#112417] rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                          >
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
+                              <div className="flex items-center space-x-4">
+                                <div className="w-12 h-12 rounded-full bg-[#0a110d] border border-[#eab308]/20 flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)] text-[#eab308] font-bold text-lg">
+                                  {message.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                  <h4 className="text-xl font-bold text-white">
+                                    {message.name}
+                                  </h4>
+                                  <div className="flex items-center text-xs text-[#596960] mt-1 font-mono">
+                                    <Clock className="w-3 h-3 mr-1" />
+                                    {formatDate(message.timestamp)}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-3 self-start">
+                                <span
+                                  className={`px-4 py-1.5 text-xs font-bold rounded-full border tracking-wide uppercase ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                      message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                        "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                    }`}
+                                >
+                                  {message.status}
                                 </span>
+                                <button
+                                  onClick={() => deleteMessage(message.id)}
+                                  className="p-2.5 text-red-500/70 hover:text-red-400 bg-[#0a110d] rounded-lg border border-[#ffffff05] hover:bg-white/5 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-[#0a110d]/50 rounded-xl border border-[#ffffff05]">
+                              <div className="flex items-center text-sm">
+                                <Mail className="w-4 h-4 text-[#8b9d93] mr-3" />
+                                <span className="text-white font-medium">{message.email}</span>
+                              </div>
+                              {message.phone && (
+                                <div className="flex items-center text-sm">
+                                  <Phone className="w-4 h-4 text-[#8b9d93] mr-3" />
+                                  <span className="text-white font-medium">{message.phone}</span>
+                                </div>
                               )}
                             </div>
-                          </div>
 
-                          <h5 className="font-medium text-gray-800 mb-2">
-                            {message.subject}
-                          </h5>
-                          <p className="text-gray-700 text-sm mb-4">
-                            {message.message}
-                          </p>
-
-                          <div className="flex space-x-2 pt-2">
-                            {message.status === "new" && (
-                              <button
-                                onClick={() => markAsRead(message.id)}
-                                className="flex items-center space-x-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded text-sm font-medium transition-colors"
-                              >
-                                <Eye className="w-4 h-4" />
-                                <span>Mark as Read</span>
-                              </button>
-                            )}
-
-                            <button
-                              onClick={() => handleReply(message.id)}
-                              className="flex items-center space-x-1 bg-rocs-green hover:bg-rocs-green-dark text-white px-3 py-1.5 rounded text-sm font-medium transition-colors"
-                            >
-                              <Edit className="w-4 h-4" />
-                              <span>Reply</span>
-                            </button>
-
-                            <a
-                              href={`mailto:${message.email}?subject=Re: ${message.subject}&body=Dear ${message.name},%0D%0A%0D%0AThank you for contacting Rocs Crew.%0D%0A%0D%0A`}
-                              className="flex items-center space-x-1 bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 px-3 py-1.5 rounded text-sm font-medium transition-colors"
-                            >
-                              <Mail className="w-4 h-4" />
-                              <span>Email Reply</span>
-                            </a>
-                          </div>
-
-                          {/* Reply Form */}
-                          {replyingTo === message.id && (
-                            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                              <h6 className="font-medium text-gray-800 mb-2">
-                                Reply to {message.name}
-                              </h6>
-                              <textarea
-                                value={replyText}
-                                onChange={(e) => setReplyText(e.target.value)}
-                                rows={4}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-rocs-green resize-none"
-                                placeholder="Type your reply here..."
-                              />
-                              <div className="flex justify-end space-x-2 mt-3">
-                                <button
-                                  onClick={() => setReplyingTo(null)}
-                                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded text-sm transition-colors"
-                                >
-                                  Cancel
-                                </button>
-                                <button
-                                  onClick={() => sendReply(message.id)}
-                                  disabled={!replyText.trim()}
-                                  className="bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded text-sm transition-colors disabled:opacity-50"
-                                >
-                                  Send Reply
-                                </button>
+                            <div className="mb-6">
+                              <h5 className="font-bold text-[#eab308] mb-3 text-lg">
+                                {message.subject}
+                              </h5>
+                              <div className="p-5 bg-white/5 rounded-xl border border-white/5 text-gray-300 leading-relaxed text-sm">
+                                {message.message}
                               </div>
                             </div>
-                          )}
-                        </div>
-                      )))}
-                  </div>
 
-                  {/* Pagination Controls */}
-                  <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
-                    <div className="flex flex-1 justify-between sm:hidden">
-                      <button
-                        onClick={() => fetchMessages(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Previous
-                      </button>
-                      <button
-                        onClick={() => fetchMessages(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Next
-                      </button>
+                            <div className="flex flex-wrap gap-3 pt-2">
+                              {message.status === "new" && (
+                                <button
+                                  onClick={() => markAsRead(message.id)}
+                                  className="flex items-center space-x-2 bg-[#2a3c31] hover:bg-[#344a3d] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors border border-white/5"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                  <span>Mark as Read</span>
+                                </button>
+                              )}
+
+                              <button
+                                onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
+                                className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                              >
+                                <Edit className="w-4 h-4" />
+                                <span>{replyingTo === message.id ? 'Cancel Reply' : 'Reply Here'}</span>
+                              </button>
+
+                              <a
+                                href={`mailto:${message.email}?subject=Re: ${message.subject}&body=Dear ${message.name},%0D%0A%0D%0AThank you for contacting Rocs Crew.%0D%0A%0D%0A`}
+                                className="flex items-center space-x-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                              >
+                                <Mail className="w-4 h-4" />
+                                <span>Email Client</span>
+                              </a>
+                            </div>
+
+                            {/* Reply Form */}
+                            {replyingTo === message.id && (
+                              <div className="mt-6 p-6 bg-[#0a110d] rounded-xl border border-[#ffffff10] relative overflow-hidden">
+                                <div className="absolute right-0 bottom-0 w-32 h-32 bg-[#eab308]/5 blur-xl pointer-events-none" />
+                                <h6 className="font-bold text-[#eab308] mb-4 flex items-center tracking-wide">
+                                  <Edit className="w-4 h-4 mr-2" /> Reply to {message.name}
+                                </h6>
+                                <textarea
+                                  value={replyText}
+                                  onChange={(e) => setReplyText(e.target.value)}
+                                  rows={5}
+                                  className="w-full px-4 py-3 bg-[#112417] text-white border border-[#ffffff15] rounded-xl focus:outline-none focus:border-[#eab308] resize-none mb-4"
+                                  placeholder="Type your official reply here..."
+                                />
+                                <div className="flex justify-end space-x-3">
+                                  <button
+                                    onClick={() => setReplyingTo(null)}
+                                    className="bg-white/5 hover:bg-white/10 text-[#8b9d93] hover:text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    onClick={() => sendReply(message.id)}
+                                    disabled={!replyText.trim()}
+                                    className="bg-[#eab308] hover:bg-[#ca8a04] text-black px-6 py-2.5 rounded-xl text-sm font-bold transition-colors disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                                  >
+                                    Send Reply
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      )}
                     </div>
-                    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-sm text-gray-700">
-                          Showing page <span className="font-medium">{currentPage}</span> of{' '}
-                          <span className="font-medium">{totalPages}</span>
+
+                    {/* Pagination Controls */}
+                    <div className="mt-10 bg-[#112417] p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <p className="text-sm font-bold text-[#8b9d93]">
+                          Showing page <span className="text-white">{currentPage}</span> of{' '}
+                          <span className="text-white">{totalPages}</span>
                         </p>
-                      </div>
-                      <div>
-                        <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                        <div className="flex items-center space-x-2">
                           <button
                             onClick={() => fetchMessages(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
-                            <span className="sr-only">Previous</span>
-                            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                            <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchMessages(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
-                            <span className="sr-only">Next</span>
-                            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                            <ChevronRight className="h-5 w-5" />
                           </button>
-                        </nav>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
+                </AnimatedPage>
+              )}
 
-            {/* Users Tab */}
-            {activeTab === "users" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Search */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <input
-                        type="text"
-                        placeholder="Search users..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-rocs-green"
-                      />
+              {/* Users Tab */}
+              {activeTab === "users" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Search Header */}
+                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
+
+                      <div className="relative w-full sm:w-2/3">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <input
+                          type="text"
+                          placeholder="Search users by name, email or phone..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-12 w-full bg-[#0a110d] border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-white placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                        />
+                      </div>
+
+                      <div className="flex space-x-3 w-full sm:w-auto">
+                        <button className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-[#0a110d] text-white border border-[#ffffff10] font-bold px-6 py-4 rounded-[16px] hover:bg-white/5 transition-all">
+                          <Filter className="w-5 h-5 text-[#eab308]" />
+                          <span>Filter</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Users List */}
-                  <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-                    {isLoading ? (
-                      <TableSkeleton />
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                User
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Contact
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Orders
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Total Spent
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {filteredUsers.map((user) => (
-                              <tr key={user.id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {user.name}
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                      Joined {formatDate(user.joinDate)}
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {user.email}
-                                  </div>
-                                  <div className="text-sm text-gray-500">
-                                    {user.phone}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                  {user.totalOrders}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                  KES {user.totalSpent.toLocaleString()}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span
-                                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(user.status)}`}
-                                  >
-                                    {user.status}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                  <button
-                                    onClick={() => toggleUserStatus(user.id)}
-                                    className={`${user.status === "active" ? "text-red-600 hover:text-red-900" : "text-green-600 hover:text-green-900"}`}
-                                  >
-                                    {user.status === "active"
-                                      ? "Deactivate"
-                                      : "Activate"}
-                                  </button>
-                                </td>
+                    {/* Users List */}
+                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                      <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
+                        <h3 className="text-lg font-bold text-white tracking-wide flex items-center">
+                          <Users className="w-5 h-5 text-[#eab308] mr-3" /> Customer Directory
+                        </h3>
+                        <span className="bg-[#0a110d] text-[#eab308] font-mono text-xs px-3 py-1 rounded-full border border-[#eab308]/20">
+                          Total: {filteredUsers.length}
+                        </span>
+                      </div>
+
+                      {isLoading ? (
+                        <div className="p-8"><TableSkeleton /></div>
+                      ) : filteredUsers.length === 0 ? (
+                        <div className="p-12 text-center">
+                          <div className="w-20 h-20 bg-[#0a110d] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#ffffff0a]">
+                            <Users className="w-10 h-10 text-[#3a4f41]" />
+                          </div>
+                          <h3 className="text-xl font-bold text-white mb-2">
+                            No users found
+                          </h3>
+                          <p className="text-[#8b9d93] text-sm max-w-sm mx-auto">
+                            No customer profiles match your current search criteria.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto custom-scrollbar">
+                          <table className="min-w-full divide-y divide-[#ffffff0a]">
+                            <thead className="bg-[#0a110d]/50">
+                              <tr>
+                                <th className="px-8 py-5 text-left text-xs font-bold text-[#596960] uppercase tracking-widest pl-10">
+                                  Customer Profile
+                                </th>
+                                <th className="px-8 py-5 text-left text-xs font-bold text-[#596960] uppercase tracking-widest">
+                                  Contact Info
+                                </th>
+                                <th className="px-8 py-5 text-center text-xs font-bold text-[#596960] uppercase tracking-widest">
+                                  Order Activity
+                                </th>
+                                <th className="px-8 py-5 text-right text-xs font-bold text-[#596960] uppercase tracking-widest">
+                                  Lifetime Value
+                                </th>
+                                <th className="px-8 py-5 text-center text-xs font-bold text-[#596960] uppercase tracking-widest">
+                                  Status
+                                </th>
+                                <th className="px-8 py-5 text-right text-xs font-bold text-[#596960] uppercase tracking-widest pr-10">
+                                  Actions
+                                </th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
+                            </thead>
+                            <tbody className="divide-y divide-[#ffffff0a]">
+                              {filteredUsers.map((user) => (
+                                <tr key={user.id} className="hover:bg-[#0a110d]/40 transition-colors group">
+                                  <td className="px-8 py-5 whitespace-nowrap pl-10">
+                                    <div className="flex items-center space-x-4">
+                                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2b20] to-[#0a110d] border border-[#eab308]/20 flex items-center justify-center text-[#eab308] font-bold shadow-inner">
+                                        {user.name.charAt(0).toUpperCase()}
+                                      </div>
+                                      <div>
+                                        <div className="text-sm font-bold text-white group-hover:text-[#eab308] transition-colors">
+                                          {user.name}
+                                        </div>
+                                        <div className="text-xs text-[#596960] mt-1 font-mono">
+                                          Joined {formatDate(user.joinDate)}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-8 py-5 whitespace-nowrap">
+                                    <div className="flex items-center text-sm text-[#8b9d93] mb-1">
+                                      <Mail className="w-3.5 h-3.5 mr-2 text-[#596960]" />
+                                      {user.email}
+                                    </div>
+                                    <div className="flex items-center text-sm text-[#8b9d93]">
+                                      <Phone className="w-3.5 h-3.5 mr-2 text-[#596960]" />
+                                      {user.phone}
+                                    </div>
+                                  </td>
+                                  <td className="px-8 py-5 whitespace-nowrap text-center">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#0a110d] border border-[#ffffff0a] group-hover:border-[#eab308]/30 transition-colors">
+                                      <span className="text-sm font-bold text-white">{user.totalOrders}</span>
+                                    </div>
+                                  </td>
+                                  <td className="px-8 py-5 whitespace-nowrap text-right">
+                                    <span className="text-sm font-bold text-[#eab308]">
+                                      KES {user.totalSpent.toLocaleString()}
+                                    </span>
+                                  </td>
+                                  <td className="px-8 py-5 whitespace-nowrap text-center">
+                                    <span
+                                      className={`px-4 py-1.5 inline-flex text-xs font-bold rounded-full uppercase tracking-wider border ${user.status === "active"
+                                          ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                          : "bg-red-500/10 text-red-400 border-red-500/20"
+                                        }`}
+                                    >
+                                      {user.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-8 py-5 whitespace-nowrap text-right pr-10">
+                                    <button
+                                      onClick={() => toggleUserStatus(user.id)}
+                                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${user.status === "active"
+                                          ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                          : "bg-[#0a110d] text-green-400 hover:bg-green-500/10 border-green-500/20"
+                                        }`}
+                                    >
+                                      {user.status === "active"
+                                        ? "Deactivate"
+                                        : "Activate"}
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
-
-            {/* Riders Tab */}
-            {activeTab === "riders" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header with refresh button */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Rider Management
-                      </h2>
+                </AnimatedPage>
+              )}
+              {/* Riders Tab */}
+              {activeTab === "riders" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
+                      <div>
+                        <div className="flex items-center space-x-2 text-[#eab308] font-bold text-xs tracking-wider uppercase mb-1">
+                          <Shield className="w-4 h-4" />
+                          <span>Admin Dashboard</span>
+                        </div>
+                        <h2 className="text-3xl font-bold text-white tracking-tight">
+                          Rider Management
+                        </h2>
+                      </div>
                       <button
                         onClick={async () => {
                           setIsLoading(true);
@@ -2238,228 +2365,255 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
-                        {isLoading ? (
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                        ) : null}
-                        <span>
-                          {isLoading ? "Refreshing..." : "Refresh Riders"}
-                        </span>
+                        <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        <span>Refresh</span>
                       </button>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">
+                    <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
+                          <ClipboardList className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                        </div>
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
                           {riders.filter((r) => r.status === "pending").length}
                         </div>
-                        <div className="text-sm text-blue-600">Pending</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Pending</div>
                       </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
+                          <UserCheck className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                        </div>
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
                           {riders.filter((r) => r.status === "approved").length}
                         </div>
-                        <div className="text-sm text-green-600">Approved</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Approved</div>
                       </div>
-                      <div className="bg-red-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-red-600">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
+                          <UserX className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                        </div>
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
                           {riders.filter((r) => r.status === "rejected").length}
                         </div>
-                        <div className="text-sm text-red-600">Rejected</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Rejected</div>
                       </div>
-                      <div className="bg-rocs-green-light p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-rocs-green">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
+                          <Bike className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                        </div>
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
                           {riders.filter((r) => r.isActive).length}
                         </div>
-                        <div className="text-sm text-rocs-green">Active</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Active</div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Riders List */}
-                  <div className="space-y-4">
-                    {isLoading ? (
-                      <CardSkeleton />
-                    ) : riders.length === 0 ? (
-                      <div className="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
-                        <Bike className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          No riders found
-                        </h3>
-                        <p className="text-gray-600">
-                          No rider applications have been submitted yet.
-                        </p>
-                      </div>
-                    ) : (
-                      riders.map((rider) => (
-                        <div
-                          key={rider.id}
-                          className="bg-white rounded-lg shadow border border-gray-200 p-6"
-                        >
-                          <div className="flex justify-between items-start mb-4">
-                            <div className="flex items-center space-x-4">
-                              <div className="w-12 h-12 bg-rocs-green rounded-full flex items-center justify-center">
-                                <Bike className="w-6 h-6 text-white" />
+                    {/* Riders List */}
+                    <div className="space-y-4">
+                      {isLoading ? (
+                        <CardSkeleton />
+                      ) : riders.length === 0 ? (
+                        <div className="bg-[#0a110d] border border-[#ffffff05] rounded-[32px] p-16 text-center shadow-lg relative overflow-hidden my-8">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
+                          <Bike className="w-20 h-20 text-[#eab308] mx-auto mb-6 relative z-10 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                            No riders found
+                          </h3>
+                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-10 relative z-10">
+                            No rider applications have been submitted yet.
+                          </p>
+                          <div className="flex justify-center items-center space-x-2 relative z-10">
+                            <div className="w-6 h-2 bg-[#eab308] rounded-full"></div>
+                            <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
+                            <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
+                            <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
+                            <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
+                          </div>
+                        </div>
+                      ) : (
+                        riders.map((rider) => (
+                          <div
+                            key={rider.id}
+                            className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                          >
+                            <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
+                              <div className="flex items-center space-x-4">
+                                <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                  <Bike className="w-6 h-6 text-[#eab308]" />
+                                </div>
+                                <div>
+                                  <h3 className="text-xl font-bold text-white">
+                                    {rider.fullName}
+                                  </h3>
+                                  <p className="text-[#8b9d93] text-sm mt-1 font-mono">
+                                    {rider.id} • <span className="text-[#eab308]">{rider.area}</span>
+                                  </p>
+                                  {rider.rating > 0 && (
+                                    <div className="flex items-center space-x-1 mt-2">
+                                      <Star className="w-4 h-4 text-[#eab308] fill-current" />
+                                      <span className="text-sm font-bold text-white">
+                                        {rider.rating} <span className="text-[#596960] font-normal">({rider.totalDeliveries} deliveries)</span>
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                              <div>
-                                <h3 className="text-lg font-semibold text-gray-900">
-                                  {rider.fullName}
-                                </h3>
-                                <p className="text-gray-600">
-                                  {rider.id} • {rider.area}
-                                </p>
-                                {rider.rating > 0 && (
-                                  <div className="flex items-center space-x-1 mt-1">
-                                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                    <span className="text-sm text-gray-600">
-                                      {rider.rating} ({rider.totalDeliveries}{" "}
-                                      deliveries)
-                                    </span>
-                                  </div>
+
+                              <div className="flex flex-col sm:items-end space-y-2">
+                                <span
+                                  className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${rider.status === "approved"
+                                      ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                      : rider.status === "pending"
+                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                                    }`}
+                                >
+                                  {rider.status}
+                                </span>
+
+                                {rider.status === "approved" && (
+                                  <span
+                                    className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${rider.isActive
+                                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                        : "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                      }`}
+                                  >
+                                    {rider.isActive ? "Active" : "Inactive"}
+                                  </span>
                                 )}
                               </div>
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                              <span
-                                className={`px-3 py-1 text-sm font-medium rounded-full ${rider.status === "approved"
-                                  ? "bg-green-100 text-green-800"
-                                  : rider.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
-                                  }`}
-                              >
-                                {rider.status}
-                              </span>
-
-                              {rider.status === "approved" && (
-                                <span
-                                  className={`px-2 py-1 text-xs rounded-full ${rider.isActive
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-gray-100 text-gray-800"
-                                    }`}
-                                >
-                                  {rider.isActive ? "Active" : "Inactive"}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Contact
-                              </p>
-                              <p className="text-sm text-gray-900">{rider.email}</p>
-                              <p className="text-sm text-gray-900">{rider.phone}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Motorcycle
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {rider.motorcycle}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                Experience: {rider.experience}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Application Date
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                <Clock className="w-3 h-3 inline mr-1" />
-                                {formatDate(rider.joinedAt)}
-                              </p>
-                              {rider.updatedAt && (
-                                <p className="text-xs text-gray-500 mt-1">
-                                  Last updated: {formatDate(rider.updatedAt)}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                  Contact
                                 </p>
-                              )}
+                                <div className="flex items-center text-sm text-white mb-1.5">
+                                  <Mail className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                  {rider.email}
+                                </div>
+                                <div className="flex items-center text-sm text-white">
+                                  <Phone className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                  {rider.phone}
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                  Motorcycle Info
+                                </p>
+                                <p className="text-sm text-white font-medium mb-1.5">
+                                  {rider.motorcycle}
+                                </p>
+                                <p className="text-sm text-[#8b9d93]">
+                                  Exp: <span className="text-white">{rider.experience}</span>
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                  Dates
+                                </p>
+                                <p className="text-sm text-white font-mono mb-1.5 flex items-center">
+                                  <Clock className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                  {formatDate(rider.joinedAt)}
+                                </p>
+                                {rider.updatedAt && (
+                                  <p className="text-xs text-[#596960] font-mono flex items-center">
+                                    <RefreshCw className="w-3 h-3 mr-1" />
+                                    {formatDate(rider.updatedAt)}
+                                  </p>
+                                )}
+                              </div>
                             </div>
-                          </div>
 
-                          {rider.motivation && (
-                            <div className="mb-4 p-3 bg-gray-50 rounded">
-                              <p className="text-sm font-medium text-gray-600">
-                                Why they want to join:
-                              </p>
-                              <p className="text-sm text-gray-700 mt-1">
-                                {rider.motivation}
-                              </p>
-                            </div>
-                          )}
+                            {rider.motivation && (
+                              <div className="mb-6 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05]">
+                                <p className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-2 flex items-center">
+                                  <Star className="w-3.5 h-3.5 mr-1.5" /> Motivation
+                                </p>
+                                <p className="text-sm text-gray-300 italic leading-relaxed">
+                                  "{rider.motivation}"
+                                </p>
+                              </div>
+                            )}
 
-                          {/* Actions */}
-                          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                            <div className="flex space-x-2">
-                              {rider.status === "pending" && (
-                                <>
+                            {/* Actions */}
+                            <div className="flex flex-wrap items-center justify-between pt-5 border-t border-[#ffffff0a] gap-4">
+                              <div className="flex flex-wrap gap-3">
+                                {rider.status === "pending" && (
+                                  <>
+                                    <button
+                                      onClick={() =>
+                                        updateRiderStatus(rider.id, "approved")
+                                      }
+                                      className="flex items-center space-x-2 bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                    >
+                                      <UserCheck className="w-4 h-4" />
+                                      <span>Approve</span>
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        updateRiderStatus(rider.id, "rejected")
+                                      }
+                                      className="flex items-center space-x-2 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                    >
+                                      <UserX className="w-4 h-4" />
+                                      <span>Reject</span>
+                                    </button>
+                                  </>
+                                )}
+
+                                {rider.status === "approved" && (
                                   <button
                                     onClick={() =>
-                                      updateRiderStatus(rider.id, "approved")
+                                      toggleRiderActive(rider.id, !rider.isActive)
                                     }
-                                    className="flex items-center space-x-1 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                                    className={`px-5 py-2 rounded-xl text-sm font-bold transition-all border ${rider.isActive
+                                        ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                        : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/20"
+                                      }`}
                                   >
-                                    <UserCheck className="w-4 h-4" />
-                                    <span>Approve</span>
+                                    {rider.isActive ? "Deactivate Rider" : "Activate Rider"}
                                   </button>
-                                  <button
-                                    onClick={() =>
-                                      updateRiderStatus(rider.id, "rejected")
-                                    }
-                                    className="flex items-center space-x-1 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
-                                  >
-                                    <UserX className="w-4 h-4" />
-                                    <span>Reject</span>
-                                  </button>
-                                </>
-                              )}
+                                )}
+                              </div>
 
-                              {rider.status === "approved" && (
-                                <button
-                                  onClick={() =>
-                                    toggleRiderActive(rider.id, !rider.isActive)
-                                  }
-                                  className={`px-3 py-1 rounded text-sm font-medium ${rider.isActive
-                                    ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                    : "bg-rocs-green text-white hover:bg-rocs-green-dark"
-                                    }`}
-                                >
-                                  {rider.isActive ? "Deactivate" : "Activate"}
-                                </button>
-                              )}
+                              <button
+                                onClick={() => deleteRider(rider.id)}
+                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                <span>Delete</span>
+                              </button>
                             </div>
-
-                            <button
-                              onClick={() => deleteRider(rider.id)}
-                              className="flex items-center space-x-1 text-red-500 hover:text-red-700 p-2 text-sm transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
-                            </button>
                           </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
-
-            {/* Partnership Requests Tab */}
-            {activeTab === "partnerships" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header with refresh button */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Partnership Requests
-                      </h2>
+                </AnimatedPage>
+              )}
+              {/* Partnership Requests Tab */}
+              {activeTab === "partnerships" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
+                      <div>
+                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                          Partnership Requests
+                        </h2>
+                        <div className="text-[#8b9d93] text-sm">
+                          Nairobi Admin Panel
+                        </div>
+                      </div>
                       <button
                         onClick={async () => {
                           setIsLoading(true);
@@ -2470,228 +2624,222 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
-                        {isLoading ? (
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                        ) : null}
-                        <span>
-                          {isLoading ? "Refreshing..." : "Refresh Requests"}
-                        </span>
+                        <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        <span>Refresh</span>
                       </button>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">
-                          {
-                            partnershipRequests.filter(
-                              (r) => r.status === "pending",
-                            ).length
-                          }
+                    <div className="grid grid-cols-3 gap-4 sm:gap-6">
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                          {partnershipRequests.filter((r) => r.status === "pending").length}
                         </div>
-                        <div className="text-sm text-blue-600">Pending Review</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Pending</div>
                       </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">
-                          {
-                            partnershipRequests.filter(
-                              (r) => r.status === "approved",
-                            ).length
-                          }
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                          {partnershipRequests.filter((r) => r.status === "approved").length}
                         </div>
-                        <div className="text-sm text-green-600">Approved</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Approved</div>
                       </div>
-                      <div className="bg-red-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-red-600">
-                          {
-                            partnershipRequests.filter(
-                              (r) => r.status === "rejected",
-                            ).length
-                          }
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                          {partnershipRequests.filter((r) => r.status === "rejected").length}
                         </div>
-                        <div className="text-sm text-red-600">Rejected</div>
+                        <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Rejected</div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Partnership Requests List */}
-                  <div className="space-y-4">
-                    {isLoading ? (
-                      <CardSkeleton />
-                    ) : partnershipRequests.length === 0 ? (
-                      <div className="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
-                        <Handshake className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          No partnership requests found
-                        </h3>
-                        <p className="text-gray-600">
-                          No partnership requests have been submitted yet.
-                        </p>
-                      </div>
-                    ) : (
-                      partnershipRequests.map((request) => (
-                        <div
-                          key={request.id}
-                          className="bg-white rounded-lg shadow border border-gray-200 p-6"
-                        >
-                          <div className="flex justify-between items-start mb-4">
-                            <div className="flex items-center space-x-4">
-                              <div className="w-12 h-12 bg-rocs-green rounded-full flex items-center justify-center">
-                                <Building2 className="w-6 h-6 text-white" />
+                    {/* Partnership Requests List */}
+                    <div className="space-y-4">
+                      {isLoading ? (
+                        <CardSkeleton />
+                      ) : partnershipRequests.length === 0 ? (
+                        <div className="bg-[#0a110d] rounded-[32px] p-16 text-center border border-dashed border-[#ffffff15] relative overflow-hidden my-8">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
+
+                          <div className="w-24 h-24 bg-[#eab308]/10 rounded-full flex items-center justify-center mx-auto mb-8 relative z-10 border border-[#eab308]/20">
+                            <Handshake className="w-10 h-10 text-[#eab308]" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white mb-4 relative z-10">
+                            No partnership requests found
+                          </h3>
+                          <p className="text-[#8b9d93] max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
+                            New applications from motorcycle delivery partners will appear here for review.
+                          </p>
+
+                          <button className="bg-[#112417] hover:bg-[#152a1d] text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10">
+                            View Archives
+                          </button>
+                        </div>
+                      ) : (
+                        partnershipRequests.map((request) => (
+                          <div
+                            key={request.id}
+                            className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                          >
+                            <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+                              <div className="flex items-center space-x-4">
+                                <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                  <Building2 className="w-6 h-6 text-[#eab308]" />
+                                </div>
+                                <div>
+                                  <h3 className="text-xl font-bold text-white">
+                                    {request.companyName}
+                                  </h3>
+                                  <p className="text-[#8b9d93] text-sm mt-1 font-mono">
+                                    {request.id} • <span className="text-[#eab308]">{request.businessCategory}</span>
+                                  </p>
+                                  <p className="text-xs text-[#596960] mt-2 font-mono flex items-center">
+                                    <Clock className="w-3 h-3 mr-1.5" />
+                                    Submitted: {formatDate(request.timestamp)}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center">
+                                <span
+                                  className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${request.status === "approved"
+                                      ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                      : request.status === "pending"
+                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                                    }`}
+                                >
+                                  {request.status}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                              <div>
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                  Contact Details
+                                </p>
+                                <p className="text-sm font-bold text-white mb-2">{request.contactPerson}</p>
+                                <div className="flex items-center text-sm text-white mb-1.5">
+                                  <Mail className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                  {request.email}
+                                </div>
+                                <div className="flex items-center text-sm text-white">
+                                  <Phone className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                  {request.phone}
+                                </div>
                               </div>
                               <div>
-                                <h3 className="text-lg font-semibold text-gray-900">
-                                  {request.companyName}
-                                </h3>
-                                <p className="text-gray-600">
-                                  {request.id} • {request.businessCategory}
+                                <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                  Business Context
                                 </p>
-                                <p className="text-xs text-gray-500 mt-1">
-                                  <Clock className="w-3 h-3 inline mr-1" />
-                                  Submitted: {formatDate(request.timestamp)}
+                                <p className="text-sm text-[#8b9d93] mb-1.5">
+                                  Category: <span className="text-white">{request.businessCategory}</span>
                                 </p>
+                                <p className="text-sm text-[#8b9d93] mb-2">
+                                  Volume: <span className="text-white">{request.deliveryVolume}</span>
+                                </p>
+                                {request.updatedAt && (
+                                  <p className="text-xs text-[#596960] font-mono flex items-center pt-2 border-t border-[#ffffff0a]">
+                                    <RefreshCw className="w-3 h-3 mr-1" />
+                                    Last updated: {formatDate(request.updatedAt)}
+                                  </p>
+                                )}
                               </div>
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                              <span
-                                className={`px-3 py-1 text-sm font-medium rounded-full ${request.status === "approved"
-                                  ? "bg-green-100 text-green-800"
-                                  : request.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
-                                  }`}
-                              >
-                                {request.status}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Contact Person
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {request.contactPerson}
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {request.email}
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                {request.phone}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-600">
-                                Business Details
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                Category: {request.businessCategory}
-                              </p>
-                              <p className="text-sm text-gray-900">
-                                Volume: {request.deliveryVolume}
-                              </p>
-                              {request.updatedAt && (
-                                <p className="text-xs text-gray-500 mt-1">
-                                  Last updated: {formatDate(request.updatedAt)}
+                            {request.message && (
+                              <div className="mb-6 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05]">
+                                <p className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-2 flex items-center">
+                                  <MessageSquare className="w-3.5 h-3.5 mr-1.5" /> Request Message
                                 </p>
-                              )}
+                                <p className="text-sm text-gray-300 italic leading-relaxed">
+                                  "{request.message}"
+                                </p>
+                              </div>
+                            )}
+
+                            {request.adminNotes && (
+                              <div className="mb-6 p-5 bg-[#1a2b20] rounded-[16px] border border-green-500/20">
+                                <p className="text-xs font-bold text-green-400 uppercase tracking-wider mb-2 flex items-center">
+                                  <FileText className="w-3.5 h-3.5 mr-1.5" /> Admin Notes
+                                </p>
+                                <p className="text-sm text-white/90">
+                                  {request.adminNotes}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Actions */}
+                            <div className="flex flex-wrap items-center justify-between pt-5 border-t border-[#ffffff0a] gap-4">
+                              <div className="flex flex-wrap gap-3">
+                                {request.status === "pending" && (
+                                  <>
+                                    <button
+                                      onClick={() =>
+                                        updatePartnershipRequestStatus(
+                                          request.id,
+                                          "approved",
+                                        )
+                                      }
+                                      className="flex items-center space-x-2 bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                    >
+                                      <CheckCircle className="w-4 h-4" />
+                                      <span>Approve</span>
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        updatePartnershipRequestStatus(
+                                          request.id,
+                                          "rejected",
+                                        )
+                                      }
+                                      className="flex items-center space-x-2 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                    >
+                                      <AlertCircle className="w-4 h-4" />
+                                      <span>Reject</span>
+                                    </button>
+                                  </>
+                                )}
+
+                                {request.status !== "pending" && (
+                                  <span className="text-sm text-[#596960] font-mono px-2 py-1 bg-[#0a110d] rounded-lg border border-[#ffffff05]">
+                                    Request {request.status} on{" "}
+                                    {request.updatedAt
+                                      ? formatDate(request.updatedAt)
+                                      : "Unknown date"}
+                                  </span>
+                                )}
+                              </div>
+
+                              <button
+                                onClick={() => deletePartnershipRequest(request.id)}
+                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                <span>Delete</span>
+                              </button>
                             </div>
                           </div>
-
-                          {request.message && (
-                            <div className="mb-4 p-3 bg-gray-50 rounded">
-                              <p className="text-sm font-medium text-gray-600">
-                                Request Message:
-                              </p>
-                              <p className="text-sm text-gray-700 mt-1">
-                                {request.message}
-                              </p>
-                            </div>
-                          )}
-
-                          {request.adminNotes && (
-                            <div className="mb-4 p-3 bg-blue-50 rounded">
-                              <p className="text-sm font-medium text-blue-800">
-                                Admin Notes:
-                              </p>
-                              <p className="text-sm text-blue-700 mt-1">
-                                {request.adminNotes}
-                              </p>
-                            </div>
-                          )}
-
-                          {/* Actions */}
-                          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                            <div className="flex space-x-2">
-                              {request.status === "pending" && (
-                                <>
-                                  <button
-                                    onClick={() =>
-                                      updatePartnershipRequestStatus(
-                                        request.id,
-                                        "approved",
-                                      )
-                                    }
-                                    className="flex items-center space-x-1 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-                                  >
-                                    <CheckCircle className="w-4 h-4" />
-                                    <span>Approve</span>
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      updatePartnershipRequestStatus(
-                                        request.id,
-                                        "rejected",
-                                      )
-                                    }
-                                    className="flex items-center space-x-1 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
-                                  >
-                                    <AlertCircle className="w-4 h-4" />
-                                    <span>Reject</span>
-                                  </button>
-                                </>
-                              )}
-
-                              {request.status !== "pending" && (
-                                <span className="text-sm text-gray-500">
-                                  Request {request.status} on{" "}
-                                  {request.updatedAt
-                                    ? formatDate(request.updatedAt)
-                                    : "Unknown date"}
-                                </span>
-                              )}
-                            </div>
-
-                            <button
-                              onClick={() => deletePartnershipRequest(request.id)}
-                              className="flex items-center space-x-1 text-red-500 hover:text-red-700 p-2 text-sm transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
-
-            {/* Rider Earnings Tab */}
-            {activeTab === "rider-earnings" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Rider Earnings Management
-                      </h2>
+                </AnimatedPage>
+              )}
+              {/* Rider Earnings Tab */}
+              {activeTab === "rider-earnings" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
+                      <div>
+                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                          Rider Earnings <br />Management
+                        </h2>
+                      </div>
                       <button
                         onClick={async () => {
                           setIsLoading(true);
@@ -2702,59 +2850,51 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
-                        {isLoading ? (
-                          <RefreshCw className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <RefreshCw className="w-4 h-4" />
-                        )}
-                        <span>
-                          {isLoading ? "Refreshing..." : "Refresh Data"}
-                        </span>
+                        <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        <span>Refresh Data</span>
                       </button>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">
+                    <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Pending</div>
+                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
                             .reduce((sum, r) => sum + (r.currentBalance || 0), 0)
                             .toLocaleString()}
                         </div>
-                        <div className="text-sm text-green-600">
-                          Total Pending Payouts
-                        </div>
                       </div>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Earnings</div>
+                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
                             .reduce((sum, r) => sum + (r.totalEarnings || 0), 0)
                             .toLocaleString()}
                         </div>
-                        <div className="text-sm text-blue-600">
-                          Total Rider Earnings
-                        </div>
                       </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-purple-600">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Paid Out</div>
+                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
                             .reduce((sum, r) => sum + (r.totalWithdrawn || 0), 0)
                             .toLocaleString()}
                         </div>
-                        <div className="text-sm text-purple-600">
-                          Total Paid Out
-                        </div>
                       </div>
-                      <div className="bg-yellow-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-yellow-600">
+
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Riders w/ Bal</div>
+                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
                           {
                             riders.filter(
                               (r) =>
@@ -2763,255 +2903,265 @@ export default function Admin() {
                             ).length
                           }
                         </div>
-                        <div className="text-sm text-yellow-600">
-                          Riders with Balance
-                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Riders Earnings List */}
-                  <div className="space-y-4">
-                    {isLoading ? (
-                      <CardSkeleton />
-                    ) : riders.filter((r) => r.status === "approved").length ===
-                      0 ? (
-                      <div className="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
-                        <DollarSign className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          No approved riders found
-                        </h3>
-                        <p className="text-gray-600">
-                          Approve riders first to manage their earnings.
-                        </p>
-                      </div>
-                    ) : (
-                      riders
-                        .filter((r) => r.status === "approved")
-                        .map((rider) => (
-                          <div
-                            key={rider.id}
-                            className="bg-white rounded-lg shadow border border-gray-200 p-6"
+                    {/* Riders Earnings List */}
+                    <div className="space-y-4">
+                      {isLoading ? (
+                        <CardSkeleton />
+                      ) : riders.filter((r) => r.status === "approved").length ===
+                        0 ? (
+                        <div className="bg-[#112417] rounded-[32px] p-12 sm:p-16 text-center shadow-lg relative overflow-hidden my-8">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-500/5 blur-[80px] rounded-full pointer-events-none" />
+
+                          <div className="w-20 h-20 bg-[#162d1d] rounded-[24px] flex items-center justify-center mx-auto mb-8 relative z-10 border border-[#1a3522]">
+                            <DollarSign className="w-10 h-10 text-[#eab308]" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white mb-4 relative z-10">
+                            No approved riders found
+                          </h3>
+                          <p className="text-[#8b9d93] max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
+                            Approve riders first from the management panel to start managing their earnings and payouts.
+                          </p>
+
+                          <button
+                            onClick={() => setActiveTab('riders')}
+                            className="bg-[#0a110d] hover:bg-white/5 text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10 group"
                           >
-                            <div className="flex justify-between items-start mb-4">
-                              <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 bg-rocs-green rounded-full flex items-center justify-center">
-                                  <DollarSign className="w-6 h-6 text-white" />
-                                </div>
-                                <div>
-                                  <h3 className="text-lg font-semibold text-gray-900">
-                                    {rider.fullName}
-                                  </h3>
-                                  <p className="text-gray-600">
-                                    {rider.id} • {rider.area}
-                                  </p>
-                                  <div className="flex items-center space-x-1 mt-1">
-                                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                    <span className="text-sm text-gray-600">
-                                      {rider.rating} ({rider.totalDeliveries}{" "}
-                                      deliveries)
-                                    </span>
+                            View Pending Riders <span className="ml-1 group-hover:translate-x-1 inline-block transition-transform">-&gt;</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-6">
+                          {riders
+                            .filter((r) => r.status === "approved")
+                            .map((rider) => (
+                              <div
+                                key={rider.id}
+                                className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8 relative overflow-hidden"
+                              >
+                                <div className="absolute right-0 top-0 w-64 h-64 bg-[#eab308]/5 blur-3xl pointer-events-none rounded-full" />
+
+                                <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
+                                  <div className="flex items-center space-x-4">
+                                    <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                      <DollarSign className="w-6 h-6 text-[#eab308]" />
+                                    </div>
+                                    <div>
+                                      <h3 className="text-xl font-bold text-white">
+                                        {rider.fullName}
+                                      </h3>
+                                      <p className="text-[#8b9d93] text-sm mt-1 font-mono">
+                                        {rider.id} • <span className="text-white">{rider.area}</span>
+                                      </p>
+                                      <div className="flex items-center space-x-1 mt-2">
+                                        <Star className="w-4 h-4 text-[#eab308] fill-current" />
+                                        <span className="text-sm font-bold text-white">
+                                          {rider.rating} <span className="text-[#596960] font-normal">({rider.totalDeliveries} deliveries)</span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="sm:text-right bg-[#0a110d]/50 p-4 rounded-2xl border border-[#ffffff05]">
+                                    <div className="text-xl sm:text-2xl font-black text-green-400 mb-1">
+                                      KES {(rider.currentBalance || 0).toLocaleString()}
+                                    </div>
+                                    <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider">
+                                      Current Balance
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="text-right">
-                                <div className="text-2xl font-bold text-green-600">
-                                  KES {(rider.currentBalance || 0).toLocaleString()}
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                                  <div>
+                                    <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                      Total Earnings
+                                    </p>
+                                    <p className="text-sm font-bold text-blue-400">
+                                      KES {(rider.totalEarnings || 0).toLocaleString()}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                      Total Withdrawn
+                                    </p>
+                                    <p className="text-sm font-bold text-purple-400">
+                                      KES {(rider.totalWithdrawn || 0).toLocaleString()}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                      Last Withdrawal
+                                    </p>
+                                    <p className="text-sm text-white font-mono">
+                                      {rider.lastWithdrawal
+                                        ? formatDate(rider.lastWithdrawal)
+                                        : "Never"}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
+                                      Contact
+                                    </p>
+                                    <p className="text-sm text-white mb-1">
+                                      {rider.email}
+                                    </p>
+                                    <p className="text-sm text-white">
+                                      {rider.phone}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="text-sm text-gray-600">
-                                  Current Balance
-                                </div>
-                              </div>
-                            </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                              <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                  Total Earnings
-                                </p>
-                                <p className="text-lg font-semibold text-blue-600">
-                                  KES {(rider.totalEarnings || 0).toLocaleString()}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                  Total Withdrawn
-                                </p>
-                                <p className="text-lg font-semibold text-purple-600">
-                                  KES {(rider.totalWithdrawn || 0).toLocaleString()}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                  Last Withdrawal
-                                </p>
-                                <p className="text-sm text-gray-900">
-                                  {rider.lastWithdrawal
-                                    ? formatDate(rider.lastWithdrawal)
-                                    : "Never"}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                  Contact
-                                </p>
-                                <p className="text-sm text-gray-900">
-                                  {rider.email}
-                                </p>
-                                <p className="text-sm text-gray-900">
-                                  {rider.phone}
-                                </p>
-                              </div>
-                            </div>
+                                {/* Recent Earnings */}
+                                {rider.earnings && rider.earnings.length > 0 && (
+                                  <div className="mb-6">
+                                    <h4 className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-3 flex items-center">
+                                      <Clock className="w-3.5 h-3.5 mr-1.5" /> Recent Earnings
+                                    </h4>
+                                    <div className="bg-[#0a110d] rounded-[16px] p-4 max-h-40 overflow-y-auto custom-scrollbar border border-[#ffffff05]">
+                                      {rider.earnings
+                                        .slice(-3)
+                                        .map((earning, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex justify-between items-center py-2.5 border-b border-[#ffffff0a] last:border-b-0"
+                                          >
+                                            <div>
+                                              <span className="text-sm font-mono text-white">
+                                                {earning.orderId}
+                                              </span>
+                                              <span className="text-xs text-[#596960] font-mono ml-3">
+                                                {formatDate(earning.deliveryDate)}
+                                              </span>
+                                            </div>
+                                            <div className="text-right">
+                                              <div className="text-sm font-bold text-green-400 mb-0.5">
+                                                +KES{" "}
+                                                {earning.riderEarning.toLocaleString()}
+                                              </div>
+                                              <div className="text-xs text-[#596960]">
+                                                from KES {earning.amount}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                    </div>
+                                  </div>
+                                )}
 
-                            {/* Recent Earnings */}
-                            {rider.earnings && rider.earnings.length > 0 && (
-                              <div className="mb-4">
-                                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                                  Recent Earnings
-                                </h4>
-                                <div className="bg-gray-50 rounded-lg p-3 max-h-32 overflow-y-auto">
-                                  {rider.earnings
-                                    .slice(-3)
-                                    .map((earning, index) => (
-                                      <div
-                                        key={index}
-                                        className="flex justify-between items-center py-1 border-b border-gray-200 last:border-b-0"
-                                      >
+                                {/* Payment Actions */}
+                                <div className="border-t border-[#ffffff0a] pt-5">
+                                  {selectedRiderForEarnings === rider.id ? (
+                                    <div className="bg-[#0a110d] p-5 sm:p-6 rounded-[20px] border border-[#eab308]/20 shadow-[0_0_20px_rgba(234,179,8,0.05)]">
+                                      <h4 className="font-bold text-[#eab308] mb-4 text-sm flex items-center tracking-wider uppercase">
+                                        <CreditCard className="w-4 h-4 mr-2" />
+                                        Process Payment to {rider.fullName}
+                                      </h4>
+
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
                                         <div>
-                                          <span className="text-xs text-gray-600">
-                                            {earning.orderId}
-                                          </span>
-                                          <span className="text-xs text-gray-500 ml-2">
-                                            {formatDate(earning.deliveryDate)}
-                                          </span>
+                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                            Amount (KES)
+                                          </label>
+                                          <input
+                                            type="number"
+                                            value={paymentAmount}
+                                            onChange={(e) =>
+                                              setPaymentAmount(e.target.value)
+                                            }
+                                            max={rider.currentBalance || 0}
+                                            min="1"
+                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                            placeholder="Enter amount"
+                                          />
+                                          <p className="text-xs text-[#596960] mt-2 font-mono flex items-center">
+                                            Max: KES{" "}
+                                            {(
+                                              rider.currentBalance || 0
+                                            ).toLocaleString()}
+                                          </p>
                                         </div>
-                                        <div className="text-right">
-                                          <div className="text-sm font-medium text-green-600">
-                                            +KES{" "}
-                                            {earning.riderEarning.toLocaleString()}
-                                          </div>
-                                          <div className="text-xs text-gray-500">
-                                            from KES {earning.amount}
-                                          </div>
+                                        <div>
+                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                            Payment Method
+                                          </label>
+                                          <select
+                                            value={paymentMethod}
+                                            onChange={(e) =>
+                                              setPaymentMethod(e.target.value)
+                                            }
+                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                          >
+                                            <option value="mpesa">M-Pesa</option>
+                                            <option value="bank">Bank Transfer</option>
+                                            <option value="cash">Cash</option>
+                                          </select>
+                                        </div>
+                                        <div>
+                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                            Notes (Optional)
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={paymentNotes}
+                                            onChange={(e) =>
+                                              setPaymentNotes(e.target.value)
+                                            }
+                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                            placeholder="Payment notes"
+                                          />
                                         </div>
                                       </div>
-                                    ))}
-                                </div>
-                              </div>
-                            )}
 
-                            {/* Payment Actions */}
-                            <div className="border-t pt-4">
-                              {selectedRiderForEarnings === rider.id ? (
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                  <h4 className="font-medium text-gray-800 mb-3">
-                                    Process Payment to {rider.fullName}
-                                  </h4>
-
-                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                    <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Amount (KES)
-                                      </label>
-                                      <input
-                                        type="number"
-                                        value={paymentAmount}
-                                        onChange={(e) =>
-                                          setPaymentAmount(e.target.value)
-                                        }
-                                        max={rider.currentBalance || 0}
-                                        min="1"
-                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green"
-                                        placeholder="Enter amount"
-                                      />
-                                      <p className="text-xs text-gray-500 mt-1">
-                                        Max: KES{" "}
-                                        {(
-                                          rider.currentBalance || 0
-                                        ).toLocaleString()}
-                                      </p>
+                                      <div className="flex flex-wrap gap-3">
+                                        <button
+                                          onClick={() => processRiderPayment(rider.id)}
+                                          disabled={
+                                            !paymentAmount ||
+                                            parseFloat(paymentAmount) <= 0 ||
+                                            parseFloat(paymentAmount) >
+                                            (rider.currentBalance || 0)
+                                          }
+                                          className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center space-x-2"
+                                        >
+                                          <CreditCard className="w-4 h-4" />
+                                          <span>Confirm Payment</span>
+                                        </button>
+                                        <button
+                                          onClick={() => {
+                                            setSelectedRiderForEarnings(null);
+                                            setPaymentAmount("");
+                                            setPaymentNotes("");
+                                          }}
+                                          className="bg-[#112417] text-[#8b9d93] hover:text-white border border-[#ffffff10] px-6 py-2.5 rounded-xl transition-all text-sm font-bold"
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
                                     </div>
-                                    <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Payment Method
-                                      </label>
-                                      <select
-                                        value={paymentMethod}
-                                        onChange={(e) =>
-                                          setPaymentMethod(e.target.value)
-                                        }
-                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green"
+                                  ) : (
+                                    <div className="flex flex-wrap gap-3">
+                                      <button
+                                        onClick={() => {
+                                          setSelectedRiderForEarnings(rider.id);
+                                          setPaymentAmount("");
+                                          setPaymentNotes("");
+                                        }}
+                                        disabled={(rider.currentBalance || 0) <= 0}
+                                        className="bg-green-500/10 text-green-400 border border-green-500/20 px-6 py-2.5 rounded-xl hover:bg-green-500/20 text-sm font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center space-x-2"
                                       >
-                                        <option value="mpesa">M-Pesa</option>
-                                        <option value="bank">Bank Transfer</option>
-                                        <option value="cash">Cash</option>
-                                      </select>
-                                    </div>
-                                    <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Notes (Optional)
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={paymentNotes}
-                                        onChange={(e) =>
-                                          setPaymentNotes(e.target.value)
-                                        }
-                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green"
-                                        placeholder="Payment notes"
-                                      />
-                                    </div>
-                                  </div>
-
-                                  <div className="flex space-x-2">
-                                    <button
-                                      onClick={() => processRiderPayment(rider.id)}
-                                      disabled={
-                                        !paymentAmount ||
-                                        parseFloat(paymentAmount) <= 0 ||
-                                        parseFloat(paymentAmount) >
-                                        (rider.currentBalance || 0)
-                                      }
-                                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                                    >
-                                      <CreditCard className="w-4 h-4" />
-                                      <span>Process Payment</span>
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setSelectedRiderForEarnings(null);
-                                        setPaymentAmount("");
-                                        setPaymentNotes("");
-                                      }}
-                                      className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 text-sm"
-                                    >
-                                      Cancel
-                                    </button>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() => {
-                                      setSelectedRiderForEarnings(rider.id);
-                                      setPaymentAmount("");
-                                      setPaymentNotes("");
-                                    }}
-                                    disabled={(rider.currentBalance || 0) <= 0}
-                                    className="bg-rocs-green text-white px-4 py-2 rounded hover:bg-rocs-green-dark text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                                  >
-                                    <DollarSign className="w-4 h-4" />
-                                    <span>Pay Rider</span>
-                                  </button>
-                                  <button
-                                    onClick={async () => {
-                                      const earnings = await fetchRiderEarnings(
-                                        rider.id,
-                                      );
-                                      if (earnings) {
-                                        const details = `
+                                        <DollarSign className="w-4 h-4" />
+                                        <span>Pay Rider</span>
+                                      </button>
+                                      <button
+                                        onClick={async () => {
+                                          const earnings = await fetchRiderEarnings(
+                                            rider.id,
+                                          );
+                                          if (earnings) {
+                                            const details = `
 🚴‍♂️ RIDER EARNINGS SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -3020,7 +3170,7 @@ export default function Admin() {
 📧 Email: ${earnings.email}
 
 💰 FINANCIAL SUMMARY
-━━━━━━━��━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
 💵 Current Balance: KES ${earnings.currentBalance.toLocaleString()}
 📈 Total Earnings: KES ${earnings.totalEarnings.toLocaleString()}
 💸 Total Withdrawn: KES ${earnings.totalWithdrawn.toLocaleString()}
@@ -3034,47 +3184,51 @@ export default function Admin() {
 📋 RECENT EARNINGS (Last 5)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${earnings.earnings
-                                            .slice(-5)
-                                            .map(
-                                              (e) =>
-                                                `🔹 ${e.orderId}: +KES ${e.riderEarning.toLocaleString()} (${formatDate(e.deliveryDate)})`,
-                                            )
-                                            .join("\n") || "No earnings recorded yet"
+                                                .slice(-5)
+                                                .map(
+                                                  (e) =>
+                                                    `🔹 ${e.orderId}: +KES ${e.riderEarning.toLocaleString()} (${formatDate(e.deliveryDate)})`,
+                                                )
+                                                .join("\n") || "No earnings recorded yet"
+                                              }
+
+⚖️ Commission Structure: 20% Company | 80% Rider
+                                  `;
+                                            alert(details);
                                           }
-
-�� Commission Structure: 20% Company | 80% Rider
-                                `;
-                                        alert(details);
-                                      }
-                                    }}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium flex items-center space-x-2"
-                                  >
-                                    <Eye className="w-4 h-4" />
-                                    <span>View Details</span>
-                                  </button>
+                                        }}
+                                        className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-white/5 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                        <span>View Statement</span>
+                                      </button>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                        ))
-                    )}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
+                </AnimatedPage>
+              )}
+              {/* Rider Activity Log Tab */}
+              {activeTab === "rider-activity" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-4 px-2">
+                      <div className="flex items-center space-x-4">
+                        <h2 className="text-3xl font-bold text-white tracking-tight">
+                          Rider Activity Log
+                        </h2>
+                        <div className="w-10 h-10 bg-[#eab308]/10 rounded-full flex items-center justify-center border border-[#eab308]/20 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                          <ArrowDown className="w-5 h-5 text-[#eab308]" />
+                        </div>
+                      </div>
 
-            {/* Rider Activity Log Tab */}
-            {activeTab === "rider-activity" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Rider Activity Log
-                      </h2>
-
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-3">
                         <button
                           onClick={async () => {
                             setIsLoading(true);
@@ -3086,36 +3240,31 @@ ${earnings.earnings
                             } finally { setIsLoading(false); }
                           }}
                           disabled={isLoading}
-                          className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                          className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                         >
-                          {isLoading ? (
-                            <RefreshCw className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <RefreshCw className="w-4 h-4" />
-                          )}
-                          <span>
-                            {isLoading ? 'Refreshing...' : 'Refresh Activities'}
-                          </span>
+                          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                          <span>Refresh</span>
                         </button>
 
                         <button
                           onClick={() => handleExport('json')}
-                          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium"
+                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <Download className="w-4 h-4" />
-                          <span>Export JSON</span>
+                          <span>JSON</span>
                         </button>
 
                         <button
                           onClick={() => handleExport('csv')}
-                          className="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm font-medium"
+                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <FileDown className="w-4 h-4" />
-                          <span>Export CSV</span>
+                          <span>CSV</span>
                         </button>
 
-                        <label className="bg-white border rounded px-3 py-2 text-sm cursor-pointer">
-                          Import JSON
+                        <label className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer">
+                          <Upload className="w-4 h-4" />
+                          <span>Import</span>
                           <input
                             type="file"
                             accept="application/json"
@@ -3147,18 +3296,16 @@ ${earnings.earnings
 
                         <button
                           onClick={() => setShowAdd(a => !a)}
-                          className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm font-medium"
+                          className={`flex items-center justify-center w-11 h-11 rounded-xl transition-all ${showAdd ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-[#eab308]/10 text-[#eab308] border border-[#eab308]/20 hover:bg-[#eab308]/20'}`}
                         >
-                          {showAdd ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                          <span>{showAdd ? 'Close Add' : 'Add Activity'}</span>
+                          {showAdd ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                         </button>
-
                       </div>
                     </div>
 
                     {showAdd && (
-                      <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
-                        <h3 className="text-lg font-medium text-gray-900 mb-3">Add Activity</h3>
+                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-lg mb-8">
+                        <h3 className="text-lg font-bold text-white mb-4">Add Manual Activity</h3>
                         <form
                           onSubmit={async (e) => {
                             e.preventDefault();
@@ -3193,25 +3340,25 @@ ${earnings.earnings
                             }
                           }}
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <input
                               required
                               value={newActivity.riderId}
                               onChange={(e) => setNewActivity((s) => ({ ...s, riderId: e.target.value }))}
                               placeholder="Rider ID (e.g. RD-001)"
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               required
                               value={newActivity.riderName}
                               onChange={(e) => setNewActivity((s) => ({ ...s, riderName: e.target.value }))}
                               placeholder="Rider Name"
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <select
                               value={newActivity.type}
                               onChange={(e) => setNewActivity((s) => ({ ...s, type: e.target.value }))}
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             >
                               <option value="order_assigned">Order Assigned</option>
                               <option value="pickup_completed">Pickup Completed</option>
@@ -3224,278 +3371,293 @@ ${earnings.earnings
                             </select>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
                             <input
                               value={newActivity.orderId}
                               onChange={(e) => setNewActivity((s) => ({ ...s, orderId: e.target.value }))}
                               placeholder="Order ID (optional)"
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               required
                               value={newActivity.description}
                               onChange={(e) => setNewActivity((s) => ({ ...s, description: e.target.value }))}
                               placeholder="Description"
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               type="number"
                               value={newActivity.amount || ''}
                               onChange={(e) => setNewActivity((s) => ({ ...s, amount: Number(e.target.value) }))}
                               placeholder="Amount (optional)"
-                              className="border border-gray-300 rounded px-3 py-2"
+                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                           </div>
 
-                          <div className="mt-4 flex items-center gap-2">
-                            <button type="submit" className="bg-rocs-green text-white px-4 py-2 rounded hover:bg-rocs-green-dark">Add Activity</button>
-                            <button type="button" onClick={() => setShowAdd(false)} className="bg-gray-200 px-4 py-2 rounded">Cancel</button>
+                          <div className="mt-6 flex flex-wrap gap-3">
+                            <button type="submit" className="bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all">Add Activity</button>
+                            <button type="button" onClick={() => setShowAdd(false)} className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-white/5 px-6 py-2.5 rounded-xl transition-all font-bold text-sm">Cancel</button>
                           </div>
                         </form>
                       </div>
                     )}
 
                     {/* Activity Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">47</div>
-                        <div className="text-sm text-blue-600">
-                          Today's Activities
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-orange-500/20 transition-all text-center">
+                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Today's</div>
+                        <div className="text-4xl sm:text-5xl font-black text-orange-400 mb-2">47</div>
+                        <div className="text-xs font-bold text-[#596960] tracking-widest uppercase">Activities</div>
+                      </div>
+                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Deliveries</div>
+                        <div className="text-4xl sm:text-5xl font-black text-green-400 mb-2">23</div>
+                        <div className="text-xs font-bold text-green-500/70 tracking-widest uppercase">Completed</div>
+                      </div>
+                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/20 transition-all text-center">
+                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Payments</div>
+                        <div className="text-4xl sm:text-5xl font-black text-[#eab308] mb-2">KSh 5k</div>
+                        <div className="text-xs font-bold text-[#596960] tracking-widest uppercase">Settled</div>
+                      </div>
+                    </div>
+
+                    {/* Filters */}
+                    <div className="bg-[#112417] p-6 rounded-[24px] shadow-lg border border-[#ffffff05]">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                            Filter by Rider
+                          </label>
+                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                            <option value="">All Riders</option>
+                            <option value="RD-001">John Mwangi</option>
+                            <option value="RD-002">Peter Kimani</option>
+                            <option value="RD-003">James Mwangi</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                            Activity Type
+                          </label>
+                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                            <option value="">All Types</option>
+                            <option value="delivery_completed">
+                              Deliveries Completed
+                            </option>
+                            <option value="payment_received">
+                              Payments Received
+                            </option>
+                            <option value="order_assigned">Orders Assigned</option>
+                            <option value="pickup_completed">
+                              Pickups Completed
+                            </option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                            Date Range
+                          </label>
+                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="all">All Time</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                            Search Order ID
+                          </label>
+                          <div className="relative">
+                            <Search className="w-4 h-4 text-[#596960] absolute left-4 top-1/2 -translate-y-1/2" />
+                            <input
+                              type="text"
+                              placeholder="e.g. RC-2024-001"
+                              className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-[#eab308]"
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">23</div>
-                        <div className="text-sm text-green-600">Deliveries</div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-purple-600">5</div>
-                        <div className="text-sm text-purple-600">Payments</div>
-                      </div>
-                      <div className="bg-orange-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-orange-600">18</div>
-                        <div className="text-sm text-orange-600">Pickups</div>
-                      </div>
-                      <div className="bg-yellow-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-yellow-600">12</div>
-                        <div className="text-sm text-yellow-600">Active Riders</div>
-                      </div>
-                      <div className="bg-red-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-red-600">156</div>
-                        <div className="text-sm text-red-600">Total Activities</div>
-                      </div>
                     </div>
-                  </div>
 
-                  {/* Filters */}
-                  <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Filter by Rider
-                        </label>
-                        <select className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green">
-                          <option value="">All Riders</option>
-                          <option value="RD-001">John Mwangi</option>
-                          <option value="RD-002">Peter Kimani</option>
-                          <option value="RD-003">James Mwangi</option>
-                        </select>
+                    {/* Activity Timeline */}
+                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                      <div className="px-6 py-5 border-b border-[#ffffff0a] flex items-center justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-1">
+                            Live Activity Timeline
+                          </h3>
+                          <p className="text-sm text-[#8b9d93]">
+                            Real-time tracking of all rider activities and earnings
+                          </p>
+                        </div>
+                        <div className="hidden sm:flex items-center space-x-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
+                          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                          <span className="text-xs font-bold text-green-400 tracking-widest uppercase">Live</span>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Activity Type
-                        </label>
-                        <select className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green">
-                          <option value="">All Types</option>
-                          <option value="delivery_completed">
-                            Deliveries Completed
-                          </option>
-                          <option value="payment_received">
-                            Payments Received
-                          </option>
-                          <option value="order_assigned">Orders Assigned</option>
-                          <option value="pickup_completed">
-                            Pickups Completed
-                          </option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Date Range
-                        </label>
-                        <select className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green">
-                          <option value="today">Today</option>
-                          <option value="week">This Week</option>
-                          <option value="month">This Month</option>
-                          <option value="all">All Time</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Search Order ID
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. RC-2024-001"
-                          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-rocs-green"
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Activity Timeline */}
-                  <div className="bg-white rounded-lg shadow border border-gray-200">
-                    <div className="px-6 py-4 border-b border-gray-200">
-                      <h3 className="text-lg font-medium text-gray-900">
-                        Live Activity Timeline
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Real-time tracking of all rider activities and earnings
-                      </p>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-4">
-                        {isLoading ? (
-                          <CardSkeleton />
-                        ) : activities.length === 0 ? (
-                          <div className="text-sm text-gray-500 py-12 text-center">No activities yet</div>
-                        ) : (
-                          activities.map((activity) => (
-                            <div
-                              key={activity.id}
-                              className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                            >
-                              <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${activity.type === 'delivery_completed' ? 'bg-green-500' :
-                                  activity.type === 'pickup_completed' ? 'bg-orange-500' :
-                                    activity.type === 'payment_received' ? 'bg-purple-500' :
-                                      activity.type === 'order_assigned' ? 'bg-blue-500' : 'bg-gray-500'
-                                  }`}
-                              >
-                                <span className="text-lg">{activity.type === 'delivery_completed' ? '✅' : activity.type === 'pickup_completed' ? '📦' : activity.type === 'payment_received' ? '💰' : activity.type === 'order_assigned' ? '🏍️' : '•'}</span>
+                      <div className="p-6">
+                        <div className="space-y-4">
+                          {isLoading ? (
+                            <CardSkeleton />
+                          ) : activities.length === 0 ? (
+                            <div className="bg-[#0a110d] rounded-[24px] border border-dashed border-[#ffffff15] p-12 text-center my-8">
+                              <div className="w-16 h-16 bg-[#112417] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#eab308]/20">
+                                <RefreshCw className="w-8 h-8 text-[#eab308]" />
                               </div>
-
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between mb-1">
-                                  <h4 className="text-sm font-medium text-gray-900">
-                                    {activity.riderName || activity.metadata?.riderName || activity.riderId}
-                                  </h4>
-                                  <span className="text-xs text-gray-500">
-                                    {new Date(activity.timestamp).toLocaleString()}
+                              <h3 className="text-lg font-bold text-white mb-2">
+                                No activities yet
+                              </h3>
+                              <p className="text-[#8b9d93] text-sm">
+                                Waiting for rider logs to sync...
+                              </p>
+                            </div>
+                          ) : (
+                            activities.map((activity) => (
+                              <div
+                                key={activity.id}
+                                className="flex items-start space-x-4 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05] hover:border-[#ffffff15] transition-all"
+                              >
+                                <div
+                                  className={`w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg ${activity.type === 'delivery_completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                      activity.type === 'pickup_completed' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
+                                        activity.type === 'payment_received' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
+                                          activity.type === 'order_assigned' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                    }`}
+                                >
+                                  <span className="text-xl">
+                                    {activity.type === 'delivery_completed' ? '✅' : activity.type === 'pickup_completed' ? '📦' : activity.type === 'payment_received' ? '💰' : activity.type === 'order_assigned' ? '🏍️' : '•'}
                                   </span>
                                 </div>
 
-                                <p className="text-sm text-gray-600 mb-2">
-                                  {activity.description}
-                                </p>
-
-                                {activity.netEarning && (
-                                  <div className="bg-white rounded p-3 border border-gray-200">
-                                    <div className="grid grid-cols-3 gap-4 text-xs">
-                                      <div>
-                                        <span className="text-gray-500">
-                                          Order Amount:
-                                        </span>
-                                        <div className="font-semibold text-gray-900">
-                                          KES {activity.amount?.toLocaleString?.()}
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500">
-                                          Company (20%):
-                                        </span>
-                                        <div className="font-semibold text-red-600">
-                                          -KES {activity.commission?.toFixed?.(2)}
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500">
-                                          Rider Net (80%):
-                                        </span>
-                                        <div className="font-semibold text-green-600">
-                                          +KES {activity.netEarning?.toFixed?.(2)}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {activity.amount && !activity.netEarning && (
-                                  <div className="bg-white rounded p-3 border border-gray-200">
-                                    <span className="text-xs text-gray-500">
-                                      Payment Amount:
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
+                                    <h4 className="text-base font-bold text-white">
+                                      {activity.riderName || activity.metadata?.riderName || activity.riderId}
+                                    </h4>
+                                    <span className="text-xs text-[#8b9d93] font-mono whitespace-nowrap">
+                                      {new Date(activity.timestamp).toLocaleString()}
                                     </span>
-                                    <div className="font-semibold text-purple-600">
-                                      -KES {activity.amount?.toLocaleString?.()}
-                                    </div>
                                   </div>
-                                )}
-                              </div>
 
-                              <div className="flex flex-col items-end space-y-1">
-                                <span
-                                  className={`px-2 py-1 text-xs font-medium rounded-full ${activity.type === 'delivery_completed' ? 'bg-green-100 text-green-800' :
-                                    activity.type === 'pickup_completed' ? 'bg-orange-100 text-orange-800' :
-                                      activity.type === 'payment_received' ? 'bg-purple-100 text-purple-800' :
-                                        activity.type === 'order_assigned' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                                    }`}
-                                >
-                                  {activity.type.replace('_', ' ')}
-                                </span>
-                                <span className="text-xs text-gray-500">
-                                  {activity.riderId}
-                                </span>
+                                  <p className="text-sm text-gray-300 leading-relaxed mb-3">
+                                    {activity.description}
+                                  </p>
 
-                                <div className="mt-2 flex items-center space-x-2">
-                                  <button
-                                    onClick={async () => {
-                                      if (!confirm('Delete this activity?')) return;
-                                      try {
-                                        const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/${activity.id}`, { method: 'DELETE' });
-                                        if (res.ok) {
-                                          alert('Activity deleted');
-                                          await fetchActivities();
-                                        } else {
-                                          const data = await res.json().catch(() => ({}));
-                                          alert('Failed to delete activity: ' + (data.error || 'Unknown'));
-                                        }
-                                      } catch (err) {
-                                        console.error('Error deleting activity', err);
-                                        alert('Failed to delete activity');
-                                      }
-                                    }}
-                                    className="flex items-center space-x-1 text-red-500 hover:text-red-700 p-2 text-sm transition-colors"
+                                  {activity.netEarning && (
+                                    <div className="bg-[#112417] rounded-xl p-4 border border-[#ffffff0a]">
+                                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                                        <div>
+                                          <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1">
+                                            Order Amount
+                                          </span>
+                                          <div className="font-bold text-white">
+                                            KES {activity.amount?.toLocaleString?.()}
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1">
+                                            Company (20%)
+                                          </span>
+                                          <div className="font-bold text-red-400">
+                                            -KES {activity.commission?.toFixed?.(2)}
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1">
+                                            Rider Net (80%)
+                                          </span>
+                                          <div className="font-bold text-green-400">
+                                            +KES {activity.netEarning?.toFixed?.(2)}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {activity.amount && !activity.netEarning && (
+                                    <div className="bg-[#112417] rounded-xl p-4 border border-[#ffffff0a] inline-block mt-1">
+                                      <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1 text-xs">
+                                        Payment Amount
+                                      </span>
+                                      <div className="font-bold text-purple-400">
+                                        -KES {activity.amount?.toLocaleString?.()}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="flex flex-col items-end space-y-2 shrink-0 ml-4 hidden sm:flex">
+                                  <span
+                                    className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${activity.type === 'delivery_completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                        activity.type === 'pickup_completed' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                          activity.type === 'payment_received' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                            activity.type === 'order_assigned' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                                      }`}
                                   >
-                                    <Trash2 className="w-4 h-4" />
-                                    <span>Delete</span>
-                                  </button>
+                                    {activity.type.replace('_', ' ')}
+                                  </span>
+                                  <span className="text-xs text-[#596960] font-mono tracking-wider">
+                                    {activity.riderId}
+                                  </span>
+
+                                  <div className="mt-2 pt-2 border-t border-[#ffffff0a]">
+                                    <button
+                                      onClick={async () => {
+                                        if (!confirm('Delete this activity?')) return;
+                                        try {
+                                          const res = await fetch(`${API_BASE_URL}/api/admin/rider-activities/${activity.id}`, { method: 'DELETE' });
+                                          if (res.ok) {
+                                            alert('Activity deleted');
+                                            await fetchActivities();
+                                          } else {
+                                            const data = await res.json().catch(() => ({}));
+                                            alert('Failed to delete activity: ' + (data.error || 'Unknown'));
+                                          }
+                                        } catch (err) {
+                                          console.error('Error deleting activity', err);
+                                          alert('Failed to delete activity');
+                                        }
+                                      }}
+                                      className="flex items-center space-x-1 text-red-500/70 hover:text-red-400 text-sm transition-colors py-1 px-2 rounded hover:bg-white/5"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                      <span>Delete</span>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )))}
-                      </div>
+                            )))}
+                        </div>
 
-                      {/* Load More Button */}
-                      <div className="text-center mt-6">
-                        <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2 rounded-lg transition-colors">
-                          Load More Activities
-                        </button>
+                        {/* Load More Button */}
+                        {!isLoading && activities.length > 0 && (
+                          <div className="text-center mt-8">
+                            <button className="bg-transparent hover:bg-white/5 text-white border border-[#ffffff15] px-6 py-2.5 rounded-xl transition-all font-bold text-sm">
+                              Load More Activities
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
-
-            {/* Withdrawal Requests Tab */}
-            {activeTab === "withdrawal-requests" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Withdrawal Requests Management
-                      </h2>
+                </AnimatedPage>
+              )}
+              {/* Withdrawal Requests Tab */}
+              {activeTab === "withdrawal-requests" && (
+                <AnimatedPage>
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
+                      <div>
+                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                          Withdrawal Requests
+                        </h2>
+                        <div className="text-[#8b9d93] text-sm">
+                          Manage and process rider withdrawal requests.
+                        </div>
+                      </div>
                       <button
                         onClick={async () => {
                           setIsLoading(true);
@@ -3517,502 +3679,517 @@ ${earnings.earnings
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
-                        {isLoading ? (
-                          <RefreshCw className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <RefreshCw className="w-4 h-4" />
-                        )}
-                        <span>
-                          {isLoading ? "Refreshing..." : "Refresh Requests"}
-                        </span>
+                        <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        <span>Refresh Requests</span>
                       </button>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="bg-yellow-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-yellow-600">3</div>
-                        <div className="text-sm text-yellow-600">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#eab308]/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/40 transition-all text-center">
+                        <div className="text-4xl font-black text-[#eab308] mb-2">3</div>
+                        <div className="text-xs font-bold text-[#eab308]/70 tracking-widest uppercase">
                           Pending Requests
                         </div>
                       </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">12</div>
-                        <div className="text-sm text-green-600">Approved Today</div>
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all text-center">
+                        <div className="text-4xl font-black text-green-500 mb-2">12</div>
+                        <div className="text-xs font-bold text-green-500/70 tracking-widest uppercase">Approved Today</div>
                       </div>
-                      <div className="bg-red-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-red-600">2</div>
-                        <div className="text-sm text-red-600">Rejected</div>
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-red-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-red-500/40 transition-all text-center">
+                        <div className="text-4xl font-black text-red-500 mb-2">2</div>
+                        <div className="text-xs font-bold text-red-500/70 tracking-widest uppercase">Rejected</div>
                       </div>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">
+                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-blue-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-blue-500/40 transition-all text-center">
+                        <div className="text-3xl font-black text-blue-400 mb-2 whitespace-nowrap">
                           KES 25,480
                         </div>
-                        <div className="text-sm text-blue-600">Total Requested</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Fee Calculator */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
-                      Withdrawal Fee Calculator
-                    </h3>
-                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="font-medium text-blue-800 mb-2">
-                            Fee Structure:
-                          </h4>
-                          <ul className="text-sm text-blue-700 space-y-1">
-                            <li>
-                              • Below KES 1,000: <strong>KES 20 fee</strong>
-                            </li>
-                            <li>
-                              • KES 1,000 and above: <strong>KES 50 fee</strong>
-                            </li>
-                            <li>• Fees are deducted from withdrawal amount</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-blue-800 mb-2">
-                            Examples:
-                          </h4>
-                          <ul className="text-sm text-blue-700 space-y-1">
-                            <li>• Request KES 800 → Get KES 780 (KES 20 fee)</li>
-                            <li>
-                              • Request KES 1,500 → Get KES 1,450 (KES 50 fee)
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Withdrawal Requests List */}
-                  <div className="bg-white rounded-lg shadow border border-gray-200">
-                    <div className="px-6 py-4 border-b border-gray-200">
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          Recent Withdrawal Requests
-                        </h3>
-                        <div className="flex space-x-2">
-                          <select className="border border-gray-300 rounded px-3 py-1 text-sm">
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="processed">Processed</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-4">
-                        {isLoading ? (
-                          <CardSkeleton />
-                        ) : (
-                          [
-                            {
-                              id: "WR-001",
-                              rider: "John Mwangi",
-                              riderId: "RD-001",
-                              phone: "+254 712 345 678",
-                              amount: 800,
-                              fee: 20,
-                              netAmount: 780,
-                              status: "pending",
-                              requestedAt: "2 hours ago",
-                              notes: "Need funds for motorcycle maintenance",
-                            },
-                            {
-                              id: "WR-002",
-                              rider: "Peter Kimani",
-                              riderId: "RD-002",
-                              phone: "+254 700 123 456",
-                              amount: 1500,
-                              fee: 50,
-                              netAmount: 1450,
-                              status: "pending",
-                              requestedAt: "4 hours ago",
-                              notes: "Emergency medical expenses",
-                            },
-                          ].map((request) => (
-                            <div
-                              key={request.id}
-                              className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                            >
-                              <div className="flex justify-between items-start mb-3">
-                                <div className="flex items-center space-x-4">
-                                  <div className="w-10 h-10 bg-rocs-green rounded-full flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">
-                                      {request.rider
-                                        .split(" ")
-                                        .map((n) => n[0])
-                                        .join("")}
-                                    </span>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold text-gray-900">
-                                      {request.rider}
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                      {request.riderId} • {request.phone}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                      {request.requestedAt}
-                                    </p>
-                                  </div>
-                                </div>
-                                <span
-                                  className={`px-3 py-1 text-sm font-medium rounded-full ${request.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : request.status === "approved"
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-red-100 text-red-800"
-                                    }`}
-                                >
-                                  {request.status}
-                                </span>
-                              </div>
-
-                              {/* Amount Breakdown */}
-                              <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                                <div className="grid grid-cols-3 gap-4 text-sm">
-                                  <div>
-                                    <span className="text-gray-500">
-                                      Requested Amount:
-                                    </span>
-                                    <div className="font-semibold text-gray-900">
-                                      KES {request.amount.toLocaleString()}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <span className="text-gray-500">
-                                      Withdrawal Fee:
-                                    </span>
-                                    <div className="font-semibold text-red-600">
-                                      -KES {request.fee}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <span className="text-gray-500">Net Amount:</span>
-                                    <div className="font-semibold text-green-600">
-                                      KES {request.netAmount.toLocaleString()}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {request.notes && (
-                                <div className="mb-3 p-2 bg-blue-50 rounded border border-blue-200">
-                                  <span className="text-xs text-blue-600 font-medium">
-                                    Notes:
-                                  </span>
-                                  <p className="text-sm text-blue-700 mt-1">
-                                    {request.notes}
-                                  </p>
-                                </div>
-                              )}
-
-                              {/* Actions */}
-                              {request.status === "pending" && (
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() => {
-                                      if (
-                                        confirm(
-                                          `Approve withdrawal of KES ${request.amount} for ${request.rider}?`,
-                                        )
-                                      ) {
-                                        alert(
-                                          `✅ Withdrawal approved for ${request.rider}\nNet amount: KES ${request.netAmount}`,
-                                        );
-                                      }
-                                    }}
-                                    className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700 transition-colors"
-                                  >
-                                    ✅ Approve
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      const reason = prompt("Reason for rejection:");
-                                      if (reason) {
-                                        alert(
-                                          `❌ Withdrawal rejected for ${request.rider}\nReason: ${reason}`,
-                                        );
-                                      }
-                                    }}
-                                    className="bg-red-600 text-white px-4 py-2 rounded text-sm hover:bg-red-700 transition-colors"
-                                  >
-                                    ❌ Reject
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          )))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </AnimatedPage>
-            )}
-
-            {/* Automated Payments Tab */}
-            {activeTab === "automated-payments" && (
-              <AnimatedPage>
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Automated Payment System
-                      </h2>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => {
-                            if (
-                              confirm(
-                                "Trigger automated payments now? This will pay all riders with balance.",
-                              )
-                            ) {
-                              alert("🚀 Automated payments triggered manually!");
-                            }
-                          }}
-                          className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
-                        >
-                          <Zap className="w-4 h-4" />
-                          <span>Trigger Now</span>
-                        </button>
-                        <button className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors">
-                          <TrendingUp className="w-4 h-4" />
-                          <span>View Reports</span>
-                        </button>
+                        <div className="text-xs font-bold text-blue-400/70 tracking-widest uppercase">Total Requested</div>
                       </div>
                     </div>
 
-                    {/* Scheduler Status */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-green-800 font-medium">
-                            Scheduler Active
-                          </span>
-                        </div>
-                        <p className="text-sm text-green-600 mt-1">
-                          Next payment: Today at 23:00
-                        </p>
-                      </div>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">15</div>
-                        <div className="text-sm text-blue-600">Riders Eligible</div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-purple-600">
-                          KES 45,290
-                        </div>
-                        <div className="text-sm text-purple-600">Total Pending</div>
-                      </div>
-                    </div>
-
-                    {/* Payment Settings */}
-                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                      <h3 className="font-medium text-yellow-800 mb-2">
-                        📅 Automated Payment Schedule
+                    {/* Fee Calculator */}
+                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#ffffff05]">
+                      <h3 className="text-lg font-bold text-white mb-6 flex items-center">
+                        <span className="w-8 h-8 rounded-full bg-[#0a110d] flex items-center justify-center mr-3 border border-[#ffffff10]">🧮</span>
+                        Withdrawal Fee Calculator
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-yellow-700">
-                        <div>
-                          <ul className="space-y-1">
-                            <li>
-                              • <strong>Daily Schedule:</strong> 23:00 hrs (11 PM)
-                            </li>
-                            <li>
-                              • <strong>Payment Method:</strong> M-Pesa to
-                              registered phone
-                            </li>
-                            <li>
-                              • <strong>Eligibility:</strong> Approved riders with
-                              balance
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <ul className="space-y-1">
-                            <li>
-                              • <strong>Processing Time:</strong> 2-5 minutes per
-                              rider
-                            </li>
-                            <li>
-                              • <strong>Retry Policy:</strong> 3 attempts for failed
-                              payments
-                            </li>
-                            <li>
-                              • <strong>Notification:</strong> SMS + Email
-                              confirmation
-                            </li>
-                          </ul>
+                      <div className="bg-[#0a110d] p-6 rounded-2xl border border-blue-500/20">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div>
+                            <h4 className="font-bold text-blue-400 mb-4 text-sm tracking-wider uppercase">
+                              Fee Structure
+                            </h4>
+                            <ul className="text-sm text-gray-300 space-y-3">
+                              <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
+                                Below KES 1,000: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 20 fee</strong>
+                              </li>
+                              <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
+                                KES 1,000 and above: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 50 fee</strong>
+                              </li>
+                              <li className="flex items-center text-[#8b9d93]">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#596960] mr-3"></span>
+                                Fees are deducted from withdrawal amount
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-blue-400 mb-4 text-sm tracking-wider uppercase">
+                              Examples
+                            </h4>
+                            <ul className="text-sm text-gray-300 space-y-3">
+                              <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
+                                <div className="flex-1">Request <span className="text-white font-bold">KES 800</span></div>
+                                <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
+                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 780</span> <span className="text-[#8b9d93] text-xs block">(KES 20 fee)</span></div>
+                              </li>
+                              <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
+                                <div className="flex-1">Request <span className="text-white font-bold">KES 1,500</span></div>
+                                <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
+                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 1,450</span> <span className="text-[#8b9d93] text-xs block">(KES 50 fee)</span></div>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Payment History Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-600">156</div>
-                        <div className="text-sm text-gray-600">Total Payments</div>
-                      </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">
-                          98.7%
+                    {/* Withdrawal Requests List */}
+                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                      <div className="px-6 py-5 border-b border-[#ffffff0a]">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                          <h3 className="text-lg font-bold text-white">
+                            Recent Withdrawal Requests
+                          </h3>
+                          <div className="flex items-center">
+                            <label className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider mr-3 hidden sm:block">Status</label>
+                            <select className="bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-2 focus:outline-none focus:border-[#eab308] text-sm">
+                              <option value="all">All Status</option>
+                              <option value="pending">Pending</option>
+                              <option value="approved">Approved</option>
+                              <option value="rejected">Rejected</option>
+                              <option value="processed">Processed</option>
+                            </select>
+                          </div>
                         </div>
-                        <div className="text-sm text-green-600">Success Rate</div>
                       </div>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">23</div>
-                        <div className="text-sm text-blue-600">
-                          Today's Payments
-                        </div>
-                      </div>
-                      <div className="bg-red-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-red-600">2</div>
-                        <div className="text-sm text-red-600">Failed Payments</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Recent Automated Payments */}
-                  <div className="bg-white rounded-lg shadow border border-gray-200">
-                    <div className="px-6 py-4 border-b border-gray-200">
-                      <h3 className="text-lg font-medium text-gray-900">
-                        Recent Automated Payments
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Payments processed automatically at 23:00 daily
-                      </p>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-4">
-                        {isLoading ? (
-                          <CardSkeleton />
-                        ) : (
-                          [
-                            {
-                              id: "AP-001",
-                              rider: "John Mwangi",
-                              phone: "+254712345678",
-                              amount: 2480,
-                              status: "success",
-                              transactionId: "MP2024001234",
-                              processedAt: "23:00 Today",
-                            },
-                            {
-                              id: "AP-002",
-                              rider: "Peter Kimani",
-                              phone: "+254700123456",
-                              amount: 1890,
-                              status: "success",
-                              transactionId: "MP2024001235",
-                              processedAt: "23:01 Today",
-                            },
-                            {
-                              id: "AP-003",
-                              rider: "James Mwangi",
-                              phone: "+254701987654",
-                              amount: 3460,
-                              status: "failed",
-                              transactionId: null,
-                              error: "M-Pesa timeout",
-                              processedAt: "23:02 Today",
-                            },
-                          ].map((payment) => (
-                            <div
-                              key={payment.id}
-                              className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                            >
-                              <div className="flex justify-between items-start">
-                                <div className="flex items-center space-x-4">
-                                  <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${payment.status === "success"
-                                      ? "bg-green-500"
-                                      : "bg-red-500"
-                                      }`}
-                                  >
-                                    <span className="text-white text-lg">
-                                      {payment.status === "success" ? "✅" : "❌"}
-                                    </span>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold text-gray-900">
-                                      {payment.rider}
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                      {payment.phone}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                      {payment.processedAt}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="text-right">
-                                  <div className="text-lg font-bold text-gray-900">
-                                    KES {payment.amount.toLocaleString()}
+                      <div className="p-6">
+                        <div className="space-y-4">
+                          {isLoading ? (
+                            <CardSkeleton />
+                          ) : (
+                            [
+                              {
+                                id: "WR-001",
+                                rider: "John Mwangi",
+                                riderId: "RD-001",
+                                phone: "+254 712 345 678",
+                                amount: 800,
+                                fee: 20,
+                                netAmount: 780,
+                                status: "pending",
+                                requestedAt: "2 hours ago",
+                                notes: "Need funds for motorcycle maintenance",
+                              },
+                              {
+                                id: "WR-002",
+                                rider: "Peter Kimani",
+                                riderId: "RD-002",
+                                phone: "+254 700 123 456",
+                                amount: 1500,
+                                fee: 50,
+                                netAmount: 1450,
+                                status: "pending",
+                                requestedAt: "4 hours ago",
+                                notes: "Emergency medical expenses",
+                              },
+                            ].map((request) => (
+                              <div
+                                key={request.id}
+                                className="bg-[#0a110d] border border-[#ffffff05] rounded-[20px] p-6 hover:border-[#ffffff15] transition-all relative overflow-hidden"
+                              >
+                                {request.status === 'pending' && (
+                                  <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 blur-3xl pointer-events-none rounded-full" />
+                                )}
+                                <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
+                                  <div className="flex items-center space-x-4">
+                                    <div className="w-12 h-12 bg-[#112417] border border-[#ffffff10] rounded-full flex items-center justify-center">
+                                      <span className="text-white font-bold text-lg">
+                                        {request.rider
+                                          .split(" ")
+                                          .map((n) => n[0])
+                                          .join("")}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <h4 className="font-bold text-white text-lg">
+                                        {request.rider}
+                                      </h4>
+                                      <p className="text-sm text-[#8b9d93] font-mono mt-0.5">
+                                        {request.riderId} • <span className="text-white">{request.phone}</span>
+                                      </p>
+                                      <p className="text-xs text-[#596960] flex items-center mt-1.5 font-mono">
+                                        <Clock className="w-3.5 h-3.5 mr-1" />
+                                        {request.requestedAt}
+                                      </p>
+                                    </div>
                                   </div>
                                   <span
-                                    className={`px-2 py-1 text-xs font-medium rounded-full ${payment.status === "success"
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-red-100 text-red-800"
+                                    className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${request.status === "pending"
+                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                        : request.status === "approved"
+                                          ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                          : "bg-red-500/10 text-red-500 border-red-500/20"
                                       }`}
                                   >
-                                    {payment.status}
+                                    {request.status}
                                   </span>
                                 </div>
+
+                                {/* Amount Breakdown */}
+                                <div className="bg-[#112417] rounded-2xl p-4 sm:p-5 mb-5 border border-[#ffffff0a]">
+                                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    <div>
+                                      <span className="text-xs font-bold text-[#596960] uppercase tracking-wider block mb-2">
+                                        Requested Amount
+                                      </span>
+                                      <div className="text-lg font-bold text-white">
+                                        KES {request.amount.toLocaleString()}
+                                      </div>
+                                    </div>
+                                    <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6">
+                                      <span className="text-xs font-bold text-[#596960] uppercase tracking-wider block mb-2">
+                                        Withdrawal Fee
+                                      </span>
+                                      <div className="text-lg font-bold text-red-400">
+                                        -KES {request.fee}
+                                      </div>
+                                    </div>
+                                    <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6 bg-[#0a110d] sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none">
+                                      <span className="text-xs font-bold text-[#eab308] uppercase tracking-wider block mb-1 sm:mb-2">Net Amount</span>
+                                      <div className="text-2xl font-black text-green-400">
+                                        KES {request.netAmount.toLocaleString()}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {request.notes && (
+                                  <div className="mb-6 p-4 bg-[#112417] rounded-2xl border border-blue-500/20 inline-flex items-start max-w-full">
+                                    <MessageSquare className="w-4 h-4 text-blue-400 mr-3 mt-0.5 shrink-0" />
+                                    <div>
+                                      <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block mb-1">
+                                        Rider Notes
+                                      </span>
+                                      <p className="text-sm text-gray-300 italic">
+                                        "{request.notes}"
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Actions */}
+                                {request.status === "pending" && (
+                                  <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-[#ffffff0a]">
+                                    <button
+                                      onClick={() => {
+                                        if (
+                                          confirm(
+                                            `Approve withdrawal of KES ${request.amount} for ${request.rider}?`,
+                                          )
+                                        ) {
+                                          alert(
+                                            `✅ Withdrawal approved for ${request.rider}\nNet amount: KES ${request.netAmount}`,
+                                          );
+                                        }
+                                      }}
+                                      className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg flex items-center space-x-2"
+                                    >
+                                      <CheckCircle className="w-4 h-4" />
+                                      <span>Approve</span>
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        const reason = prompt("Reason for rejection:");
+                                        if (reason) {
+                                          alert(
+                                            `❌ Withdrawal rejected for ${request.rider}\nReason: ${reason}`,
+                                          );
+                                        }
+                                      }}
+                                      className="bg-transparent border border-red-500/30 text-red-400 hover:bg-red-500/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
+                                    >
+                                      <X className="w-4 h-4" />
+                                      <span>Reject</span>
+                                    </button>
+                                  </div>
+                                )}
                               </div>
-
-                              {payment.transactionId && (
-                                <div className="mt-3 p-2 bg-green-50 rounded border border-green-200">
-                                  <span className="text-xs text-green-600 font-medium">
-                                    Transaction ID:
-                                  </span>
-                                  <span className="text-sm text-green-700 ml-2">
-                                    {payment.transactionId}
-                                  </span>
-                                </div>
-                              )}
-
-                              {payment.error && (
-                                <div className="mt-3 p-2 bg-red-50 rounded border border-red-200">
-                                  <span className="text-xs text-red-600 font-medium">
-                                    Error:
-                                  </span>
-                                  <span className="text-sm text-red-700 ml-2">
-                                    {payment.error}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          )))}
+                            )))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </AnimatedPage>
-            )}
-          </div>
-        </PullToRefresh>
-      </div>
+                </AnimatedPage>
+              )}
+              {/* Automated Payments Tab */}
+              {activeTab === "automated-payments" && (
+                <AnimatedPage>
+                  <div className="space-y-6">
+                    {/* Header */}
+                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-gray-900">
+                          Automated Payment System
+                        </h2>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  "Trigger automated payments now? This will pay all riders with balance.",
+                                )
+                              ) {
+                                alert("🚀 Automated payments triggered manually!");
+                              }
+                            }}
+                            className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+                          >
+                            <Zap className="w-4 h-4" />
+                            <span>Trigger Now</span>
+                          </button>
+                          <button className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors">
+                            <TrendingUp className="w-4 h-4" />
+                            <span>View Reports</span>
+                          </button>
+                        </div>
+                      </div>
 
-      {/* Overlay for mobile sidebar */}
-      {
-        sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          ></div>
-        )
-      }
+                      {/* Scheduler Status */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-green-800 font-medium">
+                              Scheduler Active
+                            </span>
+                          </div>
+                          <p className="text-sm text-green-600 mt-1">
+                            Next payment: Today at 23:00
+                          </p>
+                        </div>
+                        <div className="bg-blue-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-blue-600">15</div>
+                          <div className="text-sm text-blue-600">Riders Eligible</div>
+                        </div>
+                        <div className="bg-purple-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-purple-600">
+                            KES 45,290
+                          </div>
+                          <div className="text-sm text-purple-600">Total Pending</div>
+                        </div>
+                      </div>
+
+                      {/* Payment Settings */}
+                      <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h3 className="font-medium text-yellow-800 mb-2">
+                          📅 Automated Payment Schedule
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-yellow-700">
+                          <div>
+                            <ul className="space-y-1">
+                              <li>
+                                • <strong>Daily Schedule:</strong> 23:00 hrs (11 PM)
+                              </li>
+                              <li>
+                                • <strong>Payment Method:</strong> M-Pesa to
+                                registered phone
+                              </li>
+                              <li>
+                                • <strong>Eligibility:</strong> Approved riders with
+                                balance
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <ul className="space-y-1">
+                              <li>
+                                • <strong>Processing Time:</strong> 2-5 minutes per
+                                rider
+                              </li>
+                              <li>
+                                • <strong>Retry Policy:</strong> 3 attempts for failed
+                                payments
+                              </li>
+                              <li>
+                                • <strong>Notification:</strong> SMS + Email
+                                confirmation
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Payment History Stats */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-600">156</div>
+                          <div className="text-sm text-gray-600">Total Payments</div>
+                        </div>
+                        <div className="bg-green-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-green-600">
+                            98.7%
+                          </div>
+                          <div className="text-sm text-green-600">Success Rate</div>
+                        </div>
+                        <div className="bg-blue-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-blue-600">23</div>
+                          <div className="text-sm text-blue-600">
+                            Today's Payments
+                          </div>
+                        </div>
+                        <div className="bg-red-50 p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-red-600">2</div>
+                          <div className="text-sm text-red-600">Failed Payments</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Recent Automated Payments */}
+                    <div className="bg-white rounded-lg shadow border border-gray-200">
+                      <div className="px-6 py-4 border-b border-gray-200">
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Recent Automated Payments
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Payments processed automatically at 23:00 daily
+                        </p>
+                      </div>
+                      <div className="p-6">
+                        <div className="space-y-4">
+                          {isLoading ? (
+                            <CardSkeleton />
+                          ) : (
+                            [
+                              {
+                                id: "AP-001",
+                                rider: "John Mwangi",
+                                phone: "+254712345678",
+                                amount: 2480,
+                                status: "success",
+                                transactionId: "MP2024001234",
+                                processedAt: "23:00 Today",
+                              },
+                              {
+                                id: "AP-002",
+                                rider: "Peter Kimani",
+                                phone: "+254700123456",
+                                amount: 1890,
+                                status: "success",
+                                transactionId: "MP2024001235",
+                                processedAt: "23:01 Today",
+                              },
+                              {
+                                id: "AP-003",
+                                rider: "James Mwangi",
+                                phone: "+254701987654",
+                                amount: 3460,
+                                status: "failed",
+                                transactionId: null,
+                                error: "M-Pesa timeout",
+                                processedAt: "23:02 Today",
+                              },
+                            ].map((payment) => (
+                              <div
+                                key={payment.id}
+                                className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                              >
+                                <div className="flex justify-between items-start">
+                                  <div className="flex items-center space-x-4">
+                                    <div
+                                      className={`w-10 h-10 rounded-full flex items-center justify-center ${payment.status === "success"
+                                        ? "bg-green-500"
+                                        : "bg-red-500"
+                                        }`}
+                                    >
+                                      <span className="text-white text-lg">
+                                        {payment.status === "success" ? "✅" : "❌"}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <h4 className="font-semibold text-gray-900">
+                                        {payment.rider}
+                                      </h4>
+                                      <p className="text-sm text-gray-600">
+                                        {payment.phone}
+                                      </p>
+                                      <p className="text-xs text-gray-500">
+                                        {payment.processedAt}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="text-lg font-bold text-gray-900">
+                                      KES {payment.amount.toLocaleString()}
+                                    </div>
+                                    <span
+                                      className={`px-2 py-1 text-xs font-medium rounded-full ${payment.status === "success"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-red-100 text-red-800"
+                                        }`}
+                                    >
+                                      {payment.status}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {payment.transactionId && (
+                                  <div className="mt-3 p-2 bg-green-50 rounded border border-green-200">
+                                    <span className="text-xs text-green-600 font-medium">
+                                      Transaction ID:
+                                    </span>
+                                    <span className="text-sm text-green-700 ml-2">
+                                      {payment.transactionId}
+                                    </span>
+                                  </div>
+                                )}
+
+                                {payment.error && (
+                                  <div className="mt-3 p-2 bg-red-50 rounded border border-red-200">
+                                    <span className="text-xs text-red-600 font-medium">
+                                      Error:
+                                    </span>
+                                    <span className="text-sm text-red-700 ml-2">
+                                      {payment.error}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </AnimatedPage>
+              )}
+            </div>
+          </PullToRefresh>
+        </div>
+
+        {/* Overlay for mobile sidebar */}
+        {
+          sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            ></div>
+          )
+        }
+      </div>
     </div>
   );
 }

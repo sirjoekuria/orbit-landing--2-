@@ -18,8 +18,10 @@ import RiderLogin from "./pages/RiderLogin";
 import RiderWithdrawal from "./pages/RiderWithdrawal";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
+import Legal from "./pages/Legal";
+import Partner from "./pages/Partner";
+import AdminPolicies from "./pages/AdminPolicies";
+import Reviews from "./pages/Reviews";
 import NotFound from "./pages/NotFound";
 import UserDashboard from "./pages/UserDashboard";
 import RiderDashboard from "./pages/RiderDashboard";
@@ -67,8 +69,12 @@ function App() {
                   <Route path="/dashboard" element={<UserDashboard />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/admin/locations" element={<AdminLocations />} />
-                  <Route path="/privacy" element={<PrivacyPolicy />} />
-                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/admin/policies" element={<AdminPolicies />} />
+                  <Route path="/privacy" element={<Legal />} />
+                  <Route path="/terms" element={<Legal />} />
+                  <Route path="/legal" element={<Legal />} />
+                  <Route path="/partner" element={<Partner />} />
+                  <Route path="/reviews" element={<Reviews />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
