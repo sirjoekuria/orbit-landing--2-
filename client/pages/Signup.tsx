@@ -37,7 +37,8 @@ export default function Signup() {
     formState: { errors },
     reset,
     watch,
-    setValue
+    setValue,
+    trigger
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
@@ -58,6 +59,29 @@ export default function Signup() {
       motorcycleInsuranceExpiry: ""
     }
   });
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const nextStep = async () => {
+    let fieldsToValidate: (keyof SignupFormValues)[] = [];
+    if (currentStep === 1) {
+      fieldsToValidate = ["fullName", "email", "phone", "password", "confirmPassword"];
+      if (userType === "rider") fieldsToValidate.push("nationalId");
+    } else if (currentStep === 2) {
+      fieldsToValidate = ["motorcycleColor", "motorcycleModel", "experience", "area", "motivation"];
+    }
+
+    const isValid = await trigger(fieldsToValidate);
+    if (isValid) {
+      setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prev) => prev - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const [fileUploads, setFileUploads] = useState({
     passportPhoto: null as File | null,
@@ -346,447 +370,506 @@ export default function Signup() {
               : "Customer Registration"}
           </h2>
 
-          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-10">
-            {/* Basic Information */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
-                Personal Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="fullName"
-                    className="text-white/80 text-sm font-medium"
-                  >
-                    Full Name *
-                  </Label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                    <Input
-                      id="fullName"
-                      type="text"
-                      autoComplete="name"
-                      {...register("fullName")}
-                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.fullName ? 'border-red-500/50' : ''}`}
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  {errors.fullName && (
-                    <p className="mt-1 text-xs text-red-400">{errors.fullName.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white/80 text-sm font-medium">
-                    Email Address *
-                  </Label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email username"
-                      {...register("email")}
-                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.email ? 'border-red-500/50' : ''}`}
-                      placeholder="name@example.com"
-                    />
-                  </div>
-                  {errors.email && (
-                    <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white/80 text-sm font-medium">
-                    Phone Number *
-                  </Label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                    <Input
-                      id="phone"
-                      type="tel"
-                      autoComplete="tel"
-                      {...register("phone")}
-                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.phone ? 'border-red-500/50' : ''}`}
-                      placeholder="+254 7XX XXX XXX"
-                    />
-                  </div>
-                  {errors.phone && (
-                    <p className="mt-1 text-xs text-red-400">{errors.phone.message}</p>
-                  )}
-                </div>
-
-                {userType === "rider" && (
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="nationalId"
-                      className="text-white/80 text-sm font-medium"
+          {userType === "rider" && (
+            <div className="mb-10">
+              <div className="flex items-center justify-between mb-2">
+                {[1, 2, 3].map((step) => (
+                  <div key={step} className="flex flex-col items-center flex-1 relative">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-10 ${currentStep >= step
+                        ? "bg-[#eab308] border-[#eab308] text-black shadow-[0_0_15px_rgba(234,179,8,0.4)]"
+                        : "bg-[#0a110d] border-white/10 text-[#8b9d93]"
+                        }`}
                     >
-                      National ID Number *
-                    </Label>
-                    <div className="relative">
-                      <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                      <Input
-                        id="nationalId"
-                        type="text"
-                        {...register("nationalId")}
-                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.nationalId ? 'border-red-500/50' : ''}`}
-                        placeholder="Your ID number"
-                      />
+                      {currentStep > step ? (
+                        <CheckCircle className="w-6 h-6" />
+                      ) : (
+                        <span className="font-bold">{step}</span>
+                      )}
                     </div>
-                    {errors.nationalId && (
-                      <p className="mt-1 text-xs text-red-400">{errors.nationalId.message}</p>
+                    <span
+                      className={`text-xs mt-2 font-medium transition-colors duration-300 ${currentStep >= step ? "text-white" : "text-[#8b9d93]"
+                        }`}
+                    >
+                      {step === 1 ? "Basic Info" : step === 2 ? "Motorcycle" : "Documents"}
+                    </span>
+                    {step < 3 && (
+                      <div
+                        className={`absolute top-5 left-[50%] w-full h-[2px] -z-0 transition-colors duration-300 ${currentStep > step ? "bg-[#eab308]" : "bg-white/5"
+                          }`}
+                      />
                     )}
                   </div>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="password"
-                    className="text-white/80 text-sm font-medium"
-                  >
-                    Password *
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      autoComplete="new-password"
-                      {...register("password")}
-                      className={`h-12 pl-11 pr-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.password ? 'border-red-500/50' : ''}`}
-                      placeholder="••••••••"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
-                      ) : (
-                        <Eye className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                  {errors.password && (
-                    <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="confirmPassword"
-                    className="text-white/80 text-sm font-medium"
-                  >
-                    Confirm Password *
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      autoComplete="new-password"
-                      {...register("confirmPassword")}
-                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.confirmPassword ? 'border-red-500/50' : ''}`}
-                      placeholder="••••••••"
-                    />
-                  </div>
-                  {errors.confirmPassword && (
-                    <p className="mt-1 text-xs text-red-400">{errors.confirmPassword.message}</p>
-                  )}
-                </div>
+                ))}
               </div>
             </div>
+          )}
+
+          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-10">
+            {/* Phase 1: Basic Information */}
+            {currentStep === 1 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                  {userType === "rider" ? "Step 1: Personal Details" : "Personal Details"}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="fullName"
+                      className="text-white/80 text-sm font-medium"
+                    >
+                      Full Name *
+                    </Label>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="fullName"
+                        type="text"
+                        autoComplete="name"
+                        {...register("fullName")}
+                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.fullName ? 'border-red-500/50' : ''}`}
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    {errors.fullName && (
+                      <p className="mt-1 text-xs text-red-400">{errors.fullName.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-white/80 text-sm font-medium">
+                      Email Address *
+                    </Label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="email"
+                        type="email"
+                        autoComplete="email username"
+                        {...register("email")}
+                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.email ? 'border-red-500/50' : ''}`}
+                        placeholder="name@example.com"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-white/80 text-sm font-medium">
+                      Phone Number *
+                    </Label>
+                    <div className="relative">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        autoComplete="tel"
+                        {...register("phone")}
+                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.phone ? 'border-red-500/50' : ''}`}
+                        placeholder="+254 7XX XXX XXX"
+                      />
+                    </div>
+                    {errors.phone && (
+                      <p className="mt-1 text-xs text-red-400">{errors.phone.message}</p>
+                    )}
+                  </div>
+
+                  {userType === "rider" && (
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="nationalId"
+                        className="text-white/80 text-sm font-medium"
+                      >
+                        National ID Number *
+                      </Label>
+                      <div className="relative">
+                        <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                        <Input
+                          id="nationalId"
+                          type="text"
+                          {...register("nationalId")}
+                          className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.nationalId ? 'border-red-500/50' : ''}`}
+                          placeholder="Your ID number"
+                        />
+                      </div>
+                      {errors.nationalId && (
+                        <p className="mt-1 text-xs text-red-400">{errors.nationalId.message}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="password"
+                      className="text-white/80 text-sm font-medium"
+                    >
+                      Password *
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        {...register("password")}
+                        className={`h-12 pl-11 pr-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.password ? 'border-red-500/50' : ''}`}
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-white/80 text-sm font-medium"
+                    >
+                      Confirm Password *
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        {...register("confirmPassword")}
+                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.confirmPassword ? 'border-red-500/50' : ''}`}
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    {errors.confirmPassword && (
+                      <p className="mt-1 text-xs text-red-400">{errors.confirmPassword.message}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Rider Specific Fields */}
             {userType === "rider" && (
               <>
-                <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-500">
-                  {/* Motorcycle Information */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
-                      Motorcycle Information
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
+                {/* Phase 2: Motorcycle Information */}
+                {currentStep === 2 && (
+                  <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                        Step 2: Motorcycle Information
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="motorcycleColor"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Motorcycle Color *
+                          </Label>
+                          <Input
+                            id="motorcycleColor"
+                            type="text"
+                            {...register("motorcycleColor")}
+                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleColor ? 'border-red-500/50' : ''}`}
+                            placeholder="e.g., Red, Blue, Black"
+                          />
+                          {errors.motorcycleColor && (
+                            <p className="mt-1 text-xs text-red-400">{errors.motorcycleColor.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="motorcycleModel"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Motorcycle Model *
+                          </Label>
+                          <Input
+                            id="motorcycleModel"
+                            type="text"
+                            {...register("motorcycleModel")}
+                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleModel ? 'border-red-500/50' : ''}`}
+                            placeholder="e.g., Honda CB 150F, Yamaha FZ"
+                          />
+                          {errors.motorcycleModel && (
+                            <p className="mt-1 text-xs text-red-400">{errors.motorcycleModel.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="experience"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Riding Experience *
+                          </Label>
+                          <select
+                            id="experience"
+                            {...register("experience")}
+                            className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.experience ? 'border-red-500/50' : ''}`}
+                          >
+                            <option value="" className="bg-[#112417]">Select experience</option>
+                            <option value="1-2 years" className="bg-[#112417]">1-2 years</option>
+                            <option value="3-5 years" className="bg-[#112417]">3-5 years</option>
+                            <option value="5+ years" className="bg-[#112417]">5+ years</option>
+                          </select>
+                          {errors.experience && (
+                            <p className="mt-1 text-xs text-red-400">{errors.experience.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="area"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Preferred Working Area *
+                          </Label>
+                          <select
+                            id="area"
+                            {...register("area")}
+                            className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.area ? 'border-red-500/50' : ''}`}
+                          >
+                            <option value="" className="bg-[#112417]">Select area</option>
+                            <option value="CBD" className="bg-[#112417]">CBD</option>
+                            <option value="Westlands" className="bg-[#112417]">Westlands</option>
+                            <option value="Karen" className="bg-[#112417]">Karen</option>
+                            <option value="Eastleigh" className="bg-[#112417]">Eastleigh</option>
+                            <option value="Kasarani" className="bg-[#112417]">Kasarani</option>
+                            <option value="Embakasi" className="bg-[#112417]">Embakasi</option>
+                            <option value="All areas" className="bg-[#112417]">All areas</option>
+                          </select>
+                          {errors.area && (
+                            <p className="mt-1 text-xs text-red-400">{errors.area.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Personal Statement */}
+                      <div className="space-y-4">
                         <Label
-                          htmlFor="motorcycleColor"
+                          htmlFor="motivation"
                           className="text-white/80 text-sm font-medium"
                         >
-                          Motorcycle Color *
+                          Why do you want to join Rocs Crew? *
                         </Label>
-                        <Input
-                          id="motorcycleColor"
-                          type="text"
-                          {...register("motorcycleColor")}
-                          className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleColor ? 'border-red-500/50' : ''}`}
-                          placeholder="e.g., Red, Blue, Black"
+                        <textarea
+                          id="motivation"
+                          {...register("motivation")}
+                          rows={4}
+                          className={`w-full px-4 py-3 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-2xl resize-none transition-all placeholder:text-white/10 ${errors.motivation ? 'border-red-500/50' : ''}`}
+                          placeholder="Tell us about your experience and why you're a great fit for the crew..."
                         />
-                        {errors.motorcycleColor && (
-                          <p className="mt-1 text-xs text-red-400">{errors.motorcycleColor.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label
-                          htmlFor="motorcycleModel"
-                          className="text-white/80 text-sm font-medium"
-                        >
-                          Motorcycle Model *
-                        </Label>
-                        <Input
-                          id="motorcycleModel"
-                          type="text"
-                          {...register("motorcycleModel")}
-                          className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleModel ? 'border-red-500/50' : ''}`}
-                          placeholder="e.g., Honda CB 150F, Yamaha FZ"
-                        />
-                        {errors.motorcycleModel && (
-                          <p className="mt-1 text-xs text-red-400">{errors.motorcycleModel.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label
-                          htmlFor="experience"
-                          className="text-white/80 text-sm font-medium"
-                        >
-                          Riding Experience *
-                        </Label>
-                        <select
-                          id="experience"
-                          {...register("experience")}
-                          className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.experience ? 'border-red-500/50' : ''}`}
-                        >
-                          <option value="" className="bg-[#112417]">Select experience</option>
-                          <option value="1-2 years" className="bg-[#112417]">1-2 years</option>
-                          <option value="3-5 years" className="bg-[#112417]">3-5 years</option>
-                          <option value="5+ years" className="bg-[#112417]">5+ years</option>
-                        </select>
-                        {errors.experience && (
-                          <p className="mt-1 text-xs text-red-400">{errors.experience.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label
-                          htmlFor="area"
-                          className="text-white/80 text-sm font-medium"
-                        >
-                          Preferred Working Area *
-                        </Label>
-                        <select
-                          id="area"
-                          {...register("area")}
-                          className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.area ? 'border-red-500/50' : ''}`}
-                        >
-                          <option value="" className="bg-[#112417]">Select area</option>
-                          <option value="CBD" className="bg-[#112417]">CBD</option>
-                          <option value="Westlands" className="bg-[#112417]">Westlands</option>
-                          <option value="Karen" className="bg-[#112417]">Karen</option>
-                          <option value="Eastleigh" className="bg-[#112417]">Eastleigh</option>
-                          <option value="Kasarani" className="bg-[#112417]">Kasarani</option>
-                          <option value="Embakasi" className="bg-[#112417]">Embakasi</option>
-                          <option value="All areas" className="bg-[#112417]">All areas</option>
-                        </select>
-                        {errors.area && (
-                          <p className="mt-1 text-xs text-red-400">{errors.area.message}</p>
+                        {errors.motivation && (
+                          <p className="mt-1 text-xs text-red-400">{errors.motivation.message}</p>
                         )}
                       </div>
                     </div>
                   </div>
+                )}
 
-                  {/* Document Uploads */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
-                      Required Documents
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <FileUpload
-                        label="Passport Photo"
-                        name="passportPhoto"
-                        accept="image/*"
-                        icon={Camera}
-                        description="Professional clear photo"
-                      />
-
-                      <FileUpload
-                        label="Motorcycle Photo"
-                        name="motorcyclePhoto"
-                        accept="image/*"
-                        icon={Bike}
-                        description="Photo showing plate number"
-                      />
-
-                      <FileUpload
-                        label="ID Card (Front)"
-                        name="idCardFront"
-                        accept="image/*"
-                        icon={FileText}
-                        description="Front of National ID"
-                      />
-
-                      <FileUpload
-                        label="ID Card (Back)"
-                        name="idCardBack"
-                        accept="image/*"
-                        icon={FileText}
-                        description="Back of National ID"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Licenses and Certificates */}
-                  <div className="space-y-8">
-                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
-                      Certifications
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                      <div className="space-y-6">
+                {/* Phase 3: Document Uploads */}
+                {currentStep === 3 && (
+                  <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                        Step 3: Required Documents
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FileUpload
-                          label="Driving License"
-                          name="drivingLicense"
-                          accept="image/*,application/pdf"
+                          label="Passport Photo"
+                          name="passportPhoto"
+                          accept="image/*"
+                          icon={Camera}
+                          description="Professional clear photo"
+                        />
+
+                        <FileUpload
+                          label="Motorcycle Photo"
+                          name="motorcyclePhoto"
+                          accept="image/*"
+                          icon={Bike}
+                          description="Photo showing plate number"
+                        />
+
+                        <FileUpload
+                          label="ID Card (Front)"
+                          name="idCardFront"
+                          accept="image/*"
                           icon={FileText}
-                          description="Valid motorcycle license"
+                          description="Front of National ID"
                         />
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="drivingLicenseExpiry"
-                            className="text-white/80 text-sm font-medium"
-                          >
-                            License Expiry Date *
-                          </Label>
-                          <Input
-                            id="drivingLicenseExpiry"
-                            type="date"
-                            {...register("drivingLicenseExpiry")}
-                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.drivingLicenseExpiry ? 'border-red-500/50' : ''}`}
-                          />
-                          {errors.drivingLicenseExpiry && (
-                            <p className="mt-1 text-xs text-red-400">{errors.drivingLicenseExpiry.message}</p>
-                          )}
-                        </div>
-                      </div>
 
-                      <div className="space-y-6">
                         <FileUpload
-                          label="Good Conduct Certificate"
-                          name="goodConductCertificate"
-                          accept="image/*,application/pdf"
-                          icon={Shield}
-                          description="Valid DCI Certificate"
+                          label="ID Card (Back)"
+                          name="idCardBack"
+                          accept="image/*"
+                          icon={FileText}
+                          description="Back of National ID"
                         />
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="goodConductExpiry"
-                            className="text-white/80 text-sm font-medium"
-                          >
-                            Certificate Expiry Date *
-                          </Label>
-                          <Input
-                            id="goodConductExpiry"
-                            type="date"
-                            {...register("goodConductExpiry")}
-                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.goodConductExpiry ? 'border-red-500/50' : ''}`}
-                          />
-                          {errors.goodConductExpiry && (
-                            <p className="mt-1 text-xs text-red-400">{errors.goodConductExpiry.message}</p>
-                          )}
-                        </div>
                       </div>
+                    </div>
 
-                      <div className="space-y-6">
-                        <FileUpload
-                          label="Motorcycle Insurance"
-                          name="motorcycleInsurance"
-                          accept="image/*,application/pdf"
-                          icon={Shield}
-                          description="Valid insurance cover"
-                        />
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="motorcycleInsuranceExpiry"
-                            className="text-white/80 text-sm font-medium"
-                          >
-                            Insurance Expiry Date *
-                          </Label>
-                          <Input
-                            id="motorcycleInsuranceExpiry"
-                            type="date"
-                            {...register("motorcycleInsuranceExpiry")}
-                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.motorcycleInsuranceExpiry ? 'border-red-500/50' : ''}`}
+                    <div className="space-y-8">
+                      <h3 className="text-lg font-bold text-white/90 mb-2">
+                        Certifications & Expiry Dates
+                      </h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                          <FileUpload
+                            label="Driving License"
+                            name="drivingLicense"
+                            accept="image/*,application/pdf"
+                            icon={FileText}
+                            description="Valid motorcycle license"
                           />
-                          {errors.motorcycleInsuranceExpiry && (
-                            <p className="mt-1 text-xs text-red-400">{errors.motorcycleInsuranceExpiry.message}</p>
-                          )}
+                          <div className="space-y-2">
+                            <Label
+                              htmlFor="drivingLicenseExpiry"
+                              className="text-white/80 text-sm font-medium"
+                            >
+                              License Expiry Date *
+                            </Label>
+                            <Input
+                              id="drivingLicenseExpiry"
+                              type="date"
+                              {...register("drivingLicenseExpiry")}
+                              className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.drivingLicenseExpiry ? 'border-red-500/50' : ''}`}
+                            />
+                            {errors.drivingLicenseExpiry && (
+                              <p className="mt-1 text-xs text-red-400">{errors.drivingLicenseExpiry.message}</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <FileUpload
+                            label="Good Conduct Certificate"
+                            name="goodConductCertificate"
+                            accept="image/*,application/pdf"
+                            icon={Shield}
+                            description="Valid DCI Certificate"
+                          />
+                          <div className="space-y-2">
+                            <Label
+                              htmlFor="goodConductExpiry"
+                              className="text-white/80 text-sm font-medium"
+                            >
+                              Certificate Expiry Date *
+                            </Label>
+                            <Input
+                              id="goodConductExpiry"
+                              type="date"
+                              {...register("goodConductExpiry")}
+                              className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.goodConductExpiry ? 'border-red-500/50' : ''}`}
+                            />
+                            {errors.goodConductExpiry && (
+                              <p className="mt-1 text-xs text-red-400">{errors.goodConductExpiry.message}</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <FileUpload
+                            label="Motorcycle Insurance"
+                            name="motorcycleInsurance"
+                            accept="image/*,application/pdf"
+                            icon={Shield}
+                            description="Valid insurance cover"
+                          />
+                          <div className="space-y-2">
+                            <Label
+                              htmlFor="motorcycleInsuranceExpiry"
+                              className="text-white/80 text-sm font-medium"
+                            >
+                              Insurance Expiry Date *
+                            </Label>
+                            <Input
+                              id="motorcycleInsuranceExpiry"
+                              type="date"
+                              {...register("motorcycleInsuranceExpiry")}
+                              className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.motorcycleInsuranceExpiry ? 'border-red-500/50' : ''}`}
+                            />
+                            {errors.motorcycleInsuranceExpiry && (
+                              <p className="mt-1 text-xs text-red-400">{errors.motorcycleInsuranceExpiry.message}</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Personal Statement */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-white/90 border-b border-white/5 pb-2">
-                      Personal Statement
-                    </h3>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="motivation"
-                        className="text-white/80 text-sm font-medium"
-                      >
-                        Why do you want to join Rocs Crew? *
-                      </Label>
-                      <textarea
-                        id="motivation"
-                        {...register("motivation")}
-                        rows={5}
-                        className={`w-full px-4 py-3 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-2xl resize-none transition-all placeholder:text-white/10 ${errors.motivation ? 'border-red-500/50' : ''}`}
-                        placeholder="Tell us about your experience and why you're a great fit for the crew..."
-                      />
-                      {errors.motivation && (
-                        <p className="mt-1 text-xs text-red-400">{errors.motivation.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                )}
               </>
             )}
 
-            <div className="pt-4 flex flex-col items-center space-y-8">
+            <div className="pt-8 flex flex-col items-center space-y-8">
+              <div className="flex w-full gap-4">
+                {userType === "rider" && currentStep > 1 && (
+                  <Button
+                    type="button"
+                    onClick={prevStep}
+                    className="flex-1 h-14 bg-white/5 hover:bg-white/10 text-white font-bold text-lg rounded-2xl border border-white/10 transition-all"
+                  >
+                    Back
+                  </Button>
+                )}
+
+                {userType === "rider" && currentStep < 3 ? (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="flex-1 h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-all active:scale-[0.98]"
+                  >
+                    Next Step
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`${userType === "rider" ? "flex-1" : "w-full"} h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-all active:scale-[0.98]`}
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-black mr-3"></div>
+                        Processing...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        <UserPlus className="w-5 h-5 mr-3" />
+                        {userType === "rider"
+                          ? "Submit Application"
+                          : "Create Account"}
+                      </span>
+                    )}
+                  </Button>
+                )}
+              </div>
+
               <div className="text-[12px] text-[#8b9d93] text-center max-w-sm px-4">
                 By clicking <span className="text-[#eab308] font-medium">{userType === "rider" ? "Submit Application" : "Create Account"}</span>, you agree to our{" "}
                 <Link to="/terms" className="text-[#eab308] hover:underline hover:text-[#ca8a04] transition-colors">Terms of Service</Link> and{" "}
                 <Link to="/privacy" className="text-[#eab308] hover:underline hover:text-[#ca8a04] transition-colors">Privacy Policy</Link>.
               </div>
-
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-all active:scale-[0.98]"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-black mr-3"></div>
-                    Processing...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center">
-                    <UserPlus className="w-5 h-5 mr-3" />
-                    {userType === "rider"
-                      ? "Submit Application"
-                      : "Create Account"}
-                  </span>
-                )}
-              </Button>
             </div>
           </form>
 
