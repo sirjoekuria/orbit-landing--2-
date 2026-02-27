@@ -25,6 +25,9 @@ import Reviews from "./pages/Reviews";
 import NotFound from "./pages/NotFound";
 import UserDashboard from "./pages/UserDashboard";
 import RiderDashboard from "./pages/RiderDashboard";
+import OrderReceipt from "./pages/OrderReceipt";
+import SupportChat from "./pages/SupportChat";
+import Wallet from "./pages/Wallet";
 import { AutoLogout } from "./components/AutoLogout";
 import { AuthProvider } from "./lib/AuthContext";
 import { ThemeProvider } from "./components/ThemeContext";
@@ -75,6 +78,9 @@ function App() {
                   <Route path="/legal" element={<Legal />} />
                   <Route path="/partner" element={<Partner />} />
                   <Route path="/reviews" element={<Reviews />} />
+                  <Route path="/order-receipt" element={<OrderReceipt />} />
+                  <Route path="/support" element={<SupportChat />} />
+                  <Route path="/wallet" element={<Wallet />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

@@ -1,0 +1,293 @@
+            {/* Withdrawal Requests Tab */}
+            {activeTab === "withdrawal-requests" && (
+              <AnimatedPage>
+                <div className="space-y-8">
+                  {/* Header */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
+                    <div>
+                      <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                        Withdrawal Requests
+                      </h2>
+                      <div className="text-[#8b9d93] text-sm">
+                        Manage and process rider withdrawal requests.
+                      </div>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        setIsLoading(true);
+                        try {
+                          const response = await fetch(
+                            "/api/admin/withdrawal-requests",
+                          );
+                          if (response.ok) {
+                            const data = await response.json();
+                            console.log("Withdrawal requests loaded:", data);
+                          }
+                        } catch (error) {
+                          console.error(
+                            "Error refreshing withdrawal requests:",
+                            error,
+                          );
+                        } finally {
+                          setIsLoading(false);
+                        }
+                      }}
+                      disabled={isLoading}
+                      className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                      <span>Refresh Requests</span>
+                    </button>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#eab308]/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/40 transition-all text-center">
+                      <div className="text-4xl font-black text-[#eab308] mb-2">3</div>
+                      <div className="text-xs font-bold text-[#eab308]/70 tracking-widest uppercase">
+                        Pending Requests
+                      </div>
+                    </div>
+                    <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all text-center">
+                      <div className="text-4xl font-black text-green-500 mb-2">12</div>
+                      <div className="text-xs font-bold text-green-500/70 tracking-widest uppercase">Approved Today</div>
+                    </div>
+                    <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-red-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-red-500/40 transition-all text-center">
+                      <div className="text-4xl font-black text-red-500 mb-2">2</div>
+                      <div className="text-xs font-bold text-red-500/70 tracking-widest uppercase">Rejected</div>
+                    </div>
+                    <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-blue-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-blue-500/40 transition-all text-center">
+                      <div className="text-3xl font-black text-blue-400 mb-2 whitespace-nowrap">
+                        KES 25,480
+                      </div>
+                      <div className="text-xs font-bold text-blue-400/70 tracking-widest uppercase">Total Requested</div>
+                    </div>
+                  </div>
+
+                  {/* Fee Calculator */}
+                  <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#ffffff05]">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center">
+                      <span className="w-8 h-8 rounded-full bg-[#0a110d] flex items-center justify-center mr-3 border border-[#ffffff10]">🧮</span>
+                      Withdrawal Fee Calculator
+                    </h3>
+                    <div className="bg-[#0a110d] p-6 rounded-2xl border border-blue-500/20">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                          <h4 className="font-bold text-blue-400 mb-4 text-sm tracking-wider uppercase">
+                            Fee Structure
+                          </h4>
+                          <ul className="text-sm text-gray-300 space-y-3">
+                            <li className="flex items-center">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
+                              Below KES 1,000: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 20 fee</strong>
+                            </li>
+                            <li className="flex items-center">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
+                              KES 1,000 and above: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 50 fee</strong>
+                            </li>
+                            <li className="flex items-center text-[#8b9d93]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#596960] mr-3"></span>
+                              Fees are deducted from withdrawal amount
+                            </li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-blue-400 mb-4 text-sm tracking-wider uppercase">
+                            Examples
+                          </h4>
+                          <ul className="text-sm text-gray-300 space-y-3">
+                            <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
+                              <div className="flex-1">Request <span className="text-white font-bold">KES 800</span></div>
+                              <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
+                              <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 780</span> <span className="text-[#8b9d93] text-xs block">(KES 20 fee)</span></div>
+                            </li>
+                            <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
+                              <div className="flex-1">Request <span className="text-white font-bold">KES 1,500</span></div>
+                              <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
+                              <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 1,450</span> <span className="text-[#8b9d93] text-xs block">(KES 50 fee)</span></div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Withdrawal Requests List */}
+                  <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                    <div className="px-6 py-5 border-b border-[#ffffff0a]">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 className="text-lg font-bold text-white">
+                          Recent Withdrawal Requests
+                        </h3>
+                        <div className="flex items-center">
+                          <label className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider mr-3 hidden sm:block">Status</label>
+                          <select className="bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-2 focus:outline-none focus:border-[#eab308] text-sm">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="processed">Processed</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        {isLoading ? (
+                          <CardSkeleton />
+                        ) : (
+                          [
+                            {
+                              id: "WR-001",
+                              rider: "John Mwangi",
+                              riderId: "RD-001",
+                              phone: "+254 712 345 678",
+                              amount: 800,
+                              fee: 20,
+                              netAmount: 780,
+                              status: "pending",
+                              requestedAt: "2 hours ago",
+                              notes: "Need funds for motorcycle maintenance",
+                            },
+                            {
+                              id: "WR-002",
+                              rider: "Peter Kimani",
+                              riderId: "RD-002",
+                              phone: "+254 700 123 456",
+                              amount: 1500,
+                              fee: 50,
+                              netAmount: 1450,
+                              status: "pending",
+                              requestedAt: "4 hours ago",
+                              notes: "Emergency medical expenses",
+                            },
+                          ].map((request) => (
+                            <div
+                              key={request.id}
+                              className="bg-[#0a110d] border border-[#ffffff05] rounded-[20px] p-6 hover:border-[#ffffff15] transition-all relative overflow-hidden"
+                            >
+                              {request.status === 'pending' && (
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 blur-3xl pointer-events-none rounded-full" />
+                              )}
+                              <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
+                                <div className="flex items-center space-x-4">
+                                  <div className="w-12 h-12 bg-[#112417] border border-[#ffffff10] rounded-full flex items-center justify-center">
+                                    <span className="text-white font-bold text-lg">
+                                      {request.rider
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-bold text-white text-lg">
+                                      {request.rider}
+                                    </h4>
+                                    <p className="text-sm text-[#8b9d93] font-mono mt-0.5">
+                                      {request.riderId} • <span className="text-white">{request.phone}</span>
+                                    </p>
+                                    <p className="text-xs text-[#596960] flex items-center mt-1.5 font-mono">
+                                      <Clock className="w-3.5 h-3.5 mr-1" />
+                                      {request.requestedAt}
+                                    </p>
+                                  </div>
+                                </div>
+                                <span
+                                  className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${
+                                    request.status === "pending"
+                                      ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                      : request.status === "approved"
+                                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                        : "bg-red-500/10 text-red-500 border-red-500/20"
+                                    }`}
+                                >
+                                  {request.status}
+                                </span>
+                              </div>
+
+                              {/* Amount Breakdown */}
+                              <div className="bg-[#112417] rounded-2xl p-4 sm:p-5 mb-5 border border-[#ffffff0a]">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                  <div>
+                                    <span className="text-xs font-bold text-[#596960] uppercase tracking-wider block mb-2">
+                                      Requested Amount
+                                    </span>
+                                    <div className="text-lg font-bold text-white">
+                                      KES {request.amount.toLocaleString()}
+                                    </div>
+                                  </div>
+                                  <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6">
+                                    <span className="text-xs font-bold text-[#596960] uppercase tracking-wider block mb-2">
+                                      Withdrawal Fee
+                                    </span>
+                                    <div className="text-lg font-bold text-red-400">
+                                      -KES {request.fee}
+                                    </div>
+                                  </div>
+                                  <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6 bg-[#0a110d] sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none">
+                                    <span className="text-xs font-bold text-[#eab308] uppercase tracking-wider block mb-1 sm:mb-2">Net Amount</span>
+                                    <div className="text-2xl font-black text-green-400">
+                                      KES {request.netAmount.toLocaleString()}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {request.notes && (
+                                <div className="mb-6 p-4 bg-[#112417] rounded-2xl border border-blue-500/20 inline-flex items-start max-w-full">
+                                  <MessageSquare className="w-4 h-4 text-blue-400 mr-3 mt-0.5 shrink-0" />
+                                  <div>
+                                    <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block mb-1">
+                                      Rider Notes
+                                    </span>
+                                    <p className="text-sm text-gray-300 italic">
+                                      "{request.notes}"
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Actions */}
+                              {request.status === "pending" && (
+                                <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-[#ffffff0a]">
+                                  <button
+                                    onClick={() => {
+                                      if (
+                                        confirm(
+                                          `Approve withdrawal of KES ${request.amount} for ${request.rider}?`,
+                                        )
+                                      ) {
+                                        alert(
+                                          `✅ Withdrawal approved for ${request.rider}\nNet amount: KES ${request.netAmount}`,
+                                        );
+                                      }
+                                    }}
+                                    className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg flex items-center space-x-2"
+                                  >
+                                    <CheckCircle className="w-4 h-4" />
+                                    <span>Approve</span>
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      const reason = prompt("Reason for rejection:");
+                                      if (reason) {
+                                        alert(
+                                          `❌ Withdrawal rejected for ${request.rider}\nReason: ${reason}`,
+                                        );
+                                      }
+                                    }}
+                                    className="bg-transparent border border-red-500/30 text-red-400 hover:bg-red-500/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
+                                  >
+                                    <X className="w-4 h-4" />
+                                    <span>Reject</span>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedPage>
+            )}

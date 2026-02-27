@@ -35,9 +35,9 @@ export default function Footer() {
 
         {/* Top Section - Logo & Socials */}
         <div className="mb-12 max-w-sm">
-          <div className="flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 bg-[#eab308] rounded-full flex items-center justify-center p-1.5 shrink-0">
-              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain filter brightness-0" />
+          <div className="flex items-center space-x-3">
+            <div className="relative w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(33,197,94,0.3)] border border-white/20 transition-transform active:scale-95 overflow-hidden">
+              <img src="/logo.svg" alt="Logo" className="w-full h-full object-contain p-2" />
             </div>
             <span className="text-2xl font-bold tracking-tight">Rocs Crew</span>
           </div>

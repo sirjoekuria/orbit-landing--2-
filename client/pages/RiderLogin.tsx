@@ -137,7 +137,18 @@ export default function RiderLogin() {
 
     try {
       const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`, { credentials: 'include' });
-      const { token } = await csrfRes.json();
+
+      if (!csrfRes.ok) {
+        throw new Error('Server connection failed. Ensure the server or tunnel is running.');
+      }
+
+      let token = '';
+      try {
+        const csrfData = await csrfRes.json();
+        token = csrfData.token;
+      } catch (e) {
+        throw new Error('Invalid API response. Ensure the backend URL is correctly configured.');
+      }
 
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -151,9 +162,20 @@ export default function RiderLogin() {
         }),
       });
 
-      if (response.ok) {
-        const result = await response.json();
+      let result;
+      let errorData;
 
+      try {
+        if (response.ok) {
+          result = await response.json();
+        } else {
+          errorData = await response.json();
+        }
+      } catch (e) {
+        throw new Error('Invalid API response format. Ensure the backend URL is properly configured and the tunnel is reachable.');
+      }
+
+      if (response.ok) {
         if (result.user.userType !== 'rider' && result.user.user_type !== 'rider') {
           throw new Error('This account is not registered as a rider.');
         }
@@ -161,8 +183,7 @@ export default function RiderLogin() {
         authLogin(result.user);
         navigate('/rider-dashboard');
       } else {
-        const error = await response.json();
-        throw new Error(error.error || 'Login failed');
+        throw new Error(errorData?.error || 'Login failed');
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Login failed. Please try again.');

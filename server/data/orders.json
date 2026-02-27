@@ -112,7 +112,7 @@
     "paymentMethod": "cash",
     "paymentStatus": "pending",
     "transactionId": "COD-1771883932253",
-    "currentStatus": "picked_up",
+    "currentStatus": "delivered",
     "createdAt": "2026-02-23T21:58:52.303Z",
     "estimatedDelivery": "2026-02-23T23:28:52.303Z",
     "statusHistory": [
@@ -130,8 +130,89 @@
         "status": "picked_up",
         "timestamp": "2026-02-23T22:00:28.603Z",
         "description": "Package picked up from TRM Drive, Thika Road, Nairobi"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2026-02-27T23:13:40.382Z",
+        "description": "Package delivered successfully to Jomo Kenyatta International Airport (JKIA), Nairobi"
       }
     ],
-    "updatedAt": "2026-02-23T22:00:28.603Z"
+    "updatedAt": "2026-02-27T23:13:40.382Z"
+  },
+  {
+    "id": "RC-2024-003",
+    "customerName": "John kamau",
+    "customerEmail": "kuriajoe85@gmail.com",
+    "customerPhone": "254750810490",
+    "pickup": "TRM Drive, Thika Road, Nairobi",
+    "delivery": "Jomo Kenyatta University of Agriculture and Technology (JKUAT), Juja, Kiambu",
+    "distance": 24.897289448461883,
+    "cost": 750,
+    "packageDetails": "Keys",
+    "notes": "None",
+    "paymentMethod": "cash",
+    "paymentStatus": "pending",
+    "transactionId": "COD-1772228655926",
+    "currentStatus": "delivered",
+    "createdAt": "2026-02-27T21:44:15.018Z",
+    "estimatedDelivery": "2026-02-27T23:14:15.018Z",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "timestamp": "2026-02-27T21:44:15.018Z",
+        "description": "Order received and is being processed"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-27T23:11:03.305Z",
+        "description": "Payment confirmed and order confirmed by admin"
+      },
+      {
+        "status": "payment_confirmed",
+        "timestamp": "2026-02-27T23:11:03.305Z",
+        "description": "Payment confirmed by admin - Receipt sent to customer"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-27T23:11:13.100Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-27T23:11:14.005Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "payment_confirmed",
+        "timestamp": "2026-02-27T23:11:14.889Z",
+        "description": "Payment confirmed by admin - Receipt sent to customer"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-27T23:11:15.189Z",
+        "description": "Order confirmed and rider assigned"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2026-02-27T23:12:01.772Z",
+        "description": "Rider assigned: Seeded Test Rider"
+      },
+      {
+        "status": "in_transit",
+        "timestamp": "2026-02-27T23:12:07.172Z",
+        "description": "Package is on the way to destination"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2026-02-27T23:12:11.768Z",
+        "description": "Package delivered successfully to Jomo Kenyatta University of Agriculture and Technology (JKUAT), Juja, Kiambu"
+      }
+    ],
+    "paymentConfirmed": true,
+    "paymentConfirmedAt": "2026-02-27T23:11:14.889Z",
+    "updatedAt": "2026-02-27T23:12:11.768Z",
+    "riderName": "Seeded Test Rider",
+    "riderPhone": "0712345678",
+    "riderId": "RD-SEED-001"
   }
 ]

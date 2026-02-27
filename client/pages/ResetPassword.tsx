@@ -72,87 +72,107 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-gray-50/50">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <Link
-          to="/login"
-          className="inline-flex items-center text-sm text-gray-500 hover:text-rocs-green mb-6 group transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
-          Back to login
-        </Link>
+    <div className="min-h-screen bg-[#0a110d] flex items-center justify-center py-12 px-4 relative overflow-hidden">
+      {/* Background Glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rocs-green/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#eab308]/5 blur-[120px] rounded-full pointer-events-none" />
 
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Reset password</h2>
-        <p className="text-gray-600 mb-8">Choose a strong new password for your account.</p>
+      <div className="max-w-md w-full relative z-10">
+        <div className="bg-[#112417] rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-10 backdrop-blur-sm">
+          <Link
+            to="/login"
+            className="inline-flex items-center text-sm text-[#8b9d93] hover:text-[#eab308] mb-8 group transition-colors font-medium font-outfit"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1.5 group-hover:-translate-x-1 transition-transform" />
+            Back to login
+          </Link>
 
-        {message && (
-          <div className={`mb-6 p-4 rounded-xl flex items-start gap-3 ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-            }`}>
-            {message.type === 'success' ? <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" /> : <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />}
-            <span className="text-sm font-medium">{message.text}</span>
+          <div className="mb-8">
+            <div className="w-16 h-16 bg-[#eab308]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#eab308]/20">
+              <CheckCircle2 className="w-8 h-8 text-[#eab308]" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-3 tracking-tight">Reset password</h2>
+            <p className="text-[#8b9d93] text-sm leading-relaxed">Choose a strong new password for your account.</p>
           </div>
-        )}
 
-        <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-5">
-          {(!tokenFromQuery || message?.type === 'error') && (
-            <div className="space-y-2">
-              <Label htmlFor="token" className="text-sm font-semibold text-gray-700">Reset Token</Label>
-              <Input
-                id="token"
-                {...register('token')}
-                className={`h-12 border-gray-200 focus:border-rocs-green focus:ring-rocs-green rounded-xl ${errors.token ? 'border-red-500' : ''}`}
-                placeholder="Paste your token here"
-              />
-              {errors.token && <p className="text-xs text-red-500">{errors.token.message}</p>}
+          {message && (
+            <div className={`mb-8 p-4 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 ${message.type === 'success'
+                ? 'bg-rocs-green/10 text-rocs-green border border-rocs-green/20'
+                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+              }`}>
+              {message.type === 'success' ? (
+                <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+              )}
+              <span className="text-sm font-medium">{message.text}</span>
             </div>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="password" name="password" className="text-sm font-semibold text-gray-700">New password</Label>
-            <div className="relative">
+          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
+            {(!tokenFromQuery || message?.type === 'error') && (
+              <div className="space-y-2">
+                <Label htmlFor="token" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Reset Token</Label>
+                <Input
+                  id="token"
+                  {...register('token')}
+                  className={`h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all ${errors.token ? 'border-red-500/50' : ''
+                    }`}
+                  placeholder="Paste your token here"
+                />
+                {errors.token && <p className="text-xs text-red-400 ml-1">{errors.token.message}</p>}
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="password" name="password" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">New password</Label>
+              <div className="relative group">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register('newPassword')}
+                  className={`h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all ${errors.newPassword ? 'border-red-500/50' : ''
+                    }`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.newPassword && <p className="text-xs text-red-400 ml-1">{errors.newPassword.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirm" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Confirm password</Label>
               <Input
-                id="password"
+                id="confirm"
                 type={showPassword ? "text" : "password"}
-                {...register('newPassword')}
-                className={`h-12 border-gray-200 focus:border-rocs-green focus:ring-rocs-green rounded-xl ${errors.newPassword ? 'border-red-500' : ''}`}
+                {...register('confirmPassword')}
+                className={`h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all ${errors.confirmPassword ? 'border-red-500/50' : ''
+                  }`}
                 placeholder="••••••••"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+              {errors.confirmPassword && <p className="text-xs text-red-400 ml-1">{errors.confirmPassword.message}</p>}
             </div>
-            {errors.newPassword && <p className="text-xs text-red-500">{errors.newPassword.message}</p>}
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirm" className="text-sm font-semibold text-gray-700">Confirm password</Label>
-            <Input
-              id="confirm"
-              type={showPassword ? "text" : "password"}
-              {...register('confirmPassword')}
-              className={`h-12 border-gray-200 focus:border-rocs-green focus:ring-rocs-green rounded-xl ${errors.confirmPassword ? 'border-red-500' : ''}`}
-              placeholder="••••••••"
-            />
-            {errors.confirmPassword && <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>}
-          </div>
-
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full h-12 bg-rocs-green hover:bg-rocs-green/90 text-white font-bold rounded-xl shadow-lg shadow-rocs-green/20 transition-all active:scale-[0.98]"
-          >
-            {loading ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Updating...
-              </div>
-            ) : 'Update password'}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-all active:scale-[0.98] mt-4"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  Updating...
+                </div>
+              ) : 'Update Password'}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );

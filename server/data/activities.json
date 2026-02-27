@@ -1,5 +1,54 @@
 [
   {
+    "riderId": "RD-SEED-001",
+    "riderName": "Seeded Test Rider",
+    "type": "order_assigned",
+    "orderId": "RC-2024-003",
+    "description": "Assigned to delivery order RC-2024-003 (TRM Drive, Thika Road, Nairobi → Jomo Kenyatta University of Agriculture and Technology (JKUAT), Juja, Kiambu)",
+    "location": "TRM Drive, Thika Road, Nairobi",
+    "metadata": {
+      "customerName": "John kamau",
+      "customerPhone": "254750810490",
+      "pickupLocation": "TRM Drive, Thika Road, Nairobi",
+      "deliveryLocation": "Jomo Kenyatta University of Agriculture and Technology (JKUAT), Juja, Kiambu",
+      "previousStatus": "available",
+      "newStatus": "assigned"
+    },
+    "id": "ACT-010",
+    "timestamp": "2026-02-27T23:12:01.774Z"
+  },
+  {
+    "riderId": "SYSTEM",
+    "riderName": "System",
+    "type": "status_change",
+    "description": "Daily automated payments completed: 1/1 successful (KES 1,000)",
+    "amount": 1000,
+    "metadata": {
+      "totalRiders": 1,
+      "successfulPayments": 1,
+      "failedPayments": 0,
+      "successRate": "100.0"
+    },
+    "id": "ACT-009",
+    "timestamp": "2026-02-27T20:00:51.499Z"
+  },
+  {
+    "riderId": "RD-SEED-001",
+    "riderName": "Seeded Test Rider",
+    "type": "payment_received",
+    "description": "Automated daily payment of KES 1,000 sent via M-Pesa",
+    "amount": 1000,
+    "metadata": {
+      "paymentMethod": "automated_mpesa",
+      "transactionId": "AG_20260227_010010561d8szst9nmyu",
+      "balanceChange": -1000,
+      "newBalance": 0,
+      "paymentType": "automated_daily"
+    },
+    "id": "ACT-008",
+    "timestamp": "2026-02-27T20:00:49.458Z"
+  },
+  {
     "riderId": "SYSTEM",
     "riderName": "System",
     "type": "status_change",

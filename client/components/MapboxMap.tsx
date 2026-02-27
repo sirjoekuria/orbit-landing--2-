@@ -46,6 +46,7 @@ export default function MapboxMap({
       // Load Mapbox GL JS and CSS
       const script = document.createElement("script");
       script.src = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js";
+      script.crossOrigin = "anonymous";
       script.onload = () => {
         if (window.mapboxgl) {
           initializeMap(window.mapboxgl);

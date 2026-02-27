@@ -200,24 +200,24 @@ export default function Admin() {
   };
 
   const TableSkeleton = () => (
-    <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
-      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-        <div className="flex space-x-4">
-          <Skeleton className="h-4 w-1/4" />
-          <Skeleton className="h-4 w-1/4" />
-          <Skeleton className="h-4 w-1/4" />
-          <Skeleton className="h-4 w-1/4" />
+    <div className="bg-[#112417] rounded-3xl shadow-2xl overflow-hidden border border-white/5">
+      <div className="bg-[#0a110d] px-6 py-4 border-b border-white/5">
+        <div className="flex space-x-6">
+          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
+          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
+          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
+          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
         </div>
       </div>
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-white/5">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="px-6 py-4">
+          <div key={i} className="px-6 py-6">
             <div className="flex justify-between items-center">
-              <div className="space-y-2 flex-grow">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
+              <div className="space-y-3 flex-grow">
+                <Skeleton className="h-4 w-3/4 bg-[#112417]/5" />
+                <Skeleton className="h-3 w-1/2 bg-[#112417]/5" />
               </div>
-              <Skeleton className="h-8 w-20 rounded" />
+              <Skeleton className="h-10 w-24 rounded-xl bg-[#112417]/5" />
             </div>
           </div>
         ))}
@@ -226,22 +226,22 @@ export default function Admin() {
   );
 
   const CardSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="bg-white p-6 rounded-lg shadow border border-gray-200">
-          <div className="flex items-center space-x-4 mb-4">
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-3 w-1/2" />
+        <div key={i} className="bg-[#112417] p-8 rounded-3xl shadow-2xl border border-white/5">
+          <div className="flex items-center space-x-5 mb-6">
+            <Skeleton className="h-14 w-14 rounded-2xl bg-[#112417]/5" />
+            <div className="flex-1 space-y-3">
+              <Skeleton className="h-4 w-3/4 bg-[#112417]/5" />
+              <Skeleton className="h-3 w-1/2 bg-[#112417]/5" />
             </div>
           </div>
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <div className="flex justify-between pt-4">
-              <Skeleton className="h-9 w-24 rounded" />
-              <Skeleton className="h-9 w-24 rounded" />
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full bg-[#112417]/5" />
+            <Skeleton className="h-4 w-full bg-[#112417]/5" />
+            <div className="flex justify-between pt-6">
+              <Skeleton className="h-10 w-28 rounded-xl bg-[#112417]/5" />
+              <Skeleton className="h-10 w-28 rounded-xl bg-[#112417]/5" />
             </div>
           </div>
         </div>
@@ -827,7 +827,7 @@ export default function Admin() {
       case "new":
         return "bg-blue-100 text-blue-800";
       case "read":
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#0a110d] text-gray-800";
       case "replied":
         return "bg-green-100 text-green-800";
       case "pending":
@@ -845,9 +845,9 @@ export default function Admin() {
       case "active":
         return "bg-green-100 text-green-800";
       case "inactive":
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#0a110d] text-gray-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#0a110d] text-gray-800";
     }
   };
 
@@ -886,90 +886,84 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0a110d] flex flex-col items-center justify-center p-4">
-        {/* Main Admin Card */}
-        <div className="w-full max-w-md bg-[#0d1610] rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden border border-[#ffffff0a]">
-          {/* Subtle top glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-rocs-green/20 blur-[50px] rounded-full pointer-events-none" />
+      <div className="min-h-screen bg-[#0a110d] flex items-center justify-center relative overflow-hidden font-outfit px-4">
+        {/* Background Glows */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-rocs-green/5 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#eab308]/5 blur-[150px] rounded-full pointer-events-none" />
 
-          {/* Icon */}
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-[#112417] rounded-full flex items-center justify-center border border-[#eab308]/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-              <Lock className="w-7 h-7 text-[#eab308]" />
+        <div className="max-w-md w-full relative z-10 animate-fade-in translate-y-[-20px]">
+          <div className="text-center mb-10">
+            <div className="w-24 h-24 bg-[#112417]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 p-4 border border-white/10 shadow-[0_0_30px_rgba(33,197,94,0.1)]">
+              <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
+            <h1 className="text-4xl font-black text-white tracking-tighter mb-2">Admin Portal</h1>
+            <p className="text-[#8b9d93] font-medium">Please authenticate to continue.</p>
           </div>
 
-          <div className="text-center mb-8 relative z-10">
-            <h2 className="text-3xl font-bold text-white mb-2">
-              Admin Dashboard
-            </h2>
-            <p className="text-[#8b9d93] text-sm md:text-base px-2">
-              Enter your password to access the secure admin panel for Rocs Crew.
-            </p>
-          </div>
-
-          <div className="bg-[#112417] p-6 rounded-3xl border border-white/5 shadow-inner relative z-10">
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div>
-                <label
+          <form
+            onSubmit={handleLogin}
+            className="bg-[#112417] p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-white/5 relative"
+          >
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <Label
                   htmlFor="password"
-                  className="block text-[#eab308] font-bold text-xs tracking-widest mb-2 uppercase"
+                  className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest pl-1"
                 >
-                  Password
-                </label>
-                <div className="relative">
+                  Admin Access Key
+                </Label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8b9d93] group-focus-within:text-[#eab308] transition-colors" />
                   <input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/20 border border-[#8b9d93]/20 text-white placeholder:text-[#8b9d93] rounded-2xl focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all pr-12"
-                    placeholder="Enter admin password"
+                    className="w-full bg-[#0a110d] border-white/10 text-white pl-12 pr-12 py-4 rounded-2xl focus:ring-2 focus:ring-[#eab308]/50 focus:border-[#eab308] transition-all placeholder:text-white/20"
+                    placeholder="••••••••"
+                    required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
                   >
-                    {showPassword ? (
-                      <Eye className="w-5 h-5" />
-                    ) : (
-                      <EyeOff className="w-5 h-5" />
-                    )}
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
               </div>
 
               {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-2xl text-sm text-center">
+                <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm font-medium animate-shake flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5" />
                   {error}
                 </div>
               )}
 
-              <button
+              <Button
                 type="submit"
-                className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(234,179,8,0.2)]"
+                className="w-full h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-black uppercase tracking-widest rounded-xl"
               >
-                <span className="text-lg">Access Dashboard</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </form>
-
-            <div className="mt-8 text-center border-t border-white/5 pt-6">
-              <div className="flex items-center justify-center space-x-2 text-[#8b9d93] mb-2 uppercase tracking-wider text-xs font-semibold">
-                <ShieldAlert className="w-4 h-4" />
-                <span>Authorized Personnel Only</span>
-              </div>
-              <p className="text-[#8b9d93]/60 italic text-xs">
-                All access attempts are monitored and logged.
-              </p>
+                Unlock Access Portal
+              </Button>
             </div>
-          </div>
+          </form>
+
+          <p className="text-[#8b9d93]/40 italic text-[10px] text-center mt-6">
+            All access attempts are monitored and logged.
+          </p>
+
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 text-white/40 hover:text-[#eab308] transition-colors mt-8 font-bold text-xs uppercase tracking-widest"
+          >
+            <ArrowRight className="w-4 h-4 rotate-180" />
+            Back to Website
+          </Link>
         </div>
 
         {/* Footer Text */}
-        <div className="mt-10 flex items-center justify-center space-x-3 text-[#8b9d93] uppercase tracking-[0.2em] text-xs font-bold">
+        <div className="absolute bottom-10 left-0 w-full flex items-center justify-center space-x-3 text-[#8b9d93] uppercase tracking-[0.2em] text-xs font-bold pointer-events-none">
           <div className="w-2 h-2 rounded-full bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.8)]" />
           <span>Rocs Crew Network</span>
         </div>
@@ -1020,7 +1014,7 @@ export default function Admin() {
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-gray-500 hover:text-[#eab308]"
+              className="lg:hidden text-[#8b9d93] hover:text-[#eab308]"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1492,11 +1486,11 @@ export default function Admin() {
                                   </div>
                                   <span
                                     className={`px-3 py-1.5 text-xs font-bold rounded-full border ${order.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
-                                        order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
-                                          order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
-                                            order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
-                                              order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                                "bg-red-500/10 text-red-400 border-red-500/20"
+                                      order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                        order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
+                                          order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                                            order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                              "bg-red-500/10 text-red-400 border-red-500/20"
                                       }`}
                                   >
                                     {order.status.replace("_", " ")}
@@ -1553,8 +1547,8 @@ export default function Admin() {
                                   </div>
                                   <span
                                     className={`px-3 py-1.5 text-xs font-bold rounded-full border ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
-                                        message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                          "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                      message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                        "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
                                       }`}
                                   >
                                     {message.status}
@@ -1687,11 +1681,11 @@ export default function Admin() {
                               <div className="flex items-center space-x-3 self-start">
                                 <span
                                   className={`px-4 py-1.5 text-xs font-bold rounded-full border tracking-wide uppercase ${order.status === "pending" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
-                                      order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
-                                        order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
-                                          order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
-                                            order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                              "bg-red-500/10 text-red-400 border-red-500/20"
+                                    order.status === "confirmed" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
+                                      order.status === "picked_up" ? "bg-purple-500/10 text-purple-400 border-purple-500/20" :
+                                        order.status === "in_transit" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                                          order.status === "delivered" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                            "bg-red-500/10 text-red-400 border-red-500/20"
                                     }`}
                                 >
                                   {order.status.replace("_", " ")}
@@ -1703,13 +1697,13 @@ export default function Admin() {
                                         editingOrder === order.id ? null : order.id,
                                       )
                                     }
-                                    className="p-2.5 text-[#8b9d93] hover:text-[#eab308] hover:bg-white/5 transition-colors border-r border-[#ffffff05]"
+                                    className="p-2.5 text-[#8b9d93] hover:text-[#eab308] hover:bg-[#112417]/5 transition-colors border-r border-[#ffffff05]"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => deleteOrder(order.id)}
-                                    className="p-2.5 text-red-500/70 hover:text-red-400 hover:bg-white/5 transition-colors"
+                                    className="p-2.5 text-red-500/70 hover:text-red-400 hover:bg-[#112417]/5 transition-colors"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -1857,7 +1851,7 @@ export default function Admin() {
                                         </select>
                                         <button
                                           onClick={() => setAssigningRider(null)}
-                                          className="mt-3 w-full text-xs font-bold text-[#8b9d93] hover:text-white bg-white/5 py-2 rounded-lg"
+                                          className="mt-3 w-full text-xs font-bold text-[#8b9d93] hover:text-white bg-[#112417]/5 py-2 rounded-lg"
                                         >
                                           Cancel
                                         </button>
@@ -1962,14 +1956,14 @@ export default function Admin() {
                           <button
                             onClick={() => fetchOrders(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchOrders(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
@@ -2062,15 +2056,15 @@ export default function Admin() {
                               <div className="flex items-center space-x-3 self-start">
                                 <span
                                   className={`px-4 py-1.5 text-xs font-bold rounded-full border tracking-wide uppercase ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
-                                      message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                        "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                    message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                                      "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
                                     }`}
                                 >
                                   {message.status}
                                 </span>
                                 <button
                                   onClick={() => deleteMessage(message.id)}
-                                  className="p-2.5 text-red-500/70 hover:text-red-400 bg-[#0a110d] rounded-lg border border-[#ffffff05] hover:bg-white/5 transition-colors"
+                                  className="p-2.5 text-red-500/70 hover:text-red-400 bg-[#0a110d] rounded-lg border border-[#ffffff05] hover:bg-[#112417]/5 transition-colors"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -2094,7 +2088,7 @@ export default function Admin() {
                               <h5 className="font-bold text-[#eab308] mb-3 text-lg">
                                 {message.subject}
                               </h5>
-                              <div className="p-5 bg-white/5 rounded-xl border border-white/5 text-gray-300 leading-relaxed text-sm">
+                              <div className="p-5 bg-[#112417]/5 rounded-xl border border-white/5 text-gray-300 leading-relaxed text-sm">
                                 {message.message}
                               </div>
                             </div>
@@ -2144,7 +2138,7 @@ export default function Admin() {
                                 <div className="flex justify-end space-x-3">
                                   <button
                                     onClick={() => setReplyingTo(null)}
-                                    className="bg-white/5 hover:bg-white/10 text-[#8b9d93] hover:text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                                    className="bg-[#112417]/5 hover:bg-[#112417]/10 text-[#8b9d93] hover:text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
                                   >
                                     Cancel
                                   </button>
@@ -2174,14 +2168,14 @@ export default function Admin() {
                           <button
                             onClick={() => fetchMessages(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchMessages(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-white/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
@@ -2212,7 +2206,7 @@ export default function Admin() {
                       </div>
 
                       <div className="flex space-x-3 w-full sm:w-auto">
-                        <button className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-[#0a110d] text-white border border-[#ffffff10] font-bold px-6 py-4 rounded-[16px] hover:bg-white/5 transition-all">
+                        <button className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-[#0a110d] text-white border border-[#ffffff10] font-bold px-6 py-4 rounded-[16px] hover:bg-[#112417]/5 transition-all">
                           <Filter className="w-5 h-5 text-[#eab308]" />
                           <span>Filter</span>
                         </button>
@@ -2310,8 +2304,8 @@ export default function Admin() {
                                   <td className="px-8 py-5 whitespace-nowrap text-center">
                                     <span
                                       className={`px-4 py-1.5 inline-flex text-xs font-bold rounded-full uppercase tracking-wider border ${user.status === "active"
-                                          ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                          : "bg-red-500/10 text-red-400 border-red-500/20"
+                                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                        : "bg-red-500/10 text-red-400 border-red-500/20"
                                         }`}
                                     >
                                       {user.status}
@@ -2321,8 +2315,8 @@ export default function Admin() {
                                     <button
                                       onClick={() => toggleUserStatus(user.id)}
                                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${user.status === "active"
-                                          ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
-                                          : "bg-[#0a110d] text-green-400 hover:bg-green-500/10 border-green-500/20"
+                                        ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                        : "bg-[#0a110d] text-green-400 hover:bg-green-500/10 border-green-500/20"
                                         }`}
                                     >
                                       {user.status === "active"
@@ -2469,10 +2463,10 @@ export default function Admin() {
                               <div className="flex flex-col sm:items-end space-y-2">
                                 <span
                                   className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${rider.status === "approved"
-                                      ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                      : rider.status === "pending"
-                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-                                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                                    ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                    : rider.status === "pending"
+                                      ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                      : "bg-red-500/10 text-red-400 border-red-500/20"
                                     }`}
                                 >
                                   {rider.status}
@@ -2481,8 +2475,8 @@ export default function Admin() {
                                 {rider.status === "approved" && (
                                   <span
                                     className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${rider.isActive
-                                        ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                        : "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                                      ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                      : "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
                                       }`}
                                   >
                                     {rider.isActive ? "Active" : "Inactive"}
@@ -2576,8 +2570,8 @@ export default function Admin() {
                                       toggleRiderActive(rider.id, !rider.isActive)
                                     }
                                     className={`px-5 py-2 rounded-xl text-sm font-bold transition-all border ${rider.isActive
-                                        ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
-                                        : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/20"
+                                      ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                      : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/20"
                                       }`}
                                   >
                                     {rider.isActive ? "Deactivate Rider" : "Activate Rider"}
@@ -2587,7 +2581,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => deleteRider(rider.id)}
-                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-[#112417]/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                               >
                                 <Trash2 className="w-4 h-4" />
                                 <span>Delete</span>
@@ -2705,10 +2699,10 @@ export default function Admin() {
                               <div className="flex items-center">
                                 <span
                                   className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${request.status === "approved"
-                                      ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                      : request.status === "pending"
-                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-                                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                                    ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                    : request.status === "pending"
+                                      ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                      : "bg-red-500/10 text-red-400 border-red-500/20"
                                     }`}
                                 >
                                   {request.status}
@@ -2816,7 +2810,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => deletePartnershipRequest(request.id)}
-                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-white/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-[#112417]/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                               >
                                 <Trash2 className="w-4 h-4" />
                                 <span>Delete</span>
@@ -2927,7 +2921,7 @@ export default function Admin() {
 
                           <button
                             onClick={() => setActiveTab('riders')}
-                            className="bg-[#0a110d] hover:bg-white/5 text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10 group"
+                            className="bg-[#0a110d] hover:bg-[#112417]/5 text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10 group"
                           >
                             View Pending Riders <span className="ml-1 group-hover:translate-x-1 inline-block transition-transform">-&gt;</span>
                           </button>
@@ -3197,7 +3191,7 @@ ${earnings.earnings
                                             alert(details);
                                           }
                                         }}
-                                        className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-white/5 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
+                                        className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-[#112417]/5 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
                                       >
                                         <Eye className="w-4 h-4" />
                                         <span>View Statement</span>
@@ -3248,7 +3242,7 @@ ${earnings.earnings
 
                         <button
                           onClick={() => handleExport('json')}
-                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <Download className="w-4 h-4" />
                           <span>JSON</span>
@@ -3256,13 +3250,13 @@ ${earnings.earnings
 
                         <button
                           onClick={() => handleExport('csv')}
-                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <FileDown className="w-4 h-4" />
                           <span>CSV</span>
                         </button>
 
-                        <label className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-white/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer">
+                        <label className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer">
                           <Upload className="w-4 h-4" />
                           <span>Import</span>
                           <input
@@ -3396,7 +3390,7 @@ ${earnings.earnings
 
                           <div className="mt-6 flex flex-wrap gap-3">
                             <button type="submit" className="bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all">Add Activity</button>
-                            <button type="button" onClick={() => setShowAdd(false)} className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-white/5 px-6 py-2.5 rounded-xl transition-all font-bold text-sm">Cancel</button>
+                            <button type="button" onClick={() => setShowAdd(false)} className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-[#112417]/5 px-6 py-2.5 rounded-xl transition-all font-bold text-sm">Cancel</button>
                           </div>
                         </form>
                       </div>
@@ -3521,9 +3515,9 @@ ${earnings.earnings
                               >
                                 <div
                                   className={`w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg ${activity.type === 'delivery_completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                                      activity.type === 'pickup_completed' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
-                                        activity.type === 'payment_received' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-                                          activity.type === 'order_assigned' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                    activity.type === 'pickup_completed' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
+                                      activity.type === 'payment_received' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
+                                        activity.type === 'order_assigned' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[#0a110d]0/20 text-gray-400 border border-gray-500/30'
                                     }`}
                                 >
                                   <span className="text-xl">
@@ -3591,9 +3585,9 @@ ${earnings.earnings
                                 <div className="flex flex-col items-end space-y-2 shrink-0 ml-4 hidden sm:flex">
                                   <span
                                     className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${activity.type === 'delivery_completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                        activity.type === 'pickup_completed' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
-                                          activity.type === 'payment_received' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-                                            activity.type === 'order_assigned' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                                      activity.type === 'pickup_completed' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                        activity.type === 'payment_received' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                          activity.type === 'order_assigned' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-[#0a110d]0/10 text-gray-400 border-gray-500/20'
                                       }`}
                                   >
                                     {activity.type.replace('_', ' ')}
@@ -3620,7 +3614,7 @@ ${earnings.earnings
                                           alert('Failed to delete activity');
                                         }
                                       }}
-                                      className="flex items-center space-x-1 text-red-500/70 hover:text-red-400 text-sm transition-colors py-1 px-2 rounded hover:bg-white/5"
+                                      className="flex items-center space-x-1 text-red-500/70 hover:text-red-400 text-sm transition-colors py-1 px-2 rounded hover:bg-[#112417]/5"
                                     >
                                       <Trash2 className="w-3.5 h-3.5" />
                                       <span>Delete</span>
@@ -3634,7 +3628,7 @@ ${earnings.earnings
                         {/* Load More Button */}
                         {!isLoading && activities.length > 0 && (
                           <div className="text-center mt-8">
-                            <button className="bg-transparent hover:bg-white/5 text-white border border-[#ffffff15] px-6 py-2.5 rounded-xl transition-all font-bold text-sm">
+                            <button className="bg-transparent hover:bg-[#112417]/5 text-white border border-[#ffffff15] px-6 py-2.5 rounded-xl transition-all font-bold text-sm">
                               Load More Activities
                             </button>
                           </div>
@@ -3840,10 +3834,10 @@ ${earnings.earnings
                                   </div>
                                   <span
                                     className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${request.status === "pending"
-                                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-                                        : request.status === "approved"
-                                          ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                          : "bg-red-500/10 text-red-500 border-red-500/20"
+                                      ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                                      : request.status === "approved"
+                                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                        : "bg-red-500/10 text-red-500 border-red-500/20"
                                       }`}
                                   >
                                     {request.status}
@@ -3941,9 +3935,9 @@ ${earnings.earnings
                 <AnimatedPage>
                   <div className="space-y-6">
                     {/* Header */}
-                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <div className="bg-[#112417] p-6 rounded-lg shadow border border-white/5">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-900">
+                        <h2 className="text-xl font-semibold text-white">
                           Automated Payment System
                         </h2>
                         <div className="flex space-x-2">
@@ -4036,9 +4030,9 @@ ${earnings.earnings
 
                       {/* Payment History Stats */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-gray-600">156</div>
-                          <div className="text-sm text-gray-600">Total Payments</div>
+                        <div className="bg-[#0a110d] p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-[#8b9d93]">156</div>
+                          <div className="text-sm text-[#8b9d93]">Total Payments</div>
                         </div>
                         <div className="bg-green-50 p-4 rounded-lg">
                           <div className="text-2xl font-bold text-green-600">
@@ -4060,12 +4054,12 @@ ${earnings.earnings
                     </div>
 
                     {/* Recent Automated Payments */}
-                    <div className="bg-white rounded-lg shadow border border-gray-200">
-                      <div className="px-6 py-4 border-b border-gray-200">
-                        <h3 className="text-lg font-medium text-gray-900">
+                    <div className="bg-[#112417] rounded-lg shadow border border-white/5">
+                      <div className="px-6 py-4 border-b border-white/5">
+                        <h3 className="text-lg font-medium text-white">
                           Recent Automated Payments
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[#8b9d93]">
                           Payments processed automatically at 23:00 daily
                         </p>
                       </div>
@@ -4106,7 +4100,7 @@ ${earnings.earnings
                             ].map((payment) => (
                               <div
                                 key={payment.id}
-                                className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                                className="border border-white/5 rounded-lg p-4 hover:bg-[#0a110d] transition-colors"
                               >
                                 <div className="flex justify-between items-start">
                                   <div className="flex items-center space-x-4">
@@ -4121,19 +4115,19 @@ ${earnings.earnings
                                       </span>
                                     </div>
                                     <div>
-                                      <h4 className="font-semibold text-gray-900">
+                                      <h4 className="font-semibold text-white">
                                         {payment.rider}
                                       </h4>
-                                      <p className="text-sm text-gray-600">
+                                      <p className="text-sm text-[#8b9d93]">
                                         {payment.phone}
                                       </p>
-                                      <p className="text-xs text-gray-500">
+                                      <p className="text-xs text-[#8b9d93]">
                                         {payment.processedAt}
                                       </p>
                                     </div>
                                   </div>
                                   <div className="text-right">
-                                    <div className="text-lg font-bold text-gray-900">
+                                    <div className="text-lg font-bold text-white">
                                       KES {payment.amount.toLocaleString()}
                                     </div>
                                     <span

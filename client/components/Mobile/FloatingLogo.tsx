@@ -24,7 +24,7 @@ const FloatingLogo: React.FC = () => {
                 whileDrag={{ scale: 1.1 }}
                 onDragEnd={handleDragEnd}
                 style={{ y, opacity }}
-                className="fixed bottom-24 right-6 z-[60] cursor-grab active:cursor-grabbing"
+                className="fixed bottom-24 right-6 z-[60] cursor-grab active:cursor-grabbing md:hidden"
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
@@ -32,8 +32,8 @@ const FloatingLogo: React.FC = () => {
             >
                 <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-rocs-green to-rocs-yellow rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
-                    <div className="relative w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-rocs-green dark:border-gray-800 transition-transform active:scale-95 overflow-hidden">
-                        <img src="/logo.webp" alt="Logo" className="w-full h-full object-contain" />
+                    <div className="relative w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.3)] border border-white/20 transition-transform active:scale-95 overflow-hidden">
+                        <img src="/logo.svg" alt="Logo" className="w-full h-full object-contain p-2" />
                     </div>
 
                     {/* Tooltip hint */}

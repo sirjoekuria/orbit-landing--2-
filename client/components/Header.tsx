@@ -29,85 +29,65 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-12 h-12 object-contain" />
-              <span className="text-2xl font-bold text-foreground">Rocs Crew</span>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-1.5 border border-white/10 group-hover:border-[#eab308]/50 transition-all">
+                <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="text-2xl font-black text-white tracking-tighter group-hover:text-[#eab308] transition-colors">Rocs Crew</span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-foreground/80 hover:text-rocs-green transition-colors">
+            <nav className="hidden md:flex items-center space-x-8 font-outfit">
+              <Link to="/" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
                 Home
               </Link>
-              <Link to="/book-delivery">
-                <Button variant="outline" className="border-rocs-green text-rocs-green hover:border-rocs-green/70 hover:bg-transparent transition-all font-semibold">
-                  Book Now
-                </Button>
+              <Link to="/tracking" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+                Track order
               </Link>
-              <Link to="/tracking" className="text-foreground/80 hover:text-rocs-green transition-colors">
-                Track Order
+              <Link to="/services" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+                Services
               </Link>
-              <Link to="/contact" className="text-foreground/80 hover:text-rocs-green transition-colors">
+              <Link to="/about" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+                About
+              </Link>
+              <Link to="/contact" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
                 Contact
-              </Link>
-              <Link to="/services" className="text-foreground/80 hover:text-rocs-green transition-colors">
-                Our Services
-              </Link>
-              <Link to="/about" className="text-foreground/80 hover:text-rocs-green transition-colors">
-                About Us
-              </Link>
-              <Link to="/admin" className="text-foreground/80 hover:text-rocs-green transition-colors">
-                Admin
               </Link>
             </nav>
 
             {/* Contact Info & CTA */}
-            <div className="hidden lg:flex items-center space-x-4">
-              <a href="tel:+254700898950" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-rocs-green transition-colors">
-                <Phone className="w-4 h-4" />
-                <span>+254 700 898 950</span>
+            <div className="hidden lg:flex items-center space-x-6">
+              <a href="tel:+254700898950" className="flex items-center space-x-2 text-white/70 hover:text-[#eab308] transition-all bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                <Phone className="w-4 h-4 text-[#eab308]" />
+                <span className="text-xs font-bold tracking-widest">+254 700 898 950</span>
               </a>
 
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-rocs-green"
-                title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-
               {user ? (
-                <div className="flex items-center space-x-3">
-                  <Link to="/dashboard" className="flex items-center space-x-1 text-sm text-gray-600 hover:text-rocs-green transition-colors">
+                <div className="flex items-center space-x-4">
+                  <Link to="/dashboard" className="flex items-center space-x-2 text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium">
                     <LayoutDashboard className="w-4 h-4" />
                     <span>Dashboard</span>
                   </Link>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <User className="w-4 h-4" />
-                    <span>{user.name}</span>
-                  </div>
                   <Button
                     onClick={handleLogout}
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    className="border-gray-300 text-gray-600 hover:bg-gray-50"
+                    className="text-white/70 hover:text-red-400 hover:bg-red-400/10 rounded-xl"
                   >
-                    <LogOut className="w-4 h-4 mr-1" />
+                    <LogOut className="w-4 h-4 mr-2" />
                     Logout
                   </Button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-4">
                   <Link to="/login">
-                    <Button variant="outline" size="sm" className="border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white">
-                      <LogIn className="w-4 h-4 mr-1" />
+                    <Button variant="ghost" className="text-white/70 hover:text-[#eab308] hover:bg-white/5 font-bold">
                       Sign In
                     </Button>
                   </Link>
                   <Link to="/signup">
-                    <Button className="bg-rocs-green hover:bg-rocs-green-dark text-white">
-                      <UserPlus className="w-4 h-4 mr-1" />
-                      Sign Up
+                    <Button className="bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold px-6 rounded-xl shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                      Join Rocs
                     </Button>
                   </Link>
                 </div>
@@ -154,10 +134,10 @@ export default function Header() {
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-6 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1">
-              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-2 border border-white/10">
+              <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="text-xl font-bold text-white">Rocs Crew</span>
+            <span className="text-xl font-black text-white tracking-tighter">Rocs Crew</span>
           </div>
           <button
             className="text-white drop-shadow-md p-1 hover:text-[#eab308]"

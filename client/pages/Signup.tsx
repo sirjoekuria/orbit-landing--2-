@@ -13,6 +13,9 @@ import {
   Upload,
   Camera,
   FileText,
+  CheckCircle,
+  Bike,
+  Shield,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -239,16 +242,16 @@ export default function Signup() {
     icon?: any;
     description?: string;
   }) => (
-    <div>
+    <div className="space-y-2">
       <Label
         htmlFor={name}
-        className="text-gray-700 font-medium flex items-center gap-2"
+        className="text-white font-medium flex items-center gap-2"
       >
-        <Icon className="w-4 h-4" />
+        <Icon className="w-4 h-4 text-[#eab308]" />
         {label} {required && "*"}
       </Label>
       {description && (
-        <p className="text-sm text-gray-500 mt-1 mb-2">{description}</p>
+        <p className="text-xs text-[#8b9d93] mt-1 mb-2">{description}</p>
       )}
       <div className="relative">
         <input
@@ -256,16 +259,15 @@ export default function Signup() {
           name={name}
           type="file"
           accept={accept}
-          required={required}
           onChange={(e) => handleFileChange(e, name)}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
         />
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-rocs-green transition-colors">
-          <Icon className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-          <p className="text-sm text-gray-600">
+        <div className="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center hover:border-[#eab308]/50 transition-all bg-[#0a110d]/50 group">
+          <Icon className="w-10 h-10 mx-auto text-[#8b9d93] mb-3 group-hover:text-[#eab308] transition-colors" />
+          <p className="text-sm text-[#8b9d93] group-hover:text-white transition-colors">
             {fileUploads[name as keyof typeof fileUploads]
               ? fileUploads[name as keyof typeof fileUploads]?.name
-              : `Click to upload ${label.toLowerCase()}`}
+              : `Tap to upload ${label.toLowerCase()}`}
           </p>
         </div>
       </div>
@@ -273,201 +275,229 @@ export default function Signup() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center mx-auto mb-4">
-            <UserPlus className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-[#0a110d] py-12 px-4 relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rocs-green/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#eab308]/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-gradient-to-br from-[#eab308] to-[#ca8a04] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
+            <UserPlus className="w-10 h-10 text-black" />
           </div>
-          <h1 className="text-3xl font-bold text-rocs-green mb-2">
+          <h1 className="text-4xl font-bold text-white mb-3">
             Join Rocs Crew
           </h1>
-          <p className="text-gray-600">Create your account to get started</p>
+          <p className="text-[#8b9d93] text-lg">Create your account to get started</p>
         </div>
 
         {/* User Type Selection */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="bg-[#112417] rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-8 mb-8">
+          <h2 className="text-xl font-bold text-white mb-6">
             Choose Account Type
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={() => setUserType("customer")}
-              className={`p-6 rounded-lg border-2 transition-all ${userType === "customer"
-                ? "border-rocs-green bg-rocs-green/5"
-                : "border-gray-200 hover:border-rocs-green/50"
+              className={`p-6 rounded-2xl border-2 transition-all text-left relative overflow-hidden group ${userType === "customer"
+                ? "border-[#eab308] bg-[#eab308]/5 shadow-[0_0_20px_rgba(234,179,8,0.1)]"
+                : "border-white/5 bg-[#0a110d]/50 hover:border-[#eab308]/30"
                 }`}
             >
-              <User
-                className={`w-8 h-8 mx-auto mb-3 ${userType === "customer" ? "text-rocs-green" : "text-gray-400"}`}
-              />
-              <h3 className="font-semibold text-gray-800 mb-2">Customer</h3>
-              <p className="text-sm text-gray-600">Book and track deliveries</p>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${userType === "customer" ? "bg-[#eab308] text-black" : "bg-white/5 text-[#8b9d93]"}`}>
+                <User className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-white mb-1">Customer</h3>
+              <p className="text-xs text-[#8b9d93]">Book and track your deliveries with ease</p>
+              {userType === "customer" && (
+                <div className="absolute top-4 right-4 text-[#eab308]">
+                  <CheckCircle className="w-5 h-5" />
+                </div>
+              )}
             </button>
 
             <button
               onClick={() => setUserType("rider")}
-              className={`p-6 rounded-lg border-2 transition-all ${userType === "rider"
-                ? "border-rocs-green bg-rocs-green/5"
-                : "border-gray-200 hover:border-rocs-green/50"
+              className={`p-6 rounded-2xl border-2 transition-all text-left relative overflow-hidden group ${userType === "rider"
+                ? "border-[#eab308] bg-[#eab308]/5 shadow-[0_0_20px_rgba(234,179,8,0.1)]"
+                : "border-white/5 bg-[#0a110d]/50 hover:border-[#eab308]/30"
                 }`}
             >
-              <MapPin
-                className={`w-8 h-8 mx-auto mb-3 ${userType === "rider" ? "text-rocs-green" : "text-gray-400"}`}
-              />
-              <h3 className="font-semibold text-gray-800 mb-2">Rider</h3>
-              <p className="text-sm text-gray-600">
-                Deliver packages and earn money
-              </p>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${userType === "rider" ? "bg-[#eab308] text-black" : "bg-white/5 text-[#8b9d93]"}`}>
+                <MapPin className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-white mb-1">Rider</h3>
+              <p className="text-xs text-[#8b9d93]">Earn money by delivering packages on your bike</p>
+              {userType === "rider" && (
+                <div className="absolute top-4 right-4 text-[#eab308]">
+                  <CheckCircle className="w-5 h-5" />
+                </div>
+              )}
             </button>
           </div>
         </div>
 
         {/* Signup Form */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        <div className="bg-[#112417] rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-8">
+          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <div className="w-2 h-8 bg-[#eab308] rounded-full" />
             {userType === "rider"
               ? "Rider Application"
               : "Customer Registration"}
           </h2>
 
-          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-10">
             {/* Basic Information */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
-                Basic Information
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                Personal Details
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label
                     htmlFor="fullName"
-                    className="text-gray-700 font-medium"
+                    className="text-white/80 text-sm font-medium"
                   >
                     Full Name *
                   </Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    autoComplete="name"
-                    {...register("fullName")}
-                    className={`mt-1 ${errors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
-                    placeholder="Your full name"
-                  />
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                    <Input
+                      id="fullName"
+                      type="text"
+                      autoComplete="name"
+                      {...register("fullName")}
+                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.fullName ? 'border-red-500/50' : ''}`}
+                      placeholder="Your full name"
+                    />
+                  </div>
                   {errors.fullName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
+                    <p className="mt-1 text-xs text-red-400">{errors.fullName.message}</p>
                   )}
                 </div>
 
-                <div>
-                  <Label htmlFor="email" className="text-gray-700 font-medium">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-white/80 text-sm font-medium">
                     Email Address *
                   </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email username"
-                    {...register("email")}
-                    className={`mt-1 ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
-                    placeholder="your.email@example.com"
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email username"
+                      {...register("email")}
+                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.email ? 'border-red-500/50' : ''}`}
+                      placeholder="name@example.com"
+                    />
+                  </div>
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                    <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div>
-                  <Label htmlFor="phone" className="text-gray-700 font-medium">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-white/80 text-sm font-medium">
                     Phone Number *
                   </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    autoComplete="tel"
-                    {...register("phone")}
-                    className={`mt-1 ${errors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
-                    placeholder="+254 7XX XXX XXX"
-                  />
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                    <Input
+                      id="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      {...register("phone")}
+                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.phone ? 'border-red-500/50' : ''}`}
+                      placeholder="+254 7XX XXX XXX"
+                    />
+                  </div>
                   {errors.phone && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                    <p className="mt-1 text-xs text-red-400">{errors.phone.message}</p>
                   )}
                 </div>
 
                 {userType === "rider" && (
-                  <div>
+                  <div className="space-y-2">
                     <Label
                       htmlFor="nationalId"
-                      className="text-gray-700 font-medium"
+                      className="text-white/80 text-sm font-medium"
                     >
                       National ID Number *
                     </Label>
-                    <Input
-                      id="nationalId"
-                      type="text"
-                      {...register("nationalId")}
-                      className={`mt-1 ${errors.nationalId ? 'border-red-500 focus:ring-red-500' : ''}`}
-                      placeholder="Your ID number"
-                    />
+                    <div className="relative">
+                      <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                      <Input
+                        id="nationalId"
+                        type="text"
+                        {...register("nationalId")}
+                        className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.nationalId ? 'border-red-500/50' : ''}`}
+                        placeholder="Your ID number"
+                      />
+                    </div>
                     {errors.nationalId && (
-                      <p className="mt-1 text-sm text-red-600">{errors.nationalId.message}</p>
+                      <p className="mt-1 text-xs text-red-400">{errors.nationalId.message}</p>
                     )}
                   </div>
                 )}
               </div>
 
-              {/* Password Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label
                     htmlFor="password"
-                    className="text-gray-700 font-medium"
+                    className="text-white/80 text-sm font-medium"
                   >
                     Password *
                   </Label>
                   <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       autoComplete="new-password"
                       {...register("password")}
-                      className={`mt-1 pr-10 ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
-                      placeholder="Create a strong password"
+                      className={`h-12 pl-11 pr-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.password ? 'border-red-500/50' : ''}`}
+                      placeholder="••••••••"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
                     >
                       {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
+                        <EyeOff className="w-5 h-5" />
                       ) : (
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-5 h-5" />
                       )}
                     </button>
                   </div>
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                    <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
                   )}
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label
                     htmlFor="confirmPassword"
-                    className="text-gray-700 font-medium"
+                    className="text-white/80 text-sm font-medium"
                   >
                     Confirm Password *
                   </Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    {...register("confirmPassword")}
-                    className={`mt-1 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : ''}`}
-                    placeholder="Confirm your password"
-                  />
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b9d93]" />
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      autoComplete="new-password"
+                      {...register("confirmPassword")}
+                      className={`h-12 pl-11 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.confirmPassword ? 'border-red-500/50' : ''}`}
+                      placeholder="••••••••"
+                    />
+                  </div>
                   {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                    <p className="mt-1 text-xs text-red-400">{errors.confirmPassword.message}</p>
                   )}
                 </div>
               </div>
@@ -476,293 +506,296 @@ export default function Signup() {
             {/* Rider Specific Fields */}
             {userType === "rider" && (
               <>
-                {/* Motorcycle Information */}
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
-                    Motorcycle Information
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="motorcycleColor"
-                        className="text-gray-700 font-medium"
-                      >
-                        Motorcycle Color *
-                      </Label>
-                      <Input
-                        id="motorcycleColor"
-                        type="text"
-                        {...register("motorcycleColor")}
-                        className={`mt-1 ${errors.motorcycleColor ? 'border-red-500 focus:ring-red-500' : ''}`}
-                        placeholder="e.g., Red, Blue, Black"
-                      />
-                      {errors.motorcycleColor && (
-                        <p className="mt-1 text-sm text-red-600">{errors.motorcycleColor.message}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label
-                        htmlFor="motorcycleModel"
-                        className="text-gray-700 font-medium"
-                      >
-                        Motorcycle Model *
-                      </Label>
-                      <Input
-                        id="motorcycleModel"
-                        type="text"
-                        {...register("motorcycleModel")}
-                        className={`mt-1 ${errors.motorcycleModel ? 'border-red-500 focus:ring-red-500' : ''}`}
-                        placeholder="e.g., Honda CB 150F, Yamaha FZ"
-                      />
-                      {errors.motorcycleModel && (
-                        <p className="mt-1 text-sm text-red-600">{errors.motorcycleModel.message}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <Label
-                        htmlFor="experience"
-                        className="text-gray-700 font-medium"
-                      >
-                        Riding Experience *
-                      </Label>
-                      <select
-                        id="experience"
-                        {...register("experience")}
-                        className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green ${errors.experience ? 'border-red-500' : 'border-gray-300'}`}
-                      >
-                        <option value="">Select experience</option>
-                        <option value="1-2 years">1-2 years</option>
-                        <option value="3-5 years">3-5 years</option>
-                        <option value="5+ years">5+ years</option>
-                      </select>
-                      {errors.experience && (
-                        <p className="mt-1 text-sm text-red-600">{errors.experience.message}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label
-                        htmlFor="area"
-                        className="text-gray-700 font-medium"
-                      >
-                        Preferred Working Area *
-                      </Label>
-                      <select
-                        id="area"
-                        {...register("area")}
-                        className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green ${errors.area ? 'border-red-500' : 'border-gray-300'}`}
-                      >
-                        <option value="">Select area</option>
-                        <option value="CBD">CBD</option>
-                        <option value="Westlands">Westlands</option>
-                        <option value="Karen">Karen</option>
-                        <option value="Eastleigh">Eastleigh</option>
-                        <option value="Kasarani">Kasarani</option>
-                        <option value="Embakasi">Embakasi</option>
-                        <option value="All areas">All areas</option>
-                      </select>
-                      {errors.area && (
-                        <p className="mt-1 text-sm text-red-600">{errors.area.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Document Uploads */}
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
-                    Document Uploads
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FileUpload
-                      label="Passport Photo"
-                      name="passportPhoto"
-                      accept="image/*"
-                      icon={Camera}
-                      description="Clear passport-size photo"
-                    />
-
-                    <FileUpload
-                      label="Motorcycle Photo"
-                      name="motorcyclePhoto"
-                      accept="image/*"
-                      icon={Camera}
-                      description="Photo showing number plates clearly"
-                    />
-
-                    <FileUpload
-                      label="ID Card (Front)"
-                      name="idCardFront"
-                      accept="image/*"
-                      icon={FileText}
-                      description="Front side of your national ID"
-                    />
-
-                    <FileUpload
-                      label="ID Card (Back)"
-                      name="idCardBack"
-                      accept="image/*"
-                      icon={FileText}
-                      description="Back side of your national ID"
-                    />
-                  </div>
-                </div>
-
-                {/* Licenses and Certificates */}
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
-                    Licenses and Certificates
-                  </h3>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <FileUpload
-                        label="Driving License"
-                        name="drivingLicense"
-                        accept="image/*,application/pdf"
-                        icon={FileText}
-                        description="Valid motorcycle driving license"
-                      />
-                      <div>
+                <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                  {/* Motorcycle Information */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                      Motorcycle Information
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
                         <Label
-                          htmlFor="drivingLicenseExpiry"
-                          className="text-gray-700 font-medium"
+                          htmlFor="motorcycleColor"
+                          className="text-white/80 text-sm font-medium"
                         >
-                          Driving License Expiry Date *
+                          Motorcycle Color *
                         </Label>
                         <Input
-                          id="drivingLicenseExpiry"
-                          type="date"
-                          {...register("drivingLicenseExpiry")}
-                          className={`mt-1 ${errors.drivingLicenseExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
+                          id="motorcycleColor"
+                          type="text"
+                          {...register("motorcycleColor")}
+                          className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleColor ? 'border-red-500/50' : ''}`}
+                          placeholder="e.g., Red, Blue, Black"
                         />
-                        {errors.drivingLicenseExpiry && (
-                          <p className="mt-1 text-sm text-red-600">{errors.drivingLicenseExpiry.message}</p>
+                        {errors.motorcycleColor && (
+                          <p className="mt-1 text-xs text-red-400">{errors.motorcycleColor.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="motorcycleModel"
+                          className="text-white/80 text-sm font-medium"
+                        >
+                          Motorcycle Model *
+                        </Label>
+                        <Input
+                          id="motorcycleModel"
+                          type="text"
+                          {...register("motorcycleModel")}
+                          className={`h-12 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-xl ${errors.motorcycleModel ? 'border-red-500/50' : ''}`}
+                          placeholder="e.g., Honda CB 150F, Yamaha FZ"
+                        />
+                        {errors.motorcycleModel && (
+                          <p className="mt-1 text-xs text-red-400">{errors.motorcycleModel.message}</p>
                         )}
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <FileUpload
-                        label="Good Conduct Certificate"
-                        name="goodConductCertificate"
-                        accept="image/*,application/pdf"
-                        icon={FileText}
-                        description="Certificate of good conduct from DCI"
-                      />
-                      <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
                         <Label
-                          htmlFor="goodConductExpiry"
-                          className="text-gray-700 font-medium"
+                          htmlFor="experience"
+                          className="text-white/80 text-sm font-medium"
                         >
-                          Good Conduct Certificate Expiry Date *
+                          Riding Experience *
                         </Label>
-                        <Input
-                          id="goodConductExpiry"
-                          type="date"
-                          {...register("goodConductExpiry")}
-                          className={`mt-1 ${errors.goodConductExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
-                        />
-                        {errors.goodConductExpiry && (
-                          <p className="mt-1 text-sm text-red-600">{errors.goodConductExpiry.message}</p>
+                        <select
+                          id="experience"
+                          {...register("experience")}
+                          className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.experience ? 'border-red-500/50' : ''}`}
+                        >
+                          <option value="" className="bg-[#112417]">Select experience</option>
+                          <option value="1-2 years" className="bg-[#112417]">1-2 years</option>
+                          <option value="3-5 years" className="bg-[#112417]">3-5 years</option>
+                          <option value="5+ years" className="bg-[#112417]">5+ years</option>
+                        </select>
+                        {errors.experience && (
+                          <p className="mt-1 text-xs text-red-400">{errors.experience.message}</p>
                         )}
                       </div>
-                    </div>
 
-                    <div className="space-y-4">
-                      <FileUpload
-                        label="Motorcycle Insurance"
-                        name="motorcycleInsurance"
-                        accept="image/*,application/pdf"
-                        icon={FileText}
-                        description="Valid motorcycle insurance certificate"
-                      />
-                      <div>
+                      <div className="space-y-2">
                         <Label
-                          htmlFor="motorcycleInsuranceExpiry"
-                          className="text-gray-700 font-medium"
+                          htmlFor="area"
+                          className="text-white/80 text-sm font-medium"
                         >
-                          Insurance Expiry Date *
+                          Preferred Working Area *
                         </Label>
-                        <Input
-                          id="motorcycleInsuranceExpiry"
-                          type="date"
-                          {...register("motorcycleInsuranceExpiry")}
-                          className={`mt-1 ${errors.motorcycleInsuranceExpiry ? 'border-red-500 focus:ring-red-500' : ''}`}
-                        />
-                        {errors.motorcycleInsuranceExpiry && (
-                          <p className="mt-1 text-sm text-red-600">{errors.motorcycleInsuranceExpiry.message}</p>
+                        <select
+                          id="area"
+                          {...register("area")}
+                          className={`h-12 w-full px-4 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-xl transition-all ${errors.area ? 'border-red-500/50' : ''}`}
+                        >
+                          <option value="" className="bg-[#112417]">Select area</option>
+                          <option value="CBD" className="bg-[#112417]">CBD</option>
+                          <option value="Westlands" className="bg-[#112417]">Westlands</option>
+                          <option value="Karen" className="bg-[#112417]">Karen</option>
+                          <option value="Eastleigh" className="bg-[#112417]">Eastleigh</option>
+                          <option value="Kasarani" className="bg-[#112417]">Kasarani</option>
+                          <option value="Embakasi" className="bg-[#112417]">Embakasi</option>
+                          <option value="All areas" className="bg-[#112417]">All areas</option>
+                        </select>
+                        {errors.area && (
+                          <p className="mt-1 text-xs text-red-400">{errors.area.message}</p>
                         )}
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Personal Statement */}
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">
-                    Personal Statement
-                  </h3>
-                  <div>
-                    <Label
-                      htmlFor="motivation"
-                      className="text-gray-700 font-medium"
-                    >
-                      Why do you want to join Rocs Crew? *
-                    </Label>
-                    <textarea
-                      id="motivation"
-                      {...register("motivation")}
-                      rows={4}
-                      className={`mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rocs-green resize-none ${errors.motivation ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder="Tell us why you want to be part of our team..."
-                    />
-                    {errors.motivation && (
-                      <p className="mt-1 text-sm text-red-600">{errors.motivation.message}</p>
-                    )}
+                  {/* Document Uploads */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                      Required Documents
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <FileUpload
+                        label="Passport Photo"
+                        name="passportPhoto"
+                        accept="image/*"
+                        icon={Camera}
+                        description="Professional clear photo"
+                      />
+
+                      <FileUpload
+                        label="Motorcycle Photo"
+                        name="motorcyclePhoto"
+                        accept="image/*"
+                        icon={Bike}
+                        description="Photo showing plate number"
+                      />
+
+                      <FileUpload
+                        label="ID Card (Front)"
+                        name="idCardFront"
+                        accept="image/*"
+                        icon={FileText}
+                        description="Front of National ID"
+                      />
+
+                      <FileUpload
+                        label="ID Card (Back)"
+                        name="idCardBack"
+                        accept="image/*"
+                        icon={FileText}
+                        description="Back of National ID"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Licenses and Certificates */}
+                  <div className="space-y-8">
+                    <h3 className="text-lg font-bold text-white/90 mb-4 border-b border-white/5 pb-2">
+                      Certifications
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div className="space-y-6">
+                        <FileUpload
+                          label="Driving License"
+                          name="drivingLicense"
+                          accept="image/*,application/pdf"
+                          icon={FileText}
+                          description="Valid motorcycle license"
+                        />
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="drivingLicenseExpiry"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            License Expiry Date *
+                          </Label>
+                          <Input
+                            id="drivingLicenseExpiry"
+                            type="date"
+                            {...register("drivingLicenseExpiry")}
+                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.drivingLicenseExpiry ? 'border-red-500/50' : ''}`}
+                          />
+                          {errors.drivingLicenseExpiry && (
+                            <p className="mt-1 text-xs text-red-400">{errors.drivingLicenseExpiry.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <FileUpload
+                          label="Good Conduct Certificate"
+                          name="goodConductCertificate"
+                          accept="image/*,application/pdf"
+                          icon={Shield}
+                          description="Valid DCI Certificate"
+                        />
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="goodConductExpiry"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Certificate Expiry Date *
+                          </Label>
+                          <Input
+                            id="goodConductExpiry"
+                            type="date"
+                            {...register("goodConductExpiry")}
+                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.goodConductExpiry ? 'border-red-500/50' : ''}`}
+                          />
+                          {errors.goodConductExpiry && (
+                            <p className="mt-1 text-xs text-red-400">{errors.goodConductExpiry.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <FileUpload
+                          label="Motorcycle Insurance"
+                          name="motorcycleInsurance"
+                          accept="image/*,application/pdf"
+                          icon={Shield}
+                          description="Valid insurance cover"
+                        />
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="motorcycleInsuranceExpiry"
+                            className="text-white/80 text-sm font-medium"
+                          >
+                            Insurance Expiry Date *
+                          </Label>
+                          <Input
+                            id="motorcycleInsuranceExpiry"
+                            type="date"
+                            {...register("motorcycleInsuranceExpiry")}
+                            className={`h-12 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-[#eab308] rounded-xl ${errors.motorcycleInsuranceExpiry ? 'border-red-500/50' : ''}`}
+                          />
+                          {errors.motorcycleInsuranceExpiry && (
+                            <p className="mt-1 text-xs text-red-400">{errors.motorcycleInsuranceExpiry.message}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Statement */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold text-white/90 border-b border-white/5 pb-2">
+                      Personal Statement
+                    </h3>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="motivation"
+                        className="text-white/80 text-sm font-medium"
+                      >
+                        Why do you want to join Rocs Crew? *
+                      </Label>
+                      <textarea
+                        id="motivation"
+                        {...register("motivation")}
+                        rows={5}
+                        className={`w-full px-4 py-3 bg-[#0a110d]/50 border-white/10 border text-white focus:outline-none focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] rounded-2xl resize-none transition-all placeholder:text-white/10 ${errors.motivation ? 'border-red-500/50' : ''}`}
+                        placeholder="Tell us about your experience and why you're a great fit for the crew..."
+                      />
+                      {errors.motivation && (
+                        <p className="mt-1 text-xs text-red-400">{errors.motivation.message}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </>
             )}
 
+            <div className="pt-4 flex flex-col items-center space-y-8">
+              <div className="text-[12px] text-[#8b9d93] text-center max-w-sm px-4">
+                By clicking <span className="text-[#eab308] font-medium">{userType === "rider" ? "Submit Application" : "Create Account"}</span>, you agree to our{" "}
+                <Link to="/terms" className="text-[#eab308] hover:underline hover:text-[#ca8a04] transition-colors">Terms of Service</Link> and{" "}
+                <Link to="/privacy" className="text-[#eab308] hover:underline hover:text-[#ca8a04] transition-colors">Privacy Policy</Link>.
+              </div>
 
-            <div className="text-xs text-gray-500 text-center">
-              By clicking {userType === "rider" ? "Submit Application" : "Create Account"}, you agree to our{" "}
-              <Link to="/terms" className="text-rocs-green hover:underline font-medium">Terms of Service</Link> and{" "}
-              <Link to="/privacy" className="text-rocs-green hover:underline font-medium">Privacy Policy</Link>.
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-all active:scale-[0.98]"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-black mr-3"></div>
+                    Processing...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center">
+                    <UserPlus className="w-5 h-5 mr-3" />
+                    {userType === "rider"
+                      ? "Submit Application"
+                      : "Create Account"}
+                  </span>
+                )}
+              </Button>
             </div>
-
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Creating Account...
-                </span>
-              ) : (
-                <span className="flex items-center justify-center">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  {userType === "rider"
-                    ? "Submit Application"
-                    : "Create Account"}
-                </span>
-              )}
-            </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
+          <div className="mt-10 pt-8 border-t border-white/5 text-center">
+            <p className="text-[#8b9d93]">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-rocs-green hover:text-rocs-green-dark font-medium"
+                className="text-[#eab308] hover:text-[#ca8a04] font-bold transition-colors"
               >
                 Sign in here
               </Link>
