@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { API_BASE_URL } from '../lib/api';
 import {
   PendingBookingDot,
@@ -49,6 +50,9 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import PullToRefresh from "../components/Mobile/PullToRefresh";
 import { saveFileNative, isNative, triggerSelectionHaptic } from "../lib/mobileUtils";
 import AnimatedPage from "../components/AnimatedPage";
@@ -893,8 +897,8 @@ export default function Admin() {
 
         <div className="max-w-md w-full relative z-10 animate-fade-in translate-y-[-20px]">
           <div className="text-center mb-10">
-            <div className="w-24 h-24 bg-[#112417]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 p-4 border border-white/10 shadow-[0_0_30px_rgba(33,197,94,0.1)]">
-              <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+            <div className="w-24 h-24 bg-[#112417]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 p-4 border border-white/10 shadow-[0_0_30px_rgba(33,197,94,0.1)] overflow-hidden">
+              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
             <h1 className="text-4xl font-black text-white tracking-tighter mb-2">Admin Portal</h1>
             <p className="text-[#8b9d93] font-medium">Please authenticate to continue.</p>

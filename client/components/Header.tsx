@@ -31,7 +31,7 @@ export default function Header() {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-1.5 border border-white/10 group-hover:border-[#eab308]/50 transition-all">
-                <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+                <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
               </div>
               <span className="text-2xl font-black text-white tracking-tighter group-hover:text-[#eab308] transition-colors">Rocs Crew</span>
             </Link>
@@ -135,7 +135,7 @@ export default function Header() {
         <div className="flex items-center justify-between p-6 pb-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-2 border border-white/10">
-              <img src="/logo.svg" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
+              <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-black text-white tracking-tighter">Rocs Crew</span>
           </div>
