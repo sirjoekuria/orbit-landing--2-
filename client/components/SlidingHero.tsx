@@ -6,9 +6,9 @@ export default function SlidingHero() {
   const [currentImage, setCurrentImage] = useState(0);
 
   const slidingImages = [
-    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=1200&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1574116194873-cf8b53ad7c3a?w=1200&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1617347454431-f49d7ff5c3b1?w=1200&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1612006567758-1846b36dd130?w=1200&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1723986550735-a1f8d8e661ba?w=1200&h=600&fit=crop",
   ];
 
   useEffect(() => {
