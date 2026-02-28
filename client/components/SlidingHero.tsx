@@ -1,18 +1,39 @@
 import { ArrowRight, Phone, Clock, MapPin, Shield, Bell, User as UserIcon, Truck, Navigation, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function SlidingHero() {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const slidingImages = [
+    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=1200&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1574116194873-cf8b53ad7c3a?w=1200&h=600&fit=crop",
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % slidingImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="relative min-h-screen bg-background pt-20 pb-10 overflow-hidden flex items-center transition-colors duration-300">
-      {/* Background Rider Image with Gradient Overlay */}
-      <div className="absolute top-0 right-0 w-full h-full md:w-2/3 pointer-events-none opacity-20 dark:opacity-50 z-0 select-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20 z-10" />
-        <img
-          src="/hero-rider.webp"
-          alt="Delivery Rider"
-          className="w-full h-full object-cover object-center translate-x-10 md:translate-x-20 scale-110"
-        />
+      {/* Sliding Background Images */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-0 select-none overflow-hidden">
+        {slidingImages.map((src, index) => (
+          <img
+            key={index}
+            src={src}
+            alt={`Delivery visual ${index + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${index === currentImage ? "opacity-100" : "opacity-0"
+              }`}
+          />
+        ))}
+        {/* Gradient overlays to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 md:via-background/80 to-background/20 dark:to-background/50 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
       </div>
 
       {/* Main Content */}
@@ -110,8 +131,8 @@ export default function SlidingHero() {
       </div>
 
       {/* Subtle Background Glows */}
-      <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-rocs-green/5 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-primary/20 dark:bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-rocs-yellow/20 dark:bg-rocs-green/5 blur-[100px] rounded-full pointer-events-none" />
     </section>
   );
 }
