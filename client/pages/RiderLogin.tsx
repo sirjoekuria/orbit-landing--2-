@@ -87,9 +87,9 @@ export default function RiderLogin() {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => { setShowForgotModal(false); if (onClose) onClose(); }}></div>
-        <div className="bg-white rounded-2xl shadow-xl p-8 z-10 w-full max-w-md relative">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Forgot Password</h3>
-          <p className="text-sm text-gray-600 mb-6">Enter the email used during registration and we'll send a reset link.</p>
+        <div className="bg-card rounded-2xl shadow-xl p-8 z-10 w-full max-w-md relative border border-border">
+          <h3 className="text-xl font-bold text-foreground mb-2">Forgot Password</h3>
+          <p className="text-sm text-muted-foreground mb-6">Enter the email used during registration and we'll send a reset link.</p>
 
           {message && (
             <div className={`mb-6 p-4 rounded-lg text-sm font-medium ${message.includes('Failed') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
@@ -99,12 +99,12 @@ export default function RiderLogin() {
 
           <form onSubmit={handleForgotSubmit(onSubmitForgot)} className="space-y-6">
             <div>
-              <Label htmlFor="fp-email">Email Address</Label>
+              <Label htmlFor="fp-email" className="text-foreground/80">Email Address</Label>
               <Input
                 id="fp-email"
                 type="email"
                 {...register('email')}
-                className={`mt-1 h-11 ${forgotErrors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+                className={`mt-1 h-11 bg-muted/50 border-border text-foreground focus:border-primary focus:ring-primary ${forgotErrors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                 placeholder="your.email@example.com"
               />
               {forgotErrors.email && <p className="mt-1 text-xs text-red-600">{forgotErrors.email.message}</p>}
@@ -113,7 +113,7 @@ export default function RiderLogin() {
             <div className="flex justify-end gap-3 pt-2">
               <button
                 type="button"
-                className="px-6 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-colors"
+                className="px-6 py-2.5 rounded-xl text-sm font-semibold text-muted-foreground hover:bg-muted transition-colors"
                 onClick={() => { setShowForgotModal(false); if (onClose) onClose(); }}
               >
                 Cancel
@@ -121,7 +121,7 @@ export default function RiderLogin() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-rocs-green hover:bg-rocs-green/90 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-rocs-green/20"
+                className="bg-primary hover:brightness-110 text-primary-foreground font-bold px-6 py-2.5 rounded-xl shadow-md"
               >
                 {loading ? 'Sending...' : 'Send Link'}
               </Button>
@@ -193,27 +193,27 @@ export default function RiderLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 transition-colors duration-300">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-rocs-green/30">
-            <Bike className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 bg-gradient-to-br from-primary to-rocs-green-dark rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+            <Bike className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Rider Portal</h1>
-          <p className="text-gray-600">Secure access to your dashboard</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Rider Portal</h1>
+          <p className="text-muted-foreground">Secure access to your dashboard</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 sm:p-10 border border-gray-100">
+        <div className="bg-card rounded-3xl shadow-xl p-8 sm:p-10 border border-border backdrop-blur-sm">
           <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
             <div>
-              <Label htmlFor="email" className="text-gray-700 font-semibold mb-1.5 block">Email Address</Label>
+              <Label htmlFor="email" className="text-foreground/80 font-semibold mb-1.5 block">Email Address</Label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   id="email"
                   type="email"
                   {...register('email')}
-                  className={`pl-11 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus:bg-white transition-all ${errors.email ? 'border-red-500 ring-red-500' : 'focus:ring-rocs-green'}`}
+                  className={`pl-11 h-12 bg-muted/30 border-border rounded-xl focus:bg-card transition-all text-foreground placeholder:text-muted-foreground/50 ${errors.email ? 'border-red-500 ring-red-500' : 'focus:ring-primary'}`}
                   placeholder="rider@example.com"
                 />
               </div>
@@ -222,28 +222,28 @@ export default function RiderLogin() {
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <Label htmlFor="password" className="text-gray-700 font-semibold">Password</Label>
+                <Label htmlFor="password" className="text-foreground/80 font-semibold">Password</Label>
                 <button
                   type="button"
                   onClick={() => setShowForgotModal(true)}
-                  className="text-sm font-bold text-rocs-green hover:text-rocs-green/80 transition-colors"
+                  className="text-sm font-bold text-primary hover:text-rocs-green-dark transition-colors"
                 >
                   Forgot password?
                 </button>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password')}
-                  className={`pl-11 pr-11 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus:bg-white transition-all ${errors.password ? 'border-red-500 ring-red-500' : 'focus:ring-rocs-green'}`}
+                  className={`pl-11 pr-11 h-12 bg-muted/30 border-border rounded-xl focus:bg-card transition-all text-foreground placeholder:text-muted-foreground/50 ${errors.password ? 'border-red-500 ring-red-500' : 'focus:ring-primary'}`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -252,20 +252,20 @@ export default function RiderLogin() {
             </div>
 
 
-            <div className="text-[11px] text-gray-400 text-center px-4 leading-relaxed">
+            <div className="text-[11px] text-muted-foreground text-center px-4 leading-relaxed">
               By signing in, you agree to our{" "}
-              <Link to="/terms" className="text-rocs-green hover:underline font-bold">Terms of Service</Link> and{" "}
-              <Link to="/privacy" className="text-rocs-green hover:underline font-bold">Privacy Policy</Link>.
+              <Link to="/terms" className="text-primary hover:underline font-bold">Terms of Service</Link> and{" "}
+              <Link to="/privacy" className="text-primary hover:underline font-bold">Privacy Policy</Link>.
             </div>
 
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 bg-rocs-green hover:bg-rocs-green/90 text-white font-bold text-lg rounded-2xl shadow-lg shadow-rocs-green/30 transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
+              className="w-full h-12 bg-gradient-to-r from-primary to-rocs-green-dark hover:brightness-110 text-primary-foreground font-bold text-lg rounded-2xl shadow-md transition-all active:scale-[0.98]"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground"></div>
                   Verifying...
                 </span>
               ) : (
@@ -279,11 +279,11 @@ export default function RiderLogin() {
 
           {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />}
 
-          <div className="mt-10 pt-8 border-t border-gray-100 text-center">
-            <p className="text-sm text-gray-500 mb-3 font-medium">Not a rider yet?</p>
+          <div className="mt-10 pt-8 border-t border-border text-center">
+            <p className="text-sm text-muted-foreground mb-3 font-medium">Not a rider yet?</p>
             <Link
               to="/signup?type=rider"
-              className="inline-flex items-center justify-center gap-2 text-rocs-green font-extrabold hover:text-rocs-green/80 transition-colors group"
+              className="inline-flex items-center justify-center gap-2 text-primary font-extrabold hover:text-rocs-green-dark transition-colors group"
             >
               <User className="w-4 h-4" />
               <span>Apply to Join the Crew</span>

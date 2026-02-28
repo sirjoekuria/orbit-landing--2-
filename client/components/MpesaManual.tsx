@@ -28,12 +28,12 @@ export default function MpesaManual({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-card border border-border rounded-lg p-6">
       <div className="text-center mb-6">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4">
           <Smartphone className="w-8 h-8 text-white" />
         </div>
-        <div className="text-lg font-semibold text-gray-800">
+        <div className="text-lg font-semibold text-foreground">
           Lipa na M-Pesa
         </div>
         <div className="text-2xl font-bold text-rocs-green">
@@ -92,7 +92,7 @@ export default function MpesaManual({
             <div>
               <div className="font-medium">Enter Till Number</div>
               <div className="flex items-center space-x-2 mt-1">
-                <div className="bg-white border border-green-300 rounded px-3 py-2 font-mono text-lg font-bold text-green-800">
+                <div className="bg-card border border-green-300 rounded px-3 py-2 font-mono text-lg font-bold text-green-800">
                   {tillNumber}
                 </div>
                 <button
@@ -177,7 +177,7 @@ export default function MpesaManual({
       </button>
 
       <div className="mt-4 text-center">
-        <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
           <CheckCircle className="w-4 h-4 text-green-500" />
           <span>Secured by Safaricom M-Pesa</span>
         </div>

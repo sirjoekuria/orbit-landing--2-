@@ -71,10 +71,9 @@ export default function Hero() {
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute inset-0 transition-transform duration-1000 ease-in-out ${
-            index === currentSlide ? 'translate-x-0' : 
+          className={`absolute inset-0 transition-transform duration-1000 ease-in-out ${index === currentSlide ? 'translate-x-0' :
             index < currentSlide ? '-translate-x-full' : 'translate-x-full'
-          }`}
+            }`}
         >
           <div className="relative h-full">
             <img
@@ -83,7 +82,7 @@ export default function Hero() {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-40" />
-            
+
             {/* Content */}
             <div className="absolute inset-0 flex items-center">
               <div className="container mx-auto px-4">
@@ -97,7 +96,7 @@ export default function Hero() {
                   <p className="text-lg mb-8 leading-relaxed">
                     {slide.description}
                   </p>
-                  <Button size="lg" className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 font-semibold px-8 py-3">
+                  <Button size="lg" className="bg-primary hover:brightness-110 text-primary-foreground font-bold px-10 py-6 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 text-lg">
                     {slide.cta}
                   </Button>
                 </div>
@@ -110,39 +109,40 @@ export default function Hero() {
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all"
+        className="absolute left-6 top-1/2 -translate-y-1/2 bg-background/20 backdrop-blur-md hover:bg-background/40 text-white p-3 rounded-2xl transition-all border border-white/10 group"
       >
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all"
+        className="absolute right-6 top-1/2 -translate-y-1/2 bg-background/20 backdrop-blur-md hover:bg-background/40 text-white p-3 rounded-2xl transition-all border border-white/10 group"
       >
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
       </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 flex space-x-3">
         {heroSlides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentSlide ? 'bg-rocs-yellow' : 'bg-white bg-opacity-50'
-            }`}
+            className={`transition-all duration-300 rounded-full ${index === currentSlide ? 'w-10 h-3 bg-primary' : 'w-3 h-3 bg-card/40 hover:bg-card/60'
+              }`}
           />
         ))}
       </div>
 
       {/* Feature Cards */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-8">
-        <div className="container mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent pt-20 pb-10">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 text-white">
-                <feature.icon className="w-8 h-8 text-rocs-yellow mb-4" />
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm opacity-90">{feature.description}</p>
+              <div key={index} className="bg-card/30 backdrop-blur-xl rounded-[2rem] p-8 text-foreground border border-border/50 shadow-2xl transition-all hover:-translate-y-2 group">
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <feature.icon className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-black mb-2 font-outfit">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground font-medium leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>

@@ -125,7 +125,7 @@ export default function AdminLocations() {
         <Button onClick={() => { setPage(1); fetchLocations(); }} className="bg-rocs-green">Search</Button>
       </div>
 
-      {message && <div className="mb-3 text-sm text-gray-700">{message}</div>}
+      {message && <div className="mb-3 text-sm text-muted-foreground">{message}</div>}
 
       <div className="overflow-auto max-h-[60vh] border rounded">
         <table className="w-full text-sm">

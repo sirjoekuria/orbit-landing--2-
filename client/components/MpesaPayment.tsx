@@ -164,9 +164,9 @@ export default function MpesaPayment({
 
   if (disabled) {
     return (
-      <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 text-center">
-        <div className="text-gray-500 mb-2">M-Pesa Payment</div>
-        <div className="text-sm text-gray-400">
+      <div className="bg-muted border border-border rounded-lg p-4 text-center">
+        <div className="text-muted-foreground mb-2">M-Pesa Payment</div>
+        <div className="text-sm text-muted-foreground">
           Complete order details to enable payment
         </div>
       </div>
@@ -174,12 +174,12 @@ export default function MpesaPayment({
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-card border border-border rounded-lg p-6">
       <div className="text-center mb-6">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4">
           <Smartphone className="w-8 h-8 text-white" />
         </div>
-        <div className="text-lg font-semibold text-gray-800">
+        <div className="text-lg font-semibold text-foreground">
           Pay with M-Pesa
         </div>
         <div className="text-2xl font-bold text-rocs-green">
@@ -190,23 +190,23 @@ export default function MpesaPayment({
       {step === "phone" && (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               M-Pesa Phone Number
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Phone className="h-5 w-5 text-gray-400" />
+                <Phone className="h-5 w-5 text-muted-foreground" />
               </div>
               <input
                 type="tel"
                 value={phoneNumber}
                 onChange={handlePhoneChange}
                 placeholder="e.g., 0712345678"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 maxLength={12}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Enter your Safaricom M-Pesa number (07XX XXX XXX)
             </p>
           </div>
@@ -222,7 +222,7 @@ export default function MpesaPayment({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="w-full text-gray-600 py-2 text-sm hover:text-gray-800"
+              className="w-full text-muted-foreground py-2 text-sm hover:text-foreground"
             >
               Cancel
             </button>
@@ -233,10 +233,10 @@ export default function MpesaPayment({
       {step === "processing" && (
         <div className="text-center py-8">
           <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-green-600" />
-          <div className="text-lg font-medium text-gray-800 mb-2">
+          <div className="text-lg font-medium text-foreground mb-2">
             Sending STK Push...
           </div>
-          <div className="text-gray-600">
+          <div className="text-muted-foreground">
             Please wait while we initiate the payment
           </div>
         </div>
@@ -247,18 +247,18 @@ export default function MpesaPayment({
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <Smartphone className="w-8 h-8 text-green-600 animate-pulse" />
           </div>
-          <div className="text-lg font-medium text-gray-800 mb-2">
+          <div className="text-lg font-medium text-foreground mb-2">
             Check Your Phone
           </div>
-          <div className="text-gray-600 mb-4">
+          <div className="text-muted-foreground mb-4">
             STK Push sent to <strong>+{phoneNumber}</strong>
           </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-            <div className="text-green-800 font-medium text-sm">
+          <div className="bg-muted/50 border border-primary/20 rounded-lg p-4 mb-4">
+            <div className="text-primary font-medium text-sm">
               📱 Enter your M-Pesa PIN on your phone to complete the payment
             </div>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-muted-foreground">
             Payment will be processed automatically once you confirm on your
             phone
           </div>
@@ -271,7 +271,7 @@ export default function MpesaPayment({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            className="text-center py-8 absolute inset-0 bg-white flex flex-col items-center justify-center z-10 rounded-lg"
+            className="text-center py-8 absolute inset-0 bg-card flex flex-col items-center justify-center z-10 rounded-lg"
           >
             {/* Confetti-like particles */}
             {[...Array(12)].map((_, i) => (
@@ -305,7 +305,7 @@ export default function MpesaPayment({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-2xl font-bold text-gray-800 mb-1"
+              className="text-2xl font-bold text-foreground mb-1"
             >
               Payment Successful!
             </motion.h3>
@@ -313,7 +313,7 @@ export default function MpesaPayment({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-gray-600"
+              className="text-muted-foreground"
             >
               Your order is being processed
             </motion.p>
@@ -322,7 +322,7 @@ export default function MpesaPayment({
       </AnimatePresence>
 
       <div className="mt-6 text-center">
-        <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
           <CheckCircle className="w-4 h-4 text-green-500" />
           <span>Secured by Safaricom M-Pesa</span>
         </div>

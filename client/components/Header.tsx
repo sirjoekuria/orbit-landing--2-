@@ -25,49 +25,58 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-[#0a110d]/90 backdrop-blur-md border-b border-[#22c55e]/10 sticky top-0 z-40 transition-colors duration-300">
+      <header className="bg-background/90 backdrop-blur-md border-b border-border sticky top-0 z-40 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-1.5 border border-white/10 group-hover:border-[#eab308]/50 transition-all">
+              <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center p-1.5 border border-border group-hover:border-primary/50 transition-all">
                 <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-2xl font-black text-white tracking-tighter group-hover:text-[#eab308] transition-colors">Rocs Crew</span>
+              <span className="text-2xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors">Rocs Crew</span>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8 font-outfit">
-              <Link to="/" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 Home
               </Link>
-              <Link to="/tracking" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/tracking" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 Track order
               </Link>
-              <Link to="/services" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/services" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 Services
               </Link>
-              <Link to="/about" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 About
               </Link>
-              <Link to="/contact" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 Contact
               </Link>
-              <Link to="/admin" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+              <Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider">
                 Admin
               </Link>
+
+              {/* Theme Toggle Desktop */}
+              <button
+                onClick={toggleTheme}
+                className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center border border-border text-muted-foreground hover:text-primary transition-all hover:scale-110 active:scale-95 shadow-sm"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5" />}
+              </button>
             </nav>
 
             {/* Contact Info & CTA */}
             <div className="hidden lg:flex items-center space-x-6">
-              <a href="tel:+254700898950" className="flex items-center space-x-2 text-white/70 hover:text-[#eab308] transition-all bg-white/5 px-4 py-2 rounded-full border border-white/5">
-                <Phone className="w-4 h-4 text-[#eab308]" />
+              <a href="tel:+254700898950" className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-all bg-muted px-4 py-2 rounded-full border border-border">
+                <Phone className="w-4 h-4 text-primary" />
                 <span className="text-xs font-bold tracking-widest">+254 700 898 950</span>
               </a>
 
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <Link to="/dashboard" className="flex items-center space-x-2 text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium">
+                  <Link to="/dashboard" className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors text-sm font-medium">
                     <LayoutDashboard className="w-4 h-4" />
                     <span>Dashboard</span>
                   </Link>
@@ -75,7 +84,7 @@ export default function Header() {
                     onClick={handleLogout}
                     variant="ghost"
                     size="sm"
-                    className="text-white/70 hover:text-red-400 hover:bg-red-400/10 rounded-xl"
+                    className="text-muted-foreground hover:text-red-600 hover:bg-muted rounded-xl"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout
@@ -84,12 +93,12 @@ export default function Header() {
               ) : (
                 <div className="flex items-center space-x-4">
                   <Link to="/login">
-                    <Button variant="ghost" className="text-white/70 hover:text-[#eab308] hover:bg-white/5 font-bold">
+                    <Button variant="ghost" className="text-muted-foreground hover:text-primary hover:bg-muted font-bold">
                       Sign In
                     </Button>
                   </Link>
                   <Link to="/signup">
-                    <Button className="bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold px-6 rounded-xl shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                    <Button className="bg-gradient-to-r from-primary to-rocs-green-dark hover:brightness-110 text-primary-foreground font-bold px-6 rounded-xl shadow-lg">
                       Join Rocs
                     </Button>
                   </Link>
@@ -99,19 +108,25 @@ export default function Header() {
 
             {/* Mobile Actions: Notifications & Profile */}
             <div className="flex md:hidden items-center space-x-3 pr-2">
-              <button className="w-10 h-10 rounded-full bg-[#112417] flex items-center justify-center border border-white/5 text-[#8b9d93] hover:text-[#eab308] transition-colors">
+              <button
+                onClick={toggleTheme}
+                className="w-10 h-10 rounded-full bg-muted flex items-center justify-center border border-border text-muted-foreground hover:text-primary transition-colors"
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <button className="w-10 h-10 rounded-full bg-muted flex items-center justify-center border border-border text-muted-foreground hover:text-primary transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
               <Link to={user ? "/dashboard" : "/login"}>
-                <button className="w-10 h-10 rounded-full bg-gradient-to-br from-[#eab308] to-[#ca8a04] flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.3)]">
-                  <UserIcon className="w-5 h-5 text-black" />
+                <button className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-rocs-green-dark flex items-center justify-center shadow-md">
+                  <UserIcon className="w-5 h-5 text-primary-foreground" />
                 </button>
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 -mr-2 text-white hover:text-[#eab308] transition-colors relative z-50"
+              className="md:hidden p-2 -mr-2 text-foreground hover:text-primary transition-colors relative z-50"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -131,19 +146,19 @@ export default function Header() {
 
       {/* Mobile Sidebar (Drawer) */}
       <div
-        className={`fixed inset-y-0 left-0 w-[280px] bg-[#0a110d] border-r border-[#eab308]/20 shadow-[5px_0_25px_rgba(0,0,0,0.5)] z-50 transform transition-transform duration-300 ease-in-out flex flex-col md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 left-0 w-[280px] bg-background border-r border-border shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-6 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center p-2 border border-white/10">
+            <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center p-2 border border-border">
               <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="text-xl font-black text-white tracking-tighter">Rocs Crew</span>
+            <span className="text-xl font-black text-foreground tracking-tighter">Rocs Crew</span>
           </div>
           <button
-            className="text-white drop-shadow-md p-1 hover:text-[#eab308]"
+            className="text-foreground drop-shadow-md p-1 hover:text-primary"
             onClick={() => setIsMenuOpen(false)}
           >
             <X className="w-6 h-6" />
@@ -154,55 +169,55 @@ export default function Header() {
         <nav className="flex-1 overflow-y-auto py-4 px-6 space-y-6">
           <Link
             to="/"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Home className="w-5 h-5 text-[#eab308]" />
+            <Home className="w-5 h-5 text-primary" />
             <span>Home</span>
           </Link>
 
           <Link
             to="/tracking"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Truck className="w-5 h-5 text-[#eab308]" />
+            <Truck className="w-5 h-5 text-primary" />
             <span>Track Order</span>
           </Link>
 
           <Link
             to="/services"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Wrench className="w-5 h-5 text-[#eab308]" />
+            <Wrench className="w-5 h-5 text-primary" />
             <span>Our Services</span>
           </Link>
 
           <Link
             to="/about"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Info className="w-5 h-5 text-[#eab308]" />
+            <Info className="w-5 h-5 text-primary" />
             <span>About Us</span>
           </Link>
 
           <Link
             to="/contact"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <HelpCircle className="w-5 h-5 text-[#eab308]" />
+            <HelpCircle className="w-5 h-5 text-primary" />
             <span>Contact</span>
           </Link>
 
           <Link
             to="/admin"
-            className="flex items-center space-x-4 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-4 text-foreground hover:text-primary transition-colors font-medium"
             onClick={() => setIsMenuOpen(false)}
           >
-            <Shield className="w-5 h-5 text-[#eab308]" />
+            <Shield className="w-5 h-5 text-primary" />
             <span>Admin Panel</span>
           </Link>
 
@@ -210,22 +225,22 @@ export default function Header() {
           <div className="pt-4 space-y-4">
             {user ? (
               <>
-                <div className="flex items-center space-x-3 text-white px-2 mb-2">
-                  <User className="w-5 h-5 text-[#eab308]" />
+                <div className="flex items-center space-x-3 text-foreground px-2 mb-2">
+                  <User className="w-5 h-5 text-primary" />
                   <span className="font-semibold">{user.name}</span>
                 </div>
                 <Button
                   onClick={handleLogout}
-                  className="w-full justify-center bg-transparent border border-[#eab308]/50 text-white hover:bg-[#eab308]/10 h-12 rounded-xl"
+                  className="w-full justify-center bg-transparent border border-primary/50 text-foreground hover:bg-primary/10 h-12 rounded-xl"
                 >
-                  <LogOut className="w-5 h-5 mr-3 text-[#eab308]" />
+                  <LogOut className="w-5 h-5 mr-3 text-primary" />
                   Logout
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full justify-center bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold h-12 rounded-xl mb-4 shadow-md border-0">
+                  <Button className="w-full justify-center bg-gradient-to-r from-primary to-rocs-green-dark hover:brightness-110 text-primary-foreground font-bold h-12 rounded-xl mb-4 shadow-md border-0">
                     <UserPlus className="w-5 h-5 mr-3" />
                     Sign Up Now
                   </Button>
@@ -234,9 +249,9 @@ export default function Header() {
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                   <Button
                     variant="outline"
-                    className="w-full justify-center bg-transparent border border-[#eab308]/50 text-white hover:bg-[#eab308]/10 h-12 rounded-xl"
+                    className="w-full justify-center bg-transparent border border-primary/50 text-foreground hover:bg-primary/10 h-12 rounded-xl"
                   >
-                    <LogIn className="w-5 h-5 mr-3 text-[#eab308]" />
+                    <LogIn className="w-5 h-5 mr-3 text-primary" />
                     Sign In
                   </Button>
                 </Link>
@@ -246,23 +261,23 @@ export default function Header() {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="border-t border-white/10 p-6 space-y-6">
+        <div className="border-t border-border p-6 space-y-6">
           <a
             href="tel:+254700898950"
-            className="flex items-center space-x-3 text-white hover:text-[#eab308] transition-colors font-medium"
+            className="flex items-center space-x-3 text-foreground hover:text-primary transition-colors font-medium"
           >
-            <Phone className="w-5 h-5 text-[#eab308]" />
+            <Phone className="w-5 h-5 text-primary" />
             <span>+254 700 898 950</span>
           </a>
 
-          <div className="flex space-x-5 text-[#8b9d93]">
-            <a href="#" className="hover:text-white transition-colors">
+          <div className="flex space-x-5 text-muted-foreground">
+            <a href="#" className="hover:text-primary transition-colors">
               <Facebook className="w-6 h-6" />
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="#" className="hover:text-primary transition-colors">
               <Twitter className="w-6 h-6" />
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="#" className="hover:text-primary transition-colors">
               <Instagram className="w-6 h-6" />
             </a>
           </div>

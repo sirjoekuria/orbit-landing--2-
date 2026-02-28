@@ -99,9 +99,9 @@ export default function LocationPicker({
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
@@ -187,8 +187,7 @@ export default function LocationPicker({
         );
 
         // Use Mapbox Geocoding API for comprehensive search
-        const mapboxAccessToken =
-          "pk.eyJ1Ijoic2lyam9la3VyaWEiLCJhIjoiY21laGxzZnI0MDBjZzJqcXczc2NtdHZqZCJ9.FhRc9jUcHnkTPuauJrP-Qw";
+        const mapboxAccessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
         // Search with various types to include buildings, businesses, POIs
         const searchTypes = [
@@ -273,8 +272,8 @@ export default function LocationPicker({
   }, [searchQuery, debouncedSearch]);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+    <div className="bg-card rounded-lg border border-border p-6">
+      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
         <MapPin className="w-5 h-5 mr-2 text-rocs-green" />
         Select Pickup & Drop-off Locations
       </h3>
@@ -283,21 +282,19 @@ export default function LocationPicker({
       <div className="flex mb-4">
         <button
           onClick={() => setSelectedLocationType("pickup")}
-          className={`flex-1 py-2 px-4 rounded-l-lg border-2 transition-colors ${
-            selectedLocationType === "pickup"
-              ? "bg-rocs-green text-white border-rocs-green"
-              : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
-          }`}
+          className={`flex-1 py-2 px-4 rounded-l-lg border-2 transition-colors ${selectedLocationType === "pickup"
+            ? "bg-rocs-green text-white border-rocs-green"
+            : "bg-background text-foreground border-border/30 hover:bg-gray-100"
+            }`}
         >
           Pickup Location
         </button>
         <button
           onClick={() => setSelectedLocationType("dropoff")}
-          className={`flex-1 py-2 px-4 rounded-r-lg border-2 border-l-0 transition-colors ${
-            selectedLocationType === "dropoff"
-              ? "bg-rocs-green text-white border-rocs-green"
-              : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
-          }`}
+          className={`flex-1 py-2 px-4 rounded-r-lg border-2 border-l-0 transition-colors ${selectedLocationType === "dropoff"
+            ? "bg-rocs-green text-white border-rocs-green"
+            : "bg-background text-foreground border-border/30 hover:bg-gray-100"
+            }`}
         >
           Drop-off Location
         </button>
@@ -307,13 +304,13 @@ export default function LocationPicker({
       <div className="relative mb-4">
         <div className="flex">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={`Search for ${selectedLocationType} location...`}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-rocs-green focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-border/30 rounded-l-lg focus:ring-2 focus:ring-rocs-green focus:border-transparent"
             />
             {searchQuery && (
               <button
@@ -321,7 +318,7 @@ export default function LocationPicker({
                   setSearchQuery("");
                   setSearchResults([]);
                 }}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -329,7 +326,7 @@ export default function LocationPicker({
           </div>
           <button
             onClick={getCurrentLocation}
-            className="px-4 py-2 bg-rocs-yellow text-gray-800 rounded-r-lg hover:bg-rocs-yellow/90 transition-colors flex items-center"
+            className="px-4 py-2 bg-rocs-yellow text-foreground rounded-r-lg hover:bg-rocs-yellow/90 transition-colors flex items-center"
           >
             <Navigation className="w-4 h-4 mr-1" />
             Current
@@ -339,15 +336,15 @@ export default function LocationPicker({
 
       {/* Search Results */}
       {searchResults.length > 0 && (
-        <div className="mb-4 border border-gray-200 rounded-lg max-h-60 overflow-y-auto">
+        <div className="mb-4 border border-border rounded-lg max-h-60 overflow-y-auto">
           {searchResults.map((location, index) => (
             <button
               key={index}
               onClick={() => selectLocation(location)}
-              className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+              className="w-full text-left p-3 hover:bg-background border-b border-gray-100 last:border-b-0 transition-colors"
             >
-              <div className="font-medium text-gray-800">{location.name}</div>
-              <div className="text-sm text-gray-600">{location.address}</div>
+              <div className="font-medium text-foreground">{location.name}</div>
+              <div className="text-sm text-muted-foreground">{location.address}</div>
             </button>
           ))}
         </div>
@@ -356,7 +353,7 @@ export default function LocationPicker({
       {/* Quick Select Common Locations */}
       {!searchQuery && (
         <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">
+          <h4 className="text-sm font-medium text-foreground mb-2">
             Quick Select:
           </h4>
           <div className="grid grid-cols-2 gap-2">
@@ -364,9 +361,9 @@ export default function LocationPicker({
               <button
                 key={index}
                 onClick={() => selectLocation(location)}
-                className="p-2 text-sm text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-sm text-left bg-background hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <div className="font-medium text-gray-800">{location.name}</div>
+                <div className="font-medium text-foreground">{location.name}</div>
               </button>
             ))}
           </div>
@@ -424,10 +421,10 @@ export default function LocationPicker({
               <div className="text-2xl font-bold text-rocs-green">
                 {distance.toFixed(1)} km
               </div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-muted-foreground mt-1">
                 Estimated time: {Math.round(duration)} minutes
               </div>
-              <div className="text-lg font-semibold text-gray-800 mt-2">
+              <div className="text-lg font-semibold text-foreground mt-2">
                 Estimated cost: KES {(distance * 30).toFixed(0)}
               </div>
             </div>
@@ -441,7 +438,7 @@ export default function LocationPicker({
           pickup={pickupLocation}
           dropoff={dropoffLocation}
           height="320px"
-          className="border border-gray-200 rounded-lg overflow-hidden"
+          className="border border-border rounded-lg overflow-hidden"
         />
 
         {/* Map Status Overlay */}

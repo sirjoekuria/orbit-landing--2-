@@ -9,41 +9,41 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 120 60% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 120 60% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 120 60% 5%;
 
-    --primary: 120 50% 25%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 120 50% 20%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 85% 70%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 45 90% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    --rocs-green: 120 50% 25%;
-    --rocs-green-light: 120 40% 85%;
-    --rocs-green-dark: 120 60% 15%;
+    --rocs-green: 120 50% 20%;
+    --rocs-green-light: 120 30% 90%;
+    --rocs-green-dark: 120 60% 10%;
 
-    --rocs-yellow: 45 85% 70%;
-    --rocs-yellow-light: 45 80% 90%;
-    --rocs-yellow-dark: 45 90% 50%;
+    --rocs-yellow: 45 90% 45%;
+    --rocs-yellow-light: 45 80% 95%;
+    --rocs-yellow-dark: 45 90% 35%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 120 10% 95%;
+    --muted-foreground: 120 5% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 90% 45%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 120 10% 90%;
+    --input: 120 10% 90%;
+    --ring: 120 50% 20%;
 
     --radius: 0.5rem;
 

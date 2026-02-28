@@ -87,20 +87,20 @@ export default function OrderTracking() {
   };
 
   return (
-    <section className="py-16 bg-gray-50 min-h-screen">
+    <section className="py-16 bg-background min-h-screen">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-rocs-green mb-4">
               Track Your Order
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               Enter your tracking ID to see real-time updates on your delivery
             </p>
           </div>
 
           {/* Search Form */}
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <div className="bg-card rounded-xl shadow-lg p-8 mb-8">
             <form onSubmit={handleTrackOrder} className="space-y-4">
               <div>
                 <Label htmlFor="trackingId" className="text-rocs-green font-semibold">
@@ -108,7 +108,7 @@ export default function OrderTracking() {
                 </Label>
                 <div className="flex space-x-4 mt-2">
                   <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                    <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="trackingId"
                       type="text"
@@ -121,7 +121,7 @@ export default function OrderTracking() {
                   <Button
                     type="submit"
                     disabled={isLoading || !trackingId.trim()}
-                    className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-gray-800 px-8"
+                    className="bg-rocs-yellow hover:bg-rocs-yellow-dark text-foreground px-8"
                   >
                     {isLoading ? (
                       <span className="flex items-center">
@@ -147,30 +147,30 @@ export default function OrderTracking() {
           {orderData && (
             <div className="space-y-8">
               {/* Order Info Card */}
-              <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="bg-card rounded-xl shadow-lg p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="text-xl font-semibold text-rocs-green mb-4">Order Details</h3>
                     <div className="space-y-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Order ID:</span>
-                        <p className="text-gray-800">{orderData.id}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Order ID:</span>
+                        <p className="text-foreground">{orderData.id}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Customer:</span>
-                        <p className="text-gray-800">{orderData.customerName}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Customer:</span>
+                        <p className="text-foreground">{orderData.customerName}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Phone:</span>
-                        <p className="text-gray-800">{orderData.customerPhone}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Phone:</span>
+                        <p className="text-foreground">{orderData.customerPhone}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Distance:</span>
-                        <p className="text-gray-800">{orderData.distance} km</p>
+                        <span className="text-sm font-medium text-muted-foreground">Distance:</span>
+                        <p className="text-foreground">{orderData.distance} km</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Cost:</span>
-                        <p className="text-gray-800 font-semibold">KES {orderData.cost.toLocaleString()}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Cost:</span>
+                        <p className="text-foreground font-semibold">KES {orderData.cost.toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
@@ -179,30 +179,30 @@ export default function OrderTracking() {
                     <h3 className="text-xl font-semibold text-rocs-green mb-4">Delivery Information</h3>
                     <div className="space-y-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Pickup Location:</span>
-                        <p className="text-gray-800">{orderData.pickup}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Pickup Location:</span>
+                        <p className="text-foreground">{orderData.pickup}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Delivery Location:</span>
-                        <p className="text-gray-800">{orderData.delivery}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Delivery Location:</span>
+                        <p className="text-foreground">{orderData.delivery}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Order Date:</span>
-                        <p className="text-gray-800">{formatDate(orderData.createdAt)}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Order Date:</span>
+                        <p className="text-foreground">{formatDate(orderData.createdAt)}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Estimated Delivery:</span>
-                        <p className="text-gray-800">{formatDate(orderData.estimatedDelivery)}</p>
+                        <span className="text-sm font-medium text-muted-foreground">Estimated Delivery:</span>
+                        <p className="text-foreground">{formatDate(orderData.estimatedDelivery)}</p>
                       </div>
                       {orderData.riderName && (
                         <>
                           <div>
-                            <span className="text-sm font-medium text-gray-600">Rider:</span>
-                            <p className="text-gray-800">{orderData.riderName}</p>
+                            <span className="text-sm font-medium text-muted-foreground">Rider:</span>
+                            <p className="text-foreground">{orderData.riderName}</p>
                           </div>
                           <div>
-                            <span className="text-sm font-medium text-gray-600">Rider Phone:</span>
-                            <p className="text-gray-800">{orderData.riderPhone}</p>
+                            <span className="text-sm font-medium text-muted-foreground">Rider Phone:</span>
+                            <p className="text-foreground">{orderData.riderPhone}</p>
                           </div>
                         </>
                       )}
@@ -212,7 +212,7 @@ export default function OrderTracking() {
               </div>
 
               {/* Tracking Progress */}
-              <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="bg-card rounded-xl shadow-lg p-8">
                 <h3 className="text-xl font-semibold text-rocs-green mb-6">Delivery Progress</h3>
 
                 <div className="relative">
@@ -230,22 +230,22 @@ export default function OrderTracking() {
 
                         {/* Step Icon */}
                         <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center ${status === 'completed' ? 'bg-rocs-green text-white' :
-                            status === 'current' ? 'bg-rocs-yellow text-gray-800' :
-                              'bg-gray-200 text-gray-400'
+                          status === 'current' ? 'bg-rocs-yellow text-foreground' :
+                            'bg-gray-200 text-muted-foreground'
                           }`}>
                           <Icon className="w-6 h-6" />
                         </div>
 
                         {/* Step Content */}
                         <div className="ml-6 flex-1">
-                          <h4 className={`font-semibold ${status === 'completed' || status === 'current' ? 'text-gray-800' : 'text-gray-400'
+                          <h4 className={`font-semibold ${status === 'completed' || status === 'current' ? 'text-foreground' : 'text-muted-foreground'
                             }`}>
                             {step.label}
                           </h4>
 
                           {/* Status Timestamp */}
                           {orderData.statusHistory.find(h => h.status === step.key) && (
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {formatDate(orderData.statusHistory.find(h => h.status === step.key)!.timestamp)}
                             </p>
                           )}
@@ -261,15 +261,15 @@ export default function OrderTracking() {
               </div>
 
               {/* Status History */}
-              <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="bg-card rounded-xl shadow-lg p-8">
                 <h3 className="text-xl font-semibold text-rocs-green mb-6">Status History</h3>
                 <div className="space-y-4">
                   {orderData.statusHistory.map((status, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center space-x-4 p-4 bg-background rounded-lg">
                       <Clock className="w-5 h-5 text-rocs-green" />
                       <div className="flex-1">
-                        <p className="font-medium text-gray-800">{status.description}</p>
-                        <p className="text-sm text-gray-600">{formatDate(status.timestamp)}</p>
+                        <p className="font-medium text-foreground">{status.description}</p>
+                        <p className="text-sm text-muted-foreground">{formatDate(status.timestamp)}</p>
                       </div>
                     </div>
                   ))}

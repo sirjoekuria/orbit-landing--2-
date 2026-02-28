@@ -142,9 +142,9 @@ export default function RiderWithdrawal() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-card shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
@@ -175,14 +175,14 @@ export default function RiderWithdrawal() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Withdrawal Form */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+              <div className="bg-card rounded-lg shadow border border-border p-6">
                 <div className="flex items-center space-x-3 mb-6">
                   <DollarSign className="w-6 h-6 text-rocs-green" />
-                  <h2 className="text-xl font-semibold text-gray-900">Request Early Withdrawal</h2>
+                  <h2 className="text-xl font-semibold text-foreground">Request Early Withdrawal</h2>
                 </div>
 
                 {/* Rider Info */}
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <div className="bg-background rounded-lg p-4 mb-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center space-x-3">
                       <User className="w-4 h-4 text-gray-500" />
@@ -311,8 +311,8 @@ export default function RiderWithdrawal() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Account Summary */}
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Summary</h3>
+              <div className="bg-card rounded-lg shadow border border-border p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">Account Summary</h3>
                 <div className="space-y-4">
                   <div>
                     <div className="text-sm text-gray-500">Current Balance</div>
@@ -320,26 +320,26 @@ export default function RiderWithdrawal() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Total Earnings</div>
-                    <div className="text-lg font-semibold text-gray-900">KES {rider.totalEarnings.toLocaleString()}</div>
+                    <div className="text-lg font-semibold text-foreground">KES {rider.totalEarnings.toLocaleString()}</div>
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Total Withdrawn</div>
-                    <div className="text-lg font-semibold text-gray-900">KES {rider.totalWithdrawn.toLocaleString()}</div>
+                    <div className="text-lg font-semibold text-foreground">KES {rider.totalWithdrawn.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
 
               {/* Recent Requests */}
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Requests</h3>
+              <div className="bg-card rounded-lg shadow border border-border p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">Recent Requests</h3>
                 <div className="space-y-3">
                   {recentRequests.length === 0 ? (
                     <p className="text-sm text-gray-500">No recent withdrawal requests</p>
                   ) : (
                     recentRequests.map((request) => (
-                      <div key={request.id} className="border border-gray-200 rounded-lg p-3">
+                      <div key={request.id} className="border border-border rounded-lg p-3">
                         <div className="flex justify-between items-start mb-2">
-                          <span className="text-sm font-medium text-gray-900">KES {request.amount.toLocaleString()}</span>
+                          <span className="text-sm font-medium text-foreground">KES {request.amount.toLocaleString()}</span>
                           <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(request.status)}`}>
                             {request.status}
                           </span>

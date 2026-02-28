@@ -42,7 +42,7 @@ const OfflineNotice: React.FC = () => {
                     className="fixed top-20 left-4 right-4 z-[9999] flex items-center justify-between bg-red-600 text-white px-4 py-3 rounded-lg shadow-2xl border border-red-500"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="bg-white/20 p-2 rounded-full">
+                        <div className="bg-card/20 p-2 rounded-full">
                             <WifiOff className="w-5 h-5" />
                         </div>
                         <div>
@@ -52,7 +52,7 @@ const OfflineNotice: React.FC = () => {
                     </div>
                     <button
                         onClick={() => setIsVisible(false)}
-                        className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                        className="p-1 hover:bg-card/10 rounded-full transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>

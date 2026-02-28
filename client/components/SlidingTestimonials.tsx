@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Star, Quote, CheckCircle2 } from "lucide-react";
 
 const testimonials = [
   {
@@ -21,7 +21,7 @@ const testimonials = [
     company: "Mama's Kitchen",
     rating: 5,
     content:
-      "The real-time tracking is fantastic! My customers love being able to see exactly where orders are. Rocs Crew has helped grow my business significantly with their reliable service.",
+      "We use Rocs Crew for all our food deliveries. Their motorcycles are perfect for navigating Nairobi traffic, and they always handle our orders with care.",
     avatar:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     deliveries: "200+",
@@ -58,7 +58,7 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-5 h-5 ${i < rating ? "text-[#eab308] fill-current drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]" : "text-gray-600"
+          className={`w-5 h-5 ${i < rating ? "text-primary fill-current drop-shadow-md" : "text-muted/30"
             }`}
         />
       ))}
@@ -69,21 +69,12 @@ function StarRating({ rating }: { rating: number }) {
 export default function SlidingTestimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [visibleTestimonials, setVisibleTestimonials] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 2;
-    }
-    return 2;
-  });
+  const [visibleTestimonials, setVisibleTestimonials] = useState(2);
 
   useEffect(() => {
     const handleResize = () => {
-      const newVisible =
-        window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 2;
-      setVisibleTestimonials(newVisible);
-      setCurrentSlide(0);
+      setVisibleTestimonials(window.innerWidth < 768 ? 1 : 2);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -91,57 +82,40 @@ export default function SlidingTestimonials() {
 
   useEffect(() => {
     if (!isAutoPlaying) return;
-
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => {
-        const maxSlide = testimonials.length - visibleTestimonials;
-        return prev >= maxSlide ? 0 : prev + 1;
-      });
+      setCurrentSlide((prev) => (prev >= testimonials.length - visibleTestimonials ? 0 : prev + 1));
     }, 4000);
-
     return () => clearInterval(timer);
   }, [isAutoPlaying, visibleTestimonials]);
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
 
   const maxSlides = testimonials.length - visibleTestimonials + 1;
 
   return (
-    <section className="py-20 bg-[#0a110d] relative overflow-hidden">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-[#1a3824] rounded-full blur-[150px] opacity-30 pointer-events-none" />
+    <section className="py-24 bg-background relative overflow-hidden transition-colors duration-300">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-primary/5 rounded-full blur-[150px] opacity-30 pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10 max-w-5xl">
-        {/* Header */}
+      <div className="container mx-auto px-4 relative z-10 max-w-6xl">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center space-x-2 bg-[#eab308] rounded-full px-5 py-2 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.4)]">
-            <CheckCircle2 className="w-4 h-4 text-black fill-black/10" />
-            <span className="text-black font-extrabold text-sm uppercase tracking-wide">
+          <div className="inline-flex items-center justify-center space-x-2 bg-primary/10 border border-primary/20 rounded-full px-5 py-2 mb-6 shadow-sm">
+            <CheckCircle2 className="w-4 h-4 text-primary" />
+            <span className="text-primary font-black text-xs uppercase tracking-widest">
               Customer Stories
             </span>
           </div>
-
-          <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
+          <h2 className="text-4xl md:text-6xl font-black text-foreground leading-tight tracking-tight font-outfit">
             What Our<br />Customers Say
           </h2>
         </div>
 
-        {/* Testimonials Slider */}
         <div
-          className="relative max-w-4xl mx-auto"
+          className="relative max-w-5xl mx-auto"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
-          onTouchStart={() => setIsAutoPlaying(false)}
-          onTouchEnd={() => setIsAutoPlaying(true)}
         >
-          <div className="overflow-hidden px-2 py-4">
+          <div className="overflow-hidden py-8">
             <div
               className="flex transition-transform duration-700 ease-in-out"
-              style={{
-                transform: `translateX(-${currentSlide * (100 / visibleTestimonials)}%)`,
-              }}
+              style={{ transform: `translateX(-${currentSlide * (100 / visibleTestimonials)}%)` }}
             >
               {testimonials.map((testimonial) => (
                 <div
@@ -149,41 +123,36 @@ export default function SlidingTestimonials() {
                   className="px-4 flex-shrink-0"
                   style={{ width: `${100 / visibleTestimonials}%` }}
                 >
-                  <div className="bg-[#112417] rounded-[2rem] p-8 md:p-10 h-full border border-[#eab308]/40 shadow-[0_0_30px_rgba(234,179,8,0.15)] flex flex-col relative transition-transform hover:scale-[1.02] duration-300">
-
-                    {/* Header: Quote and Stars */}
+                  <div className="bg-card rounded-[3rem] p-10 h-full border border-border shadow-xl flex flex-col relative transition-all hover:shadow-2xl hover:-translate-y-2 duration-300">
                     <div className="flex items-start justify-between mb-8">
-                      <div className="w-14 h-14 rounded-full bg-[#1a3824] flex items-center justify-center border border-[#eab308]/30 shrink-0">
-                        <Quote className="w-6 h-6 text-[#eab308] fill-[#eab308]" />
+                      <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+                        <Quote className="w-8 h-8 text-primary fill-primary" />
                       </div>
                       <StarRating rating={testimonial.rating} />
                     </div>
 
-                    {/* Testimonial Content */}
-                    <blockquote className="text-[#8b9d93] mb-10 leading-relaxed text-lg font-normal flex-grow">
+                    <blockquote className="text-muted-foreground mb-10 leading-relaxed text-lg font-medium flex-grow italic">
                       "{testimonial.content}"
                     </blockquote>
 
-                    {/* Customer Info */}
                     <div className="flex items-center space-x-4 mb-8">
                       <img
                         src={testimonial.avatar}
                         alt={testimonial.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-[#1a3824]"
+                        className="w-14 h-14 rounded-2xl object-cover border-2 border-border shadow-md"
                       />
                       <div>
-                        <h4 className="font-bold text-white text-lg">
+                        <h4 className="font-black text-foreground text-lg font-outfit">
                           {testimonial.name}
                         </h4>
-                        <p className="text-[#8b9d93] text-sm">
+                        <p className="text-muted-foreground text-sm font-medium">
                           {testimonial.role}, {testimonial.company}
                         </p>
                       </div>
                     </div>
 
-                    {/* Successful Deliveries Badge */}
-                    <div className="inline-flex items-center self-start bg-gradient-to-r from-[#eab308] to-[#ca8a04] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(234,179,8,0.3)]">
-                      <span className="text-black font-bold text-sm">
+                    <div className="inline-flex items-center self-start bg-primary/10 px-5 py-2.5 rounded-2xl border border-primary/20">
+                      <span className="text-primary font-black text-xs uppercase tracking-wider">
                         {testimonial.deliveries} Successful Deliveries
                       </span>
                     </div>
@@ -193,61 +162,35 @@ export default function SlidingTestimonials() {
             </div>
           </div>
 
-          {/* Slide Indicators */}
-          <div className="flex justify-center items-center mt-12 space-x-2">
+          <div className="flex justify-center items-center mt-12 space-x-3">
             {Array.from({ length: maxSlides }).map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`transition-all duration-300 rounded-full ${index === currentSlide
-                    ? "w-8 h-2 bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.6)]"
-                    : "w-2 h-2 bg-gray-600 hover:bg-gray-400"
-                  }`}
-                aria-label={`Go to slide ${index + 1}`}
+                onClick={() => setCurrentSlide(index)}
+                className={`transition-all duration-300 rounded-full ${index === currentSlide ? "w-10 h-3 bg-primary" : "w-3 h-3 bg-muted hover:bg-muted-foreground"}`}
               />
             ))}
           </div>
         </div>
 
-        {/* Bottom Statistics Divider separating sections */}
-        <div className="w-full h-px bg-white/10 mt-20 mb-12" />
+        <div className="w-full h-px bg-border/50 mt-24 mb-16" />
 
-        {/* Trust Indicators (4 Column Clean Row) */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-4 text-center">
-          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
-            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
-              5000+
-            </div>
-            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
-              Deliveries Completed
-            </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8 text-center font-outfit">
+          <div className="lg:border-r border-border px-4">
+            <div className="text-4xl md:text-5xl font-black text-foreground mb-3">5000+</div>
+            <div className="text-primary font-black text-xs uppercase tracking-widest leading-tight">Deliveries Completed</div>
           </div>
-
-          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
-            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
-              98%
-            </div>
-            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
-              Customer Satisfaction
-            </div>
+          <div className="lg:border-r border-border px-4">
+            <div className="text-4xl md:text-5xl font-black text-foreground mb-3">98%</div>
+            <div className="text-primary font-black text-xs uppercase tracking-widest leading-tight">Customer Satisfaction</div>
           </div>
-
-          <div className="lg:border-r border-white/10 px-4 flex flex-col items-center justify-center">
-            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
-              24/7
-            </div>
-            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
-              Customer Support
-            </div>
+          <div className="lg:border-r border-border px-4">
+            <div className="text-4xl md:text-5xl font-black text-foreground mb-3">24/7</div>
+            <div className="text-primary font-black text-xs uppercase tracking-widest leading-tight">Customer Support</div>
           </div>
-
-          <div className="px-4 flex flex-col items-center justify-center">
-            <div className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-3">
-              500+
-            </div>
-            <div className="text-[#eab308] font-medium text-sm w-min whitespace-pre-wrap leading-tight">
-              Happy Businesses
-            </div>
+          <div className="px-4">
+            <div className="text-4xl md:text-5xl font-black text-foreground mb-3">500+</div>
+            <div className="text-primary font-black text-xs uppercase tracking-widest leading-tight">Happy Businesses</div>
           </div>
         </div>
       </div>

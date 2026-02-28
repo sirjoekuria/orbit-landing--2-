@@ -16,13 +16,13 @@ declare global {
   }
 }
 
-export default function PayPalPayment({ 
-  amount, 
-  currency = "USD", 
-  onSuccess, 
-  onError, 
+export default function PayPalPayment({
+  amount,
+  currency = "USD",
+  onSuccess,
+  onError,
   onCancel,
-  disabled = false 
+  disabled = false
 }: PayPalPaymentProps) {
   const paypalRef = useRef<HTMLDivElement>(null);
   const [isSDKReady, setIsSDKReady] = useState(false);
@@ -40,7 +40,7 @@ export default function PayPalPayment({
 
       // Get PayPal Client ID from environment or use the live one we configured
       const paypalClientId = import.meta.env.VITE_PAYPAL_CLIENT_ID ||
-                            'AbS0oMjeCgXXVlxSbht7O4brye9TacLSKMb3CzD8arBLdizO_QzgI9n6U3mBBxYwWAn4rX4lgAzSMkUu';
+        'AbS0oMjeCgXXVlxSbht7O4brye9TacLSKMb3CzD8arBLdizO_QzgI9n6U3mBBxYwWAn4rX4lgAzSMkUu';
 
       // Create script element for PayPal SDK
       const script = document.createElement('script');
@@ -127,9 +127,9 @@ export default function PayPalPayment({
 
   if (isLoading) {
     return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+      <div className="bg-background border border-border rounded-lg p-6 text-center">
         <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-rocs-green" />
-        <div className="text-gray-600">Loading PayPal...</div>
+        <div className="text-muted-foreground">Loading PayPal...</div>
       </div>
     );
   }
@@ -145,20 +145,20 @@ export default function PayPalPayment({
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <div className="bg-card border border-border rounded-lg p-4">
       <div className="text-center mb-4">
-        <div className="text-lg font-semibold text-gray-800">Pay with PayPal</div>
+        <div className="text-lg font-semibold text-foreground">Pay with PayPal</div>
         <div className="text-2xl font-bold text-rocs-green">
           {currency} {amount.toFixed(2)}
         </div>
       </div>
-      
+
       <div ref={paypalRef} className="paypal-button-container">
         {/* PayPal buttons will be rendered here */}
       </div>
-      
+
       <div className="mt-4 text-center">
-        <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
           <CheckCircle className="w-4 h-4 text-green-500" />
           <span>Secure payment powered by PayPal</span>
         </div>

@@ -15,8 +15,8 @@ export default function BookDelivery() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rocs-green"></div>
+      <div className="min-h-screen bg-background flex items-center justify-center transition-colors duration-300">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -24,24 +24,24 @@ export default function BookDelivery() {
   // If user is not logged in, show signup/login prompt
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-16">
+      <div className="min-h-screen bg-background flex items-center justify-center py-16 transition-colors duration-300">
         <div className="max-w-md w-full mx-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-rocs-green rounded-full flex items-center justify-center mx-auto mb-6">
-              <Package className="w-8 h-8 text-white" />
+          <div className="bg-card rounded-3xl shadow-xl border border-border p-8 text-center backdrop-blur-sm">
+            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
+              <Package className="w-8 h-8 text-primary-foreground" />
             </div>
 
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               Sign In Required
             </h1>
 
-            <p className="text-gray-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               You need to create an account or sign in to book a delivery with Rocs Crew.
             </p>
 
             <div className="space-y-4">
               <Link to="/signup">
-                <Button className="w-full bg-rocs-green hover:bg-rocs-green-dark text-white font-semibold py-3">
+                <Button className="w-full bg-primary hover:bg-primary-foreground hover:text-primary font-semibold py-3 rounded-xl transition-all">
                   <UserPlus className="w-5 h-5 mr-2" />
                   Create Account
                 </Button>
@@ -50,7 +50,7 @@ export default function BookDelivery() {
               <Link to="/login">
                 <Button
                   variant="outline"
-                  className="w-full border-rocs-green text-rocs-green hover:bg-rocs-green hover:text-white font-semibold py-3"
+                  className="w-full border-primary text-primary hover:bg-primary hover:text-white font-semibold py-3 rounded-xl transition-all"
                 >
                   <LogIn className="w-5 h-5 mr-2" />
                   Sign In
@@ -58,11 +58,11 @@ export default function BookDelivery() {
               </Link>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
+            <div className="mt-6 pt-6 border-t border-border">
+              <p className="text-sm text-muted-foreground">
                 New to Rocs Crew? Create an account to:
               </p>
-              <ul className="text-sm text-gray-600 mt-2 space-y-1">
+              <ul className="text-sm text-muted-foreground mt-2 space-y-1">
                 <li>• Track your deliveries in real-time</li>
                 <li>• Save delivery addresses</li>
                 <li>• View order history</li>
@@ -77,11 +77,11 @@ export default function BookDelivery() {
 
   // If user is logged in, show the order form
   return (
-    <div className="min-h-screen bg-[#0a110d] py-16">
+    <div className="min-h-screen bg-background py-16 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-[#eab308]">
+            <h1 className="text-3xl font-bold text-primary">
               Book Your Delivery
             </h1>
           </div>

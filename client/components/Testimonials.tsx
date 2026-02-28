@@ -63,9 +63,8 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${
-            i < rating ? 'text-rocs-yellow fill-current' : 'text-gray-300'
-          }`}
+          className={`w-4 h-4 ${i < rating ? 'text-primary fill-current' : 'text-muted'
+            }`}
         />
       ))}
     </div>
@@ -74,13 +73,13 @@ function StarRating({ rating }: { rating: number }) {
 
 export default function Testimonials() {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-rocs-green mb-4">
+    <section className="py-24 bg-background transition-colors duration-300">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-black text-foreground mb-6 font-outfit tracking-tight">
             What Our Customers Say
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
             Join thousands of satisfied customers who trust Rocs Crew for their delivery needs across Nairobi.
           </p>
         </div>
@@ -89,31 +88,31 @@ export default function Testimonials() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="bg-card rounded-[2.5rem] p-8 border border-border/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group"
             >
-              <div className="flex items-start space-x-1 mb-4">
-                <Quote className="w-8 h-8 text-rocs-yellow flex-shrink-0" />
+              <div className="flex items-start justify-between mb-8">
+                <Quote className="w-10 h-10 text-primary opacity-20 group-hover:opacity-40 transition-opacity" />
                 <StarRating rating={testimonial.rating} />
               </div>
-              
-              <p className="text-gray-700 mb-6 leading-relaxed">
+
+              <p className="text-muted-foreground mb-10 italic leading-relaxed font-medium">
                 "{testimonial.content}"
               </p>
-              
+
               <div className="flex items-center space-x-4">
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-14 h-14 rounded-2xl object-cover border-2 border-border shadow-sm"
                 />
                 <div>
-                  <h4 className="font-semibold text-rocs-green">
+                  <h4 className="font-black text-foreground font-outfit">
                     {testimonial.name}
                   </h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground font-medium">
                     {testimonial.role}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-[10px] text-primary uppercase font-black tracking-widest mt-1">
                     {testimonial.location}
                   </p>
                 </div>
@@ -123,23 +122,23 @@ export default function Testimonials() {
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-16 bg-rocs-green-light rounded-xl p-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+        <div className="mt-24 bg-muted/30 border border-border/50 rounded-[3rem] p-12 backdrop-blur-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 text-center font-outfit">
             <div>
-              <div className="text-3xl font-bold text-rocs-green mb-2">5000+</div>
-              <div className="text-sm text-gray-600">Deliveries Completed</div>
+              <div className="text-4xl font-extrabold text-foreground mb-2">5000+</div>
+              <div className="text-xs text-primary uppercase font-black tracking-widest">Deliveries Completed</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-rocs-green mb-2">98%</div>
-              <div className="text-sm text-gray-600">Customer Satisfaction</div>
+              <div className="text-4xl font-extrabold text-foreground mb-2">98%</div>
+              <div className="text-xs text-primary uppercase font-black tracking-widest">Customer Satisfaction</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-rocs-green mb-2">24/7</div>
-              <div className="text-sm text-gray-600">Customer Support</div>
+              <div className="text-4xl font-extrabold text-foreground mb-2">24/7</div>
+              <div className="text-xs text-primary uppercase font-black tracking-widest">Customer Support</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-rocs-green mb-2">30</div>
-              <div className="text-sm text-gray-600">KES per Kilometer</div>
+              <div className="text-4xl font-extrabold text-foreground mb-2">KES 30</div>
+              <div className="text-xs text-primary uppercase font-black tracking-widest">Per Kilometer</div>
             </div>
           </div>
         </div>
@@ -147,3 +146,4 @@ export default function Testimonials() {
     </section>
   );
 }
+

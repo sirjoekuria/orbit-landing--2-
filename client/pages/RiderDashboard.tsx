@@ -87,7 +87,7 @@ export default function RiderDashboard() {
 
     return (
         <AnimatedPage>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-background">
                 {/* Header */}
                 <div className="bg-rocs-green text-white px-6 py-6">
                     <div className="max-w-2xl mx-auto flex items-center justify-between">
@@ -95,7 +95,7 @@ export default function RiderDashboard() {
                             <h1 className="text-xl font-bold">Rider Dashboard</h1>
                             <p className="text-sm opacity-80">{user?.name}</p>
                         </div>
-                        <button onClick={handleLogout} className="flex items-center gap-1 text-sm bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors">
+                        <button onClick={handleLogout} className="flex items-center gap-1 text-sm bg-card/20 hover:bg-card/30 px-3 py-2 rounded-lg transition-colors">
                             <LogOut className="w-4 h-4" /> Logout
                         </button>
                     </div>
@@ -109,10 +109,10 @@ export default function RiderDashboard() {
                             { label: 'Delivered', value: completedOrders.length, color: 'text-green-600', icon: <CheckCircle className="w-4 h-4" /> },
                             { label: 'Earnings', value: `KES ${Math.round(totalEarned).toLocaleString()}`, color: 'text-rocs-green', icon: <TrendingUp className="w-4 h-4" /> },
                         ].map(stat => (
-                            <div key={stat.label} className="bg-white rounded-xl p-3 shadow-sm text-center">
+                            <div key={stat.label} className="bg-card rounded-xl p-3 shadow-sm text-center">
                                 <div className={`flex justify-center mb-1 ${stat.color}`}>{stat.icon}</div>
                                 <p className={`text-lg font-bold ${stat.color}`}>{stat.value}</p>
-                                <p className="text-xs text-gray-400">{stat.label}</p>
+                                <p className="text-xs text-muted-foreground">{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -127,12 +127,12 @@ export default function RiderDashboard() {
                     )}
 
                     {/* Tabs */}
-                    <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-4">
+                    <div className="flex gap-1 bg-muted rounded-xl p-1 mb-4">
                         {(['orders', 'earnings'] as const).map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors capitalize ${activeTab === tab ? 'bg-white shadow-sm text-rocs-green' : 'text-gray-500 hover:text-gray-700'
+                                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors capitalize ${activeTab === tab ? 'bg-card shadow-sm text-rocs-green' : 'text-muted-foreground hover:text-foreground'
                                     }`}
                             >
                                 {tab === 'orders' ? `Orders (${orders.length})` : 'Earnings'}
@@ -141,7 +141,7 @@ export default function RiderDashboard() {
                     </div>
 
                     <div className="flex justify-end mb-3">
-                        <button onClick={loadData} className="text-xs text-gray-400 flex items-center gap-1 hover:text-rocs-green">
+                        <button onClick={loadData} className="text-xs text-muted-foreground flex items-center gap-1 hover:text-rocs-green">
                             <RefreshCw className="w-3 h-3" /> Refresh
                         </button>
                     </div>
@@ -150,9 +150,9 @@ export default function RiderDashboard() {
                     {activeTab === 'orders' && (
                         <div className="space-y-3 pb-8">
                             {isLoading ? (
-                                [1, 2, 3].map(i => <div key={i} className="h-28 bg-gray-100 animate-pulse rounded-xl" />)
+                                [1, 2, 3].map(i => <div key={i} className="h-28 bg-muted animate-pulse rounded-xl" />)
                             ) : orders.length === 0 ? (
-                                <div className="bg-white rounded-xl p-10 text-center shadow-sm text-gray-400">
+                                <div className="bg-card rounded-xl p-10 text-center shadow-sm text-muted-foreground">
                                     <Package className="w-10 h-10 mx-auto mb-2 opacity-30" />
                                     <p>No orders assigned yet.</p>
                                 </div>
@@ -161,21 +161,21 @@ export default function RiderDashboard() {
                                     const nextStatus = getNextStatus(order.currentStatus);
                                     const statusMeta = STATUS_LABELS[order.currentStatus] || STATUS_LABELS.pending;
                                     return (
-                                        <div key={order.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                        <div key={order.id} className="bg-card rounded-xl p-4 shadow-sm border border-border">
                                             <div className="flex justify-between items-start mb-2">
-                                                <span className="text-xs font-mono font-semibold text-gray-500">{order.id}</span>
+                                                <span className="text-xs font-mono font-semibold text-muted-foreground">{order.id}</span>
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusMeta.color}`}>
                                                     {statusMeta.label}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center gap-1 text-sm text-gray-700 mb-1">
+                                            <div className="flex items-center gap-1 text-sm text-foreground mb-1">
                                                 <MapPin className="w-3 h-3 text-rocs-green shrink-0" />
                                                 <span className="font-medium truncate">{order.pickup}</span>
                                                 <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
                                                 <span className="truncate">{order.delivery}</span>
                                             </div>
                                             <div className="flex items-center justify-between mt-2">
-                                                <div className="text-xs text-gray-400">
+                                                <div className="text-xs text-muted-foreground">
                                                     {order.customerName} · KES {(order.cost || 0).toLocaleString()}
                                                 </div>
                                                 {order.riderRating && (
@@ -206,22 +206,22 @@ export default function RiderDashboard() {
                     {activeTab === 'earnings' && (
                         <div className="space-y-3 pb-8">
                             {isLoading ? (
-                                [1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-100 animate-pulse rounded-xl" />)
+                                [1, 2, 3].map(i => <div key={i} className="h-16 bg-muted animate-pulse rounded-xl" />)
                             ) : earnings.length === 0 ? (
-                                <div className="bg-white rounded-xl p-10 text-center shadow-sm text-gray-400">
+                                <div className="bg-card rounded-xl p-10 text-center shadow-sm text-muted-foreground">
                                     <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-30" />
                                     <p>No earnings yet.</p>
                                 </div>
                             ) : (
                                 earnings.map((e: any, i: number) => (
-                                    <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                    <div key={i} className="bg-card rounded-xl p-4 shadow-sm border border-border flex items-center justify-between">
                                         <div>
-                                            <p className="text-sm font-medium text-gray-800">{e.orderId}</p>
-                                            <p className="text-xs text-gray-400">{new Date(e.deliveryDate || e.created_at).toLocaleDateString('en-KE')}</p>
+                                            <p className="text-sm font-medium text-foreground">{e.orderId}</p>
+                                            <p className="text-xs text-muted-foreground">{new Date(e.deliveryDate || e.created_at).toLocaleDateString('en-KE')}</p>
                                         </div>
                                         <div className="text-right">
                                             <p className="font-bold text-rocs-green">KES {(e.netEarning || e.net_earning || 0).toLocaleString()}</p>
-                                            <p className="text-xs text-gray-400">of KES {(e.orderAmount || 0).toLocaleString()}</p>
+                                            <p className="text-xs text-muted-foreground">of KES {(e.orderAmount || 0).toLocaleString()}</p>
                                         </div>
                                     </div>
                                 ))

@@ -120,7 +120,7 @@ export default function PaymentSelection({
     return (
       <div className="bg-gray-100 border border-gray-300 rounded-lg p-8 text-center">
         <Shield className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-        <h3 className="text-lg font-semibold text-gray-500 mb-2">
+        <h3 className="text-lg font-semibold text-muted-foreground mb-2">
           Payment Options
         </h3>
         <p className="text-gray-400">
@@ -139,10 +139,10 @@ export default function PaymentSelection({
             <h3 className="text-2xl font-bold text-rocs-green mb-2">
               Choose Payment Method
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Select how you'd like to pay for your delivery
             </p>
-            <div className="text-xl font-semibold text-gray-800 mt-4">
+            <div className="text-xl font-semibold text-foreground mt-4">
               Total: {currency} {amount.toLocaleString()}
             </div>
           </div>
@@ -151,17 +151,17 @@ export default function PaymentSelection({
             {/* M-Pesa STK Push Option */}
             <div
               onClick={() => setSelectedMethod("mpesa")}
-              className="border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-green-500 hover:shadow-lg transition-all duration-300 group"
+              className="border-2 border-border rounded-xl p-4 cursor-pointer hover:border-green-500 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-green-600 rounded-full mb-3 group-hover:scale-110 transition-transform">
                   <Smartphone className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 mb-2">
+                <h4 className="text-lg font-bold text-foreground mb-2">
                   M-Pesa STK
                 </h4>
-                <p className="text-gray-600 mb-3 text-sm">Pay via STK Push</p>
-                <div className="space-y-1 text-xs text-gray-600">
+                <p className="text-muted-foreground mb-3 text-sm">Pay via STK Push</p>
+                <div className="space-y-1 text-xs text-muted-foreground">
                   <div className="flex items-center justify-center space-x-1">
                     <span>✓</span>
                     <span>Instant payment</span>
@@ -184,17 +184,17 @@ export default function PaymentSelection({
             {/* M-Pesa Manual Till Option */}
             <div
               onClick={() => setSelectedMethod("mpesa-manual")}
-              className="border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-green-500 hover:shadow-lg transition-all duration-300 group"
+              className="border-2 border-border rounded-xl p-4 cursor-pointer hover:border-green-500 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-green-500 rounded-full mb-3 group-hover:scale-110 transition-transform">
                   <span className="text-white font-bold text-sm">Till</span>
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 mb-2">
+                <h4 className="text-lg font-bold text-foreground mb-2">
                   Lipa na M-Pesa
                 </h4>
-                <p className="text-gray-600 mb-3 text-sm">Till No: 5056903</p>
-                <div className="space-y-1 text-xs text-gray-600">
+                <p className="text-muted-foreground mb-3 text-sm">Till No: 5056903</p>
+                <div className="space-y-1 text-xs text-muted-foreground">
                   <div className="flex items-center justify-center space-x-1">
                     <span>✓</span>
                     <span>Pay from any phone</span>
@@ -217,17 +217,17 @@ export default function PaymentSelection({
             {/* PayPal Option */}
             <div
               onClick={() => setSelectedMethod("paypal")}
-              className="border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 hover:shadow-lg transition-all duration-300 group"
+              className="border-2 border-border rounded-xl p-4 cursor-pointer hover:border-blue-500 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full mb-3 group-hover:scale-110 transition-transform">
                   <CreditCard className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 mb-2">PayPal</h4>
-                <p className="text-gray-600 mb-3 text-sm">
+                <h4 className="text-lg font-bold text-foreground mb-2">PayPal</h4>
+                <p className="text-muted-foreground mb-3 text-sm">
                   International cards
                 </p>
-                <div className="space-y-1 text-xs text-gray-600">
+                <div className="space-y-1 text-xs text-muted-foreground">
                   <div className="flex items-center justify-center space-x-1">
                     <span>✓</span>
                     <span>Instant confirmation</span>
@@ -250,17 +250,17 @@ export default function PaymentSelection({
             {/* Cash on Delivery Option */}
             <div
               onClick={() => setSelectedMethod("cash")}
-              className="border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-rocs-green hover:shadow-lg transition-all duration-300 group"
+              className="border-2 border-border rounded-xl p-4 cursor-pointer hover:border-rocs-green hover:shadow-lg transition-all duration-300 group"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-rocs-green rounded-full mb-3 group-hover:scale-110 transition-transform">
                   <Banknote className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-gray-800 mb-2">
+                <h4 className="text-lg font-bold text-foreground mb-2">
                   Cash on Delivery
                 </h4>
-                <p className="text-gray-600 mb-3 text-sm">Pay when delivered</p>
-                <div className="space-y-1 text-xs text-gray-600">
+                <p className="text-muted-foreground mb-3 text-sm">Pay when delivered</p>
+                <div className="space-y-1 text-xs text-muted-foreground">
                   <div className="flex items-center justify-center space-x-1">
                     <span>✓</span>
                     <span>No advance payment</span>
@@ -295,7 +295,7 @@ export default function PaymentSelection({
             </h3>
             <button
               onClick={() => setSelectedMethod(null)}
-              className="text-gray-500 hover:text-gray-700 underline"
+              className="text-muted-foreground hover:text-foreground underline"
               disabled={isProcessing}
             >
               Change Payment Method
@@ -345,8 +345,8 @@ export default function PaymentSelection({
       )}
 
       {/* Security Notice */}
-      <div className="bg-gray-50 rounded-lg p-4 text-center">
-        <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+      <div className="bg-background rounded-lg p-4 text-center">
+        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
           <Shield className="w-4 h-4 text-green-500" />
           <span>All payments are secure and protected</span>
         </div>

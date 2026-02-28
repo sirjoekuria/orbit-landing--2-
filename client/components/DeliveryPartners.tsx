@@ -212,7 +212,7 @@ export default function DeliveryPartners() {
         {/* Partner Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {partnerStats.map((stat, index) => (
-            <div key={index} className="text-center p-6 bg-gray-50 rounded-xl hover:bg-rocs-green/5 transition-colors">
+            <div key={index} className="text-center p-6 bg-background rounded-xl hover:bg-rocs-green/5 transition-colors">
               <div className="text-3xl mb-3">{stat.icon}</div>
               <div className="text-3xl md:text-4xl font-bold text-rocs-green mb-2">{stat.number}</div>
               <div className="text-lg font-semibold text-gray-800 mb-1">{stat.label}</div>
@@ -249,7 +249,7 @@ export default function DeliveryPartners() {
           {activeTab === 'partners' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {partners.map((partner) => (
-                <div key={partner.id} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div key={partner.id} className="bg-card border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                   {/* Partner Logo */}
                   <div className="flex items-center justify-between mb-4">
                     <img
@@ -313,7 +313,7 @@ export default function DeliveryPartners() {
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {partnerBenefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start space-x-4 p-6 bg-gray-50 rounded-xl hover:bg-rocs-green/5 transition-colors">
+                  <div key={index} className="flex items-start space-x-4 p-6 bg-background rounded-xl hover:bg-rocs-green/5 transition-colors">
                     <div className="text-3xl">{benefit.icon}</div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
@@ -339,7 +339,7 @@ export default function DeliveryPartners() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {isSubmitted ? (
                 /* Success Message */
-                <div className="lg:col-span-2 bg-white rounded-xl p-8 text-center">
+                <div className="lg:col-span-2 bg-card rounded-xl p-8 text-center">
                   <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-10 h-10 text-white" />
                   </div>
@@ -357,7 +357,7 @@ export default function DeliveryPartners() {
               ) : (
                 <>
                   {/* Contact Form */}
-                  <div className="bg-gray-50 rounded-xl p-8">
+                  <div className="bg-background rounded-xl p-8">
                     <h3 className="text-2xl font-bold text-rocs-green mb-6">Partner with Rocs Crew</h3>
                     <form onSubmit={handlePartnershipSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

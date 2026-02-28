@@ -204,13 +204,13 @@ export default function Admin() {
   };
 
   const TableSkeleton = () => (
-    <div className="bg-[#112417] rounded-3xl shadow-2xl overflow-hidden border border-white/5">
-      <div className="bg-[#0a110d] px-6 py-4 border-b border-white/5">
+    <div className="bg-card rounded-3xl shadow-2xl overflow-hidden border border-border">
+      <div className="bg-background px-6 py-4 border-b border-border">
         <div className="flex space-x-6">
-          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
-          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
-          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
-          <Skeleton className="h-4 w-1/4 bg-[#112417]/5" />
+          <Skeleton className="h-4 w-1/4 bg-card/5" />
+          <Skeleton className="h-4 w-1/4 bg-card/5" />
+          <Skeleton className="h-4 w-1/4 bg-card/5" />
+          <Skeleton className="h-4 w-1/4 bg-card/5" />
         </div>
       </div>
       <div className="divide-y divide-white/5">
@@ -218,10 +218,10 @@ export default function Admin() {
           <div key={i} className="px-6 py-6">
             <div className="flex justify-between items-center">
               <div className="space-y-3 flex-grow">
-                <Skeleton className="h-4 w-3/4 bg-[#112417]/5" />
-                <Skeleton className="h-3 w-1/2 bg-[#112417]/5" />
+                <Skeleton className="h-4 w-3/4 bg-card/5" />
+                <Skeleton className="h-3 w-1/2 bg-card/5" />
               </div>
-              <Skeleton className="h-10 w-24 rounded-xl bg-[#112417]/5" />
+              <Skeleton className="h-10 w-24 rounded-xl bg-card/5" />
             </div>
           </div>
         ))}
@@ -232,20 +232,20 @@ export default function Admin() {
   const CardSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="bg-[#112417] p-8 rounded-3xl shadow-2xl border border-white/5">
+        <div key={i} className="bg-card p-8 rounded-3xl shadow-2xl border border-border">
           <div className="flex items-center space-x-5 mb-6">
-            <Skeleton className="h-14 w-14 rounded-2xl bg-[#112417]/5" />
+            <Skeleton className="h-14 w-14 rounded-2xl bg-card/5" />
             <div className="flex-1 space-y-3">
-              <Skeleton className="h-4 w-3/4 bg-[#112417]/5" />
-              <Skeleton className="h-3 w-1/2 bg-[#112417]/5" />
+              <Skeleton className="h-4 w-3/4 bg-card/5" />
+              <Skeleton className="h-3 w-1/2 bg-card/5" />
             </div>
           </div>
           <div className="space-y-4">
-            <Skeleton className="h-4 w-full bg-[#112417]/5" />
-            <Skeleton className="h-4 w-full bg-[#112417]/5" />
+            <Skeleton className="h-4 w-full bg-card/5" />
+            <Skeleton className="h-4 w-full bg-card/5" />
             <div className="flex justify-between pt-6">
-              <Skeleton className="h-10 w-28 rounded-xl bg-[#112417]/5" />
-              <Skeleton className="h-10 w-28 rounded-xl bg-[#112417]/5" />
+              <Skeleton className="h-10 w-28 rounded-xl bg-card/5" />
+              <Skeleton className="h-10 w-28 rounded-xl bg-card/5" />
             </div>
           </div>
         </div>
@@ -831,7 +831,7 @@ export default function Admin() {
       case "new":
         return "bg-blue-100 text-blue-800";
       case "read":
-        return "bg-[#0a110d] text-gray-800";
+        return "bg-muted text-foreground";
       case "replied":
         return "bg-green-100 text-green-800";
       case "pending":
@@ -849,9 +849,9 @@ export default function Admin() {
       case "active":
         return "bg-green-100 text-green-800";
       case "inactive":
-        return "bg-[#0a110d] text-gray-800";
+        return "bg-muted text-foreground";
       default:
-        return "bg-[#0a110d] text-gray-800";
+        return "bg-muted text-foreground";
     }
   };
 
@@ -890,47 +890,47 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0a110d] flex items-center justify-center relative overflow-hidden font-outfit px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden font-outfit px-4">
         {/* Background Glows */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-rocs-green/5 blur-[150px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#eab308]/5 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 blur-[150px] rounded-full pointer-events-none" />
 
         <div className="max-w-md w-full relative z-10 animate-fade-in translate-y-[-20px]">
           <div className="text-center mb-10">
-            <div className="w-24 h-24 bg-[#112417]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 p-4 border border-white/10 shadow-[0_0_30px_rgba(33,197,94,0.1)] overflow-hidden">
+            <div className="w-24 h-24 bg-card/10 rounded-3xl flex items-center justify-center mx-auto mb-6 p-4 border border-border shadow-[0_0_30px_rgba(33,197,94,0.1)] overflow-hidden">
               <img src="/logo.webp" alt="Rocs Crew Logo" className="w-full h-full object-contain" />
             </div>
-            <h1 className="text-4xl font-black text-white tracking-tighter mb-2">Admin Portal</h1>
-            <p className="text-[#8b9d93] font-medium">Please authenticate to continue.</p>
+            <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">Admin Portal</h1>
+            <p className="text-muted-foreground font-medium">Please authenticate to continue.</p>
           </div>
 
           <form
             onSubmit={handleLogin}
-            className="bg-[#112417] p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-white/5 relative"
+            className="bg-card p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-border relative"
           >
             <div className="space-y-6">
               <div className="space-y-2">
                 <Label
                   htmlFor="password"
-                  className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest pl-1"
+                  className="text-xs font-bold text-muted-foreground uppercase tracking-widest pl-1"
                 >
                   Admin Access Key
                 </Label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8b9d93] group-focus-within:text-[#eab308] transition-colors" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-secondary transition-colors" />
                   <input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#0a110d] border-white/10 text-white pl-12 pr-12 py-4 rounded-2xl focus:ring-2 focus:ring-[#eab308]/50 focus:border-[#eab308] transition-all placeholder:text-white/20"
+                    className="w-full bg-background border-border text-foreground pl-12 pr-12 py-4 rounded-2xl focus:ring-2 focus:ring-[#eab308]/50 focus:border-[#eab308] transition-all placeholder:text-foreground/20"
                     placeholder="••••••••"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b9d93] hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -953,13 +953,13 @@ export default function Admin() {
             </div>
           </form>
 
-          <p className="text-[#8b9d93]/40 italic text-[10px] text-center mt-6">
+          <p className="text-muted-foreground/40 italic text-[10px] text-center mt-6">
             All access attempts are monitored and logged.
           </p>
 
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 text-white/40 hover:text-[#eab308] transition-colors mt-8 font-bold text-xs uppercase tracking-widest"
+            className="flex items-center justify-center gap-2 text-foreground/40 hover:text-secondary transition-colors mt-8 font-bold text-xs uppercase tracking-widest"
           >
             <ArrowRight className="w-4 h-4 rotate-180" />
             Back to Website
@@ -967,8 +967,8 @@ export default function Admin() {
         </div>
 
         {/* Footer Text */}
-        <div className="absolute bottom-10 left-0 w-full flex items-center justify-center space-x-3 text-[#8b9d93] uppercase tracking-[0.2em] text-xs font-bold pointer-events-none">
-          <div className="w-2 h-2 rounded-full bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.8)]" />
+        <div className="absolute bottom-10 left-0 w-full flex items-center justify-center space-x-3 text-muted-foreground uppercase tracking-[0.2em] text-xs font-bold pointer-events-none">
+          <div className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_rgba(234,179,8,0.8)]" />
           <span>Rocs Crew Network</span>
         </div>
       </div>
@@ -976,19 +976,19 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a110d]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="hidden lg:block bg-[#0a110d] border-b border-[#ffffff05]">
+      <header className="hidden lg:block bg-background border-b border-[#ffffff05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-white tracking-wide">
+            <h1 className="text-2xl font-bold text-foreground tracking-wide">
               Admin Dashboard
             </h1>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 bg-[#112417] hover:bg-[#152e1d] text-white font-bold px-4 py-2 rounded-xl border border-[#ffffff05] transition-all"
+              className="flex items-center space-x-2 bg-card hover:bg-[#152e1d] text-foreground font-bold px-4 py-2 rounded-xl border border-[#ffffff05] transition-all"
             >
-              <LogOut className="w-4 h-4 text-[#eab308]" />
+              <LogOut className="w-4 h-4 text-secondary" />
               <span className="uppercase text-xs tracking-wider">Logout</span>
             </button>
           </div>
@@ -999,26 +999,26 @@ export default function Admin() {
 
         {/* Sidebar */}
         <div
-          className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0a110d] shadow-2xl transform flex flex-col justify-between ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed inset-y-0 left-0 z-50 w-72 bg-background shadow-2xl transform flex flex-col justify-between ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
             } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-[#ffffff05]`}
         >
           <div className="flex items-center justify-between pt-10 pb-6 px-8">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#0a110d] rounded-full flex items-center justify-center border border-[#eab308]/30 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-                <span className="text-[#eab308] font-bold text-sm">RC</span>
+              <div className="w-12 h-12 bg-background rounded-full flex items-center justify-center border border-[#eab308]/30 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                <span className="text-secondary font-bold text-sm">RC</span>
               </div>
               <div className="flex flex-col">
-                <h2 className="text-xl font-bold text-white leading-tight">
+                <h2 className="text-xl font-bold text-foreground leading-tight">
                   Admin Panel
                 </h2>
-                <span className="text-[10px] uppercase tracking-[0.1em] text-[#8b9d93] font-bold mt-1">
+                <span className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-bold mt-1">
                   Nairobi Logistics
                 </span>
               </div>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-[#8b9d93] hover:text-[#eab308]"
+              className="lg:hidden text-muted-foreground hover:text-secondary"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1033,11 +1033,11 @@ export default function Admin() {
                 setSidebarOpen(false);
               }}
               className={`w-full flex items-center space-x-4 px-5 py-4 rounded-xl text-left transition-all mb-6 ${activeTab === "overview"
-                ? "bg-[#112417] text-white shadow-[0_0_15px_rgba(234,179,8,0.05)] border border-[#eab308]/20"
-                : "text-[#8b9d93] hover:bg-[#112417]/50 hover:text-white"
+                ? "bg-card text-foreground shadow-[0_0_15px_rgba(234,179,8,0.05)] border border-border/20"
+                : "text-muted-foreground hover:bg-card/50 hover:text-foreground"
                 }`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className={`w-5 h-5 ${activeTab === "overview" ? "text-[#eab308]" : "text-[#eab308]/70"}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className={`w-5 h-5 ${activeTab === "overview" ? "text-secondary" : "text-secondary/70"}`}>
                 <rect width="8" height="8" x="3" y="3" rx="1.5" />
                 <rect width="8" height="8" x="13" y="3" rx="1.5" />
                 <rect width="8" height="8" x="13" y="13" rx="1.5" />
@@ -1055,18 +1055,18 @@ export default function Admin() {
                     operations: !prev.operations,
                   }))
                 }
-                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+                className="w-full flex items-center justify-between px-2 py-2 text-foreground hover:text-secondary rounded-lg transition-colors group"
               >
                 <div className="flex items-center space-x-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="w-5 h-5 text-[#eab308]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="w-5 h-5 text-secondary">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                   </svg>
                   <span className="font-bold text-sm tracking-wide">Operations</span>
                 </div>
                 {expandedMenus.operations ? (
-                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                  <ChevronDown className="w-4 h-4 text-secondary" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                  <ChevronRight className="w-4 h-4 text-secondary" />
                 )}
               </button>
               {expandedMenus.operations && (
@@ -1077,11 +1077,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "orders"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "orders" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "orders" ? "bg-secondary" : "bg-[#596960]"}`} />
                     {stats.pendingOrders > 0 ? (
                       <PendingBookingDot>Orders Management</PendingBookingDot>
                     ) : (
@@ -1094,11 +1094,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "messages"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "messages" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "messages" ? "bg-secondary" : "bg-[#596960]"}`} />
                     {stats.unreadMessages > 0 ? (
                       <UnreadMessageDot>Customer Messages</UnreadMessageDot>
                     ) : (
@@ -1115,16 +1115,16 @@ export default function Admin() {
                 onClick={() =>
                   setExpandedMenus((prev) => ({ ...prev, people: !prev.people }))
                 }
-                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+                className="w-full flex items-center justify-between px-2 py-2 text-foreground hover:text-secondary rounded-lg transition-colors group"
               >
                 <div className="flex items-center space-x-3">
-                  <Users className="w-5 h-5 text-[#eab308]" />
+                  <Users className="w-5 h-5 text-secondary" />
                   <span className="font-bold text-sm tracking-wide">People</span>
                 </div>
                 {expandedMenus.people ? (
-                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                  <ChevronDown className="w-4 h-4 text-secondary" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                  <ChevronRight className="w-4 h-4 text-secondary" />
                 )}
               </button>
               {expandedMenus.people && (
@@ -1135,11 +1135,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "users"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "users" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "users" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Customer Users
                   </button>
                   <button
@@ -1148,11 +1148,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "riders"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "riders" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "riders" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Rider Management
                   </button>
                   <button
@@ -1161,11 +1161,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "partnerships"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "partnerships" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "partnerships" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Business Partners
                   </button>
                 </div>
@@ -1181,10 +1181,10 @@ export default function Admin() {
                     financial: !prev.financial,
                   }))
                 }
-                className="w-full flex items-center justify-between px-2 py-2 text-white hover:text-[#eab308] rounded-lg transition-colors group"
+                className="w-full flex items-center justify-between px-2 py-2 text-foreground hover:text-secondary rounded-lg transition-colors group"
               >
                 <div className="flex items-center space-x-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#eab308]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-secondary">
                     <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
                     <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
                     <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
@@ -1192,9 +1192,9 @@ export default function Admin() {
                   <span className="font-bold text-sm tracking-wide">Financial</span>
                 </div>
                 {expandedMenus.financial ? (
-                  <ChevronDown className="w-4 h-4 text-[#eab308]" />
+                  <ChevronDown className="w-4 h-4 text-secondary" />
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-[#eab308]" />
+                  <ChevronRight className="w-4 h-4 text-secondary" />
                 )}
               </button>
               {expandedMenus.financial && (
@@ -1205,11 +1205,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "rider-earnings"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-earnings" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-earnings" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Rider Earnings
                   </button>
                   <button
@@ -1218,11 +1218,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "rider-activity"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-activity" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "rider-activity" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Rider Activity Log
                   </button>
                   <button
@@ -1231,11 +1231,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "withdrawal-requests"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "withdrawal-requests" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "withdrawal-requests" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Withdrawal Requests
                   </button>
                   <button
@@ -1244,11 +1244,11 @@ export default function Admin() {
                       setSidebarOpen(false);
                     }}
                     className={`w-full flex items-center text-left text-sm transition-colors tracking-wide ${activeTab === "automated-payments"
-                      ? "text-white font-semibold"
-                      : "text-[#8b9d93] hover:text-[#c4d6cb]"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-[#c4d6cb]"
                       }`}
                   >
-                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "automated-payments" ? "bg-[#eab308]" : "bg-[#596960]"}`} />
+                    <div className={`w-[5px] h-[5px] rounded-full mr-4 ${activeTab === "automated-payments" ? "bg-secondary" : "bg-[#596960]"}`} />
                     Automated Payments
                   </button>
                 </div>
@@ -1260,30 +1260,30 @@ export default function Admin() {
           <div className="px-6 pb-8 pt-4">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center space-x-3 bg-[#112417] hover:bg-[#152e1d] text-white font-bold px-4 py-4 rounded-xl transition-all border border-[#ffffff0a] shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+              className="w-full flex items-center justify-center space-x-3 bg-card hover:bg-[#152e1d] text-foreground font-bold px-4 py-4 rounded-xl transition-all border border-[#ffffff0a] shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
             >
-              <LogOut className="w-5 h-5 text-[#eab308]" />
+              <LogOut className="w-5 h-5 text-secondary" />
               <span className="tracking-widest uppercase text-sm">Logout</span>
             </button>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 w-full lg:ml-0 overflow-y-auto overflow-x-hidden custom-scrollbar bg-[#0a110d]">
+        <div className="flex-1 w-full lg:ml-0 overflow-y-auto overflow-x-hidden custom-scrollbar bg-background">
           {/* Mobile Header */}
-          <div className="lg:hidden bg-[#0a110d] border-b border-[#ffffff05]">
+          <div className="lg:hidden bg-background border-b border-[#ffffff05]">
             <div className="flex items-center justify-between px-6 py-5">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="text-[#eab308] hover:text-[#c48a04]"
+                className="text-secondary hover:text-[#c48a04]"
               >
                 <Menu className="w-6 h-6" />
               </button>
               <div className="flex flex-col items-center">
-                <h1 className="text-xl font-bold text-white tracking-wide">
+                <h1 className="text-xl font-bold text-foreground tracking-wide">
                   Admin Panel
                 </h1>
-                <span className="text-[9px] uppercase tracking-widest text-[#eab308] font-bold mt-1">
+                <span className="text-[9px] uppercase tracking-widest text-secondary font-bold mt-1">
                   Dashboard
                 </span>
               </div>
@@ -1292,10 +1292,10 @@ export default function Admin() {
           </div>
 
           {/* Desktop Header */}
-          <div className="hidden lg:block bg-[#0a110d] border-b border-[#ffffff05] sticky top-0 z-40 backdrop-blur-md bg-opacity-90">
+          <div className="hidden lg:block bg-background border-b border-[#ffffff05] sticky top-0 z-40 backdrop-blur-md bg-opacity-90">
             <div className="px-8 py-6">
               <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold text-white tracking-wide capitalize">
+                <h1 className="text-3xl font-bold text-foreground tracking-wide capitalize">
                   {activeTab === "rider-earnings"
                     ? "Rider Earnings"
                     : activeTab === "rider-activity"
@@ -1306,9 +1306,9 @@ export default function Admin() {
                           ? "Automated Payments"
                           : activeTab.replace("-", " ")}
                 </h1>
-                <div className="flex items-center space-x-3 bg-[#112417] px-4 py-2 rounded-full border border-white/5">
-                  <div className="w-2 h-2 bg-[#eab308] rounded-full shadow-[0_0_10px_rgba(234,179,8,0.8)] animate-pulse" />
-                  <span className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest">
+                <div className="flex items-center space-x-3 bg-card px-4 py-2 rounded-full border border-border">
+                  <div className="w-2 h-2 bg-secondary rounded-full shadow-[0_0_10px_rgba(234,179,8,0.8)] animate-pulse" />
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                     Live System Check
                   </span>
                   <span className="text-xs text-[#596960] border-l border-[#ffffff10] pl-3 ml-1">
@@ -1327,13 +1327,13 @@ export default function Admin() {
                   <div className="space-y-8">
                     {/* Stats Cards */}
                     {/* Dashboard Header */}
-                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_40px_rgba(0,0,0,0.3)] mb-8 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
+                    <div className="bg-card p-6 lg:p-8 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_40px_rgba(0,0,0,0.3)] mb-8 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/5 blur-[100px] rounded-full pointer-events-none" />
 
                       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center relative z-10 gap-6">
                         <div>
-                          <h2 className="text-2xl font-bold text-white tracking-wide mb-2">Dashboard Overview</h2>
-                          <p className="text-[#8b9d93] text-sm">Real-time summary of Nairobi Logistics performance</p>
+                          <h2 className="text-2xl font-bold text-foreground tracking-wide mb-2">Dashboard Overview</h2>
+                          <p className="text-muted-foreground text-sm">Real-time summary of Nairobi Logistics performance</p>
                         </div>
                         <button
                           onClick={async () => {
@@ -1345,7 +1345,7 @@ export default function Admin() {
                             }
                           }}
                           disabled={isLoading}
-                          className="flex items-center space-x-3 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-3 rounded-full transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:opacity-50 w-full sm:w-auto justify-center"
+                          className="flex items-center space-x-3 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-6 py-3 rounded-full transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:opacity-50 w-full sm:w-auto justify-center"
                         >
                           {isLoading ? (
                             <RefreshCw className="w-5 h-5 animate-spin" />
@@ -1364,7 +1364,7 @@ export default function Admin() {
                         </>
                       ) : (
                         <>
-                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                          <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
                             <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all pointer-events-none" />
                             <div className="flex items-center">
                               <div className="flex-shrink-0 w-14 h-14 bg-blue-500/10 rounded-full flex items-center justify-center border border-blue-500/20 text-blue-400">
@@ -1372,10 +1372,10 @@ export default function Admin() {
                               </div>
                               <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                  <dt className="text-xs font-bold text-muted-foreground uppercase tracking-wider truncate mb-1">
                                     Total Users
                                   </dt>
-                                  <dd className="text-3xl font-bold text-white">
+                                  <dd className="text-3xl font-bold text-foreground">
                                     {stats.totalUsers}
                                   </dd>
                                 </dl>
@@ -1383,18 +1383,18 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
-                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#eab308]/10 rounded-full blur-xl group-hover:bg-[#eab308]/20 transition-all pointer-events-none" />
+                          <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-secondary/10 rounded-full blur-xl group-hover:bg-secondary/20 transition-all pointer-events-none" />
                             <div className="flex items-center">
-                              <div className="flex-shrink-0 w-14 h-14 bg-[#eab308]/10 rounded-full flex items-center justify-center border border-[#eab308]/20 text-[#eab308]">
+                              <div className="flex-shrink-0 w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center border border-border/20 text-secondary">
                                 <Package className="h-7 w-7" />
                               </div>
                               <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                  <dt className="text-xs font-bold text-muted-foreground uppercase tracking-wider truncate mb-1">
                                     Total Orders
                                   </dt>
-                                  <dd className="text-3xl font-bold text-white">
+                                  <dd className="text-3xl font-bold text-foreground">
                                     {stats.totalOrders}
                                   </dd>
                                 </dl>
@@ -1402,7 +1402,7 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                          <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
                             <div className="absolute -right-4 -top-4 w-24 h-24 bg-green-500/10 rounded-full blur-xl group-hover:bg-green-500/20 transition-all pointer-events-none" />
                             <div className="flex items-center">
                               <div className="flex-shrink-0 w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20 text-green-400">
@@ -1410,10 +1410,10 @@ export default function Admin() {
                               </div>
                               <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                  <dt className="text-xs font-bold text-muted-foreground uppercase tracking-wider truncate mb-1">
                                     New Messages
                                   </dt>
-                                  <dd className="text-3xl font-bold text-white">
+                                  <dd className="text-3xl font-bold text-foreground">
                                     {stats.unreadMessages}
                                   </dd>
                                 </dl>
@@ -1421,7 +1421,7 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
+                          <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] relative overflow-hidden group">
                             <div className="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
                             <div className="flex items-center">
                               <div className="flex-shrink-0 w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center border border-purple-500/20 text-purple-400">
@@ -1429,10 +1429,10 @@ export default function Admin() {
                               </div>
                               <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                  <dt className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider truncate mb-1">
+                                  <dt className="text-xs font-bold text-muted-foreground uppercase tracking-wider truncate mb-1">
                                     Total Revenue
                                   </dt>
-                                  <dd className="text-xl font-bold text-white">
+                                  <dd className="text-xl font-bold text-foreground">
                                     KES {stats.totalRevenue.toLocaleString()}
                                   </dd>
                                 </dl>
@@ -1445,14 +1445,14 @@ export default function Admin() {
 
                     {/* Recent Activity */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      <div className="bg-[#112417] rounded-[24px] border border-[#ffffff05] overflow-hidden">
+                      <div className="bg-card rounded-[24px] border border-[#ffffff05] overflow-hidden">
                         <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
-                          <h3 className="text-lg font-bold text-white tracking-wide">
+                          <h3 className="text-lg font-bold text-foreground tracking-wide">
                             Recent Orders
                           </h3>
                           <button
                             onClick={() => setActiveTab("orders")}
-                            className="text-sm text-[#eab308] hover:text-white font-bold tracking-wider uppercase transition-colors"
+                            className="text-sm text-secondary hover:text-foreground font-bold tracking-wider uppercase transition-colors"
                           >
                             View All
                           </button>
@@ -1468,19 +1468,19 @@ export default function Admin() {
                             ) : orders.length === 0 ? (
                               <div className="py-12 text-center">
                                 <Package className="w-12 h-12 text-[#3a4f41] mx-auto mb-3" />
-                                <p className="text-sm font-bold text-[#8b9d93]">No recent orders</p>
+                                <p className="text-sm font-bold text-muted-foreground">No recent orders</p>
                               </div>
                             ) : (
                               orders.slice(0, 5).map((order) => (
                                 <div
                                   key={order.id}
-                                  className="flex items-center justify-between p-4 bg-[#0a110d]/50 hover:bg-[#0a110d] rounded-xl border border-[#ffffff05] transition-all"
+                                  className="flex items-center justify-between p-4 bg-background/50 hover:bg-background rounded-xl border border-[#ffffff05] transition-all"
                                 >
                                   <div>
-                                    <p className="text-sm font-bold text-white mb-1">
+                                    <p className="text-sm font-bold text-foreground mb-1">
                                       {order.id}
                                     </p>
-                                    <p className="text-sm text-[#8b9d93]">
+                                    <p className="text-sm text-muted-foreground">
                                       {order.customerName}
                                     </p>
                                     <p className="text-xs text-[#596960] mt-1 font-mono">
@@ -1506,14 +1506,14 @@ export default function Admin() {
                         </div>
                       </div>
 
-                      <div className="bg-[#112417] rounded-[24px] border border-[#ffffff05] overflow-hidden">
+                      <div className="bg-card rounded-[24px] border border-[#ffffff05] overflow-hidden">
                         <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
-                          <h3 className="text-lg font-bold text-white tracking-wide">
+                          <h3 className="text-lg font-bold text-foreground tracking-wide">
                             Recent Messages
                           </h3>
                           <button
                             onClick={() => setActiveTab("messages")}
-                            className="text-sm text-[#eab308] hover:text-white font-bold tracking-wider uppercase transition-colors"
+                            className="text-sm text-secondary hover:text-foreground font-bold tracking-wider uppercase transition-colors"
                           >
                             View All
                           </button>
@@ -1529,19 +1529,19 @@ export default function Admin() {
                             ) : messages.length === 0 ? (
                               <div className="py-12 text-center">
                                 <MessageSquare className="w-12 h-12 text-[#3a4f41] mx-auto mb-3" />
-                                <p className="text-sm font-bold text-[#8b9d93]">No recent messages</p>
+                                <p className="text-sm font-bold text-muted-foreground">No recent messages</p>
                               </div>
                             ) : (
                               messages.slice(0, 5).map((message) => (
                                 <div
                                   key={message.id}
-                                  className="flex items-center justify-between p-4 bg-[#0a110d]/50 hover:bg-[#0a110d] rounded-xl border border-[#ffffff05] transition-all"
+                                  className="flex items-center justify-between p-4 bg-background/50 hover:bg-background rounded-xl border border-[#ffffff05] transition-all"
                                 >
                                   <div>
-                                    <p className="text-sm font-bold text-white mb-1">
+                                    <p className="text-sm font-bold text-foreground mb-1">
                                       {message.name}
                                     </p>
-                                    <p className="text-sm text-[#eab308]">
+                                    <p className="text-sm text-secondary">
                                       {message.subject}
                                     </p>
                                     <p className="text-xs text-[#596960] mt-1 font-mono">
@@ -1552,7 +1552,7 @@ export default function Admin() {
                                   <span
                                     className={`px-3 py-1.5 text-xs font-bold rounded-full border ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
                                       message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                        "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
+                                        "bg-background0/10 text-gray-400 border-gray-500/20"
                                       }`}
                                   >
                                     {message.status}
@@ -1575,7 +1575,7 @@ export default function Admin() {
                     {/* Search and Filter */}
                     <div className="flex flex-col gap-6">
                       <div className="flex lg:hidden items-center justify-between">
-                        <h2 className="text-3xl font-bold text-white">Order<br />Management</h2>
+                        <h2 className="text-3xl font-bold text-foreground">Order<br />Management</h2>
                         <button
                           onClick={async () => {
                             setIsLoading(true);
@@ -1586,7 +1586,7 @@ export default function Admin() {
                             }
                           }}
                           disabled={isLoading}
-                          className="flex items-center space-x-2 bg-[#eab308] text-black font-bold px-5 py-2.5 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.3)] disabled:opacity-50"
+                          className="flex items-center space-x-2 bg-secondary text-black font-bold px-5 py-2.5 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.3)] disabled:opacity-50"
                         >
                           {isLoading ? (
                             <RefreshCw className="w-4 h-4 animate-spin" />
@@ -1598,13 +1598,13 @@ export default function Admin() {
                       </div>
 
                       <div className="relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary" />
                         <input
                           type="text"
                           placeholder="Search orders..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="w-full bg-transparent border border-[#eab308]/30 text-white placeholder:text-[#3a4f41] rounded-[16px] pl-12 pr-4 py-4 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                          className="w-full bg-transparent border border-[#eab308]/30 text-foreground placeholder:text-[#3a4f41] rounded-[16px] pl-12 pr-4 py-4 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
                         />
                       </div>
 
@@ -1613,7 +1613,7 @@ export default function Admin() {
                           <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="w-full appearance-none bg-[#112417] border border-[#eab308]/30 text-[#eab308] font-bold rounded-full px-5 py-2 pr-10 focus:outline-none focus:border-[#eab308]"
+                            className="w-full appearance-none bg-card border border-[#eab308]/30 text-secondary font-bold rounded-full px-5 py-2 pr-10 focus:outline-none focus:border-[#eab308]"
                           >
                             <option value="all">All Status</option>
                             <option value="pending">Pending</option>
@@ -1623,12 +1623,12 @@ export default function Admin() {
                             <option value="delivered">Delivered</option>
                             <option value="cancelled">Cancelled</option>
                           </select>
-                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#eab308] pointer-events-none" />
+                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary pointer-events-none" />
                         </div>
-                        <button className="whitespace-nowrap bg-[#0a110d] border border-[#ffffff10] text-white font-bold rounded-full px-5 py-2 hover:bg-[#112417]">
+                        <button className="whitespace-nowrap bg-background border border-[#ffffff10] text-foreground font-bold rounded-full px-5 py-2 hover:bg-card">
                           Today
                         </button>
-                        <button className="whitespace-nowrap bg-[#0a110d] border border-[#ffffff10] text-white font-bold rounded-full px-5 py-2 hover:bg-[#112417]">
+                        <button className="whitespace-nowrap bg-background border border-[#ffffff10] text-foreground font-bold rounded-full px-5 py-2 hover:bg-card">
                           Completed
                         </button>
                       </div>
@@ -1639,16 +1639,16 @@ export default function Admin() {
                       {isLoading ? (
                         <CardSkeleton />
                       ) : filteredOrders.length === 0 ? (
-                        <div className="bg-[#112417] rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
+                        <div className="bg-card rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-secondary/5 blur-[80px] rounded-full pointer-events-none" />
 
-                          <div className="w-24 h-24 bg-[#eab308] rounded-[24px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(234,179,8,0.2)] relative z-10 border-4 border-[#112417] outline outline-1 outline-[#eab308]/20">
+                          <div className="w-24 h-24 bg-secondary rounded-[24px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(234,179,8,0.2)] relative z-10 border-4 border-[#112417] outline outline-1 outline-[#eab308]/20">
                             <Package className="w-12 h-12 text-black" />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                          <h3 className="text-2xl font-bold text-foreground mb-3 relative z-10">
                             No orders found
                           </h3>
-                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-8 relative z-10 text-sm">
+                          <p className="text-muted-foreground max-w-xs mx-auto mb-8 relative z-10 text-sm">
                             Try adjusting your search or filters to find what you're looking for.
                           </p>
 
@@ -1657,7 +1657,7 @@ export default function Admin() {
                               setSearchTerm("");
                               setStatusFilter("all");
                             }}
-                            className="flex items-center space-x-2 mx-auto text-[#eab308] font-bold text-sm tracking-wide relative z-10 hover:text-white transition-colors"
+                            className="flex items-center space-x-2 mx-auto text-secondary font-bold text-sm tracking-wide relative z-10 hover:text-foreground transition-colors"
                           >
                             <Filter className="w-4 h-4" />
                             <span>Reset Filters</span>
@@ -1667,15 +1667,15 @@ export default function Admin() {
                         filteredOrders.map((order) => (
                           <div
                             key={order.id}
-                            className="bg-[#112417] rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                            className="bg-card rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
                           >
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
                               <div>
-                                <h3 className="text-xl font-bold text-white mb-1">
+                                <h3 className="text-xl font-bold text-foreground mb-1">
                                   {order.id}
                                 </h3>
-                                <p className="text-[#8b9d93] font-medium">
-                                  {order.customerName} • <span className="text-[#eab308]">{order.customerPhone}</span>
+                                <p className="text-muted-foreground font-medium">
+                                  {order.customerName} • <span className="text-secondary">{order.customerPhone}</span>
                                 </p>
                                 <p className="text-xs text-[#596960] mt-2 font-mono">
                                   <Clock className="w-3 h-3 inline mr-1" />
@@ -1694,20 +1694,20 @@ export default function Admin() {
                                 >
                                   {order.status.replace("_", " ")}
                                 </span>
-                                <div className="flex bg-[#0a110d] rounded-lg border border-[#ffffff05] overflow-hidden">
+                                <div className="flex bg-background rounded-lg border border-[#ffffff05] overflow-hidden">
                                   <button
                                     onClick={() =>
                                       setEditingOrder(
                                         editingOrder === order.id ? null : order.id,
                                       )
                                     }
-                                    className="p-2.5 text-[#8b9d93] hover:text-[#eab308] hover:bg-[#112417]/5 transition-colors border-r border-[#ffffff05]"
+                                    className="p-2.5 text-muted-foreground hover:text-secondary hover:bg-card/5 transition-colors border-r border-[#ffffff05]"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => deleteOrder(order.id)}
-                                    className="p-2.5 text-red-500/70 hover:text-red-400 hover:bg-[#112417]/5 transition-colors"
+                                    className="p-2.5 text-red-500/70 hover:text-red-400 hover:bg-card/5 transition-colors"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -1715,18 +1715,18 @@ export default function Admin() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-xl border border-[#ffffff05]">
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6 p-5 bg-background/50 rounded-xl border border-[#ffffff05]">
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
                                   Pickup
                                 </p>
-                                <p className="text-sm text-white font-medium">{order.pickup}</p>
+                                <p className="text-sm text-foreground font-medium">{order.pickup}</p>
                               </div>
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
                                   Delivery
                                 </p>
-                                <p className="text-sm text-white font-medium">
+                                <p className="text-sm text-foreground font-medium">
                                   {order.delivery}
                                 </p>
                               </div>
@@ -1734,15 +1734,15 @@ export default function Admin() {
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
                                   Cost
                                 </p>
-                                <p className="text-sm text-[#eab308] font-bold">
-                                  KES {order.cost} <span className="text-[#8b9d93] font-normal">({order.distance}km)</span>
+                                <p className="text-sm text-secondary font-bold">
+                                  KES {order.cost} <span className="text-muted-foreground font-normal">({order.distance}km)</span>
                                 </p>
                               </div>
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-1">
                                   Status Updated
                                 </p>
-                                <p className="text-sm text-white font-mono">
+                                <p className="text-sm text-foreground font-mono">
                                   {order.updatedAt
                                     ? formatDate(order.updatedAt)
                                     : "Not updated"}
@@ -1759,7 +1759,7 @@ export default function Admin() {
                                   <p className="text-xs font-bold text-green-400 uppercase tracking-wider mb-0.5">
                                     Assigned Rider
                                   </p>
-                                  <p className="text-sm text-white font-medium">
+                                  <p className="text-sm text-foreground font-medium">
                                     {order.riderName} • <span className="text-gray-400">{order.riderPhone}</span>
                                   </p>
                                 </div>
@@ -1780,7 +1780,7 @@ export default function Admin() {
                               <div className="border-t border-[#ffffff10] pt-6 space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                   <div>
-                                    <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                                       Update Status
                                     </label>
                                     <select
@@ -1791,7 +1791,7 @@ export default function Admin() {
                                           e.target.value as Order["status"],
                                         )
                                       }
-                                      className="w-full bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                                      className="w-full bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                                     >
                                       <option value="pending">Pending</option>
                                       <option value="confirmed">Confirmed</option>
@@ -1802,7 +1802,7 @@ export default function Admin() {
                                     </select>
                                   </div>
                                   <div>
-                                    <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                                       Assign Rider
                                     </label>
                                     {order.riderName ? (
@@ -1823,15 +1823,15 @@ export default function Admin() {
                                     ) : (
                                       <button
                                         onClick={() => setAssigningRider(order.id)}
-                                        className="w-full p-4 border-2 border-dashed border-[#ffffff15] rounded-xl text-[#8b9d93] font-bold hover:border-[#eab308] hover:text-[#eab308] transition-colors"
+                                        className="w-full p-4 border-2 border-dashed border-[#ffffff15] rounded-xl text-muted-foreground font-bold hover:border-[#eab308] hover:text-secondary transition-colors"
                                       >
                                         + Assign Rider
                                       </button>
                                     )}
 
                                     {assigningRider === order.id && (
-                                      <div className="mt-3 p-4 bg-[#0a110d] rounded-xl border border-[#ffffff10]">
-                                        <label className="block text-xs font-bold text-[#eab308] mb-3">
+                                      <div className="mt-3 p-4 bg-background rounded-xl border border-[#ffffff10]">
+                                        <label className="block text-xs font-bold text-secondary mb-3">
                                           Select Available Rider:
                                         </label>
                                         <select
@@ -1843,7 +1843,7 @@ export default function Admin() {
                                               );
                                             }
                                           }}
-                                          className="w-full bg-[#112417] border border-[#ffffff15] text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#eab308]"
+                                          className="w-full bg-card border border-[#ffffff15] text-foreground rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#eab308]"
                                           defaultValue=""
                                         >
                                           <option value="">Choose a rider...</option>
@@ -1855,7 +1855,7 @@ export default function Admin() {
                                         </select>
                                         <button
                                           onClick={() => setAssigningRider(null)}
-                                          className="mt-3 w-full text-xs font-bold text-[#8b9d93] hover:text-white bg-[#112417]/5 py-2 rounded-lg"
+                                          className="mt-3 w-full text-xs font-bold text-muted-foreground hover:text-foreground bg-card/5 py-2 rounded-lg"
                                         >
                                           Cancel
                                         </button>
@@ -1865,7 +1865,7 @@ export default function Admin() {
                                 </div>
                                 <button
                                   onClick={() => setEditingOrder(null)}
-                                  className="w-full bg-[#eab308] text-black font-bold px-4 py-3 rounded-xl hover:bg-[#ca8a04] transition-colors"
+                                  className="w-full bg-secondary text-black font-bold px-4 py-3 rounded-xl hover:bg-[#ca8a04] transition-colors"
                                 >
                                   Save Changes
                                 </button>
@@ -1873,9 +1873,9 @@ export default function Admin() {
                             ) : (
                               <div className="border-t border-[#ffffff10] pt-6 mt-2">
                                 {/* Payment Confirmation Section */}
-                                <div className="mb-6 p-5 bg-[#eab308]/5 border border-[#eab308]/20 rounded-xl relative overflow-hidden">
-                                  <div className="absolute right-0 top-0 w-32 h-32 bg-[#eab308]/10 rounded-full blur-2xl pointer-events-none" />
-                                  <h4 className="font-bold text-[#eab308] mb-3 flex items-center tracking-wide relative z-10">
+                                <div className="mb-6 p-5 bg-secondary/5 border border-border/20 rounded-xl relative overflow-hidden">
+                                  <div className="absolute right-0 top-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl pointer-events-none" />
+                                  <h4 className="font-bold text-secondary mb-3 flex items-center tracking-wide relative z-10">
                                     <DollarSign className="w-4 h-4 mr-2" /> Payment Management
                                   </h4>
                                   <div className="flex flex-col sm:flex-row gap-3 relative z-10">
@@ -1894,7 +1894,7 @@ export default function Admin() {
                                       <Mail className="w-4 h-4 mr-2" /> Resend Receipt
                                     </button>
                                   </div>
-                                  <p className="text-[#8b9d93] text-xs mt-3 relative z-10">
+                                  <p className="text-muted-foreground text-xs mt-3 relative z-10">
                                     Receipts are linked to <strong>{order.customerEmail}</strong>
                                   </p>
                                 </div>
@@ -1906,7 +1906,7 @@ export default function Admin() {
                                       onClick={() =>
                                         updateOrderStatus(order.id, "confirmed")
                                       }
-                                      className="flex-1 min-w-[140px] bg-blue-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-blue-700 text-sm flex justify-center items-center shadow-lg"
+                                      className="flex-1 min-w-[140px] bg-blue-600 text-foreground font-bold px-4 py-3 rounded-xl hover:bg-blue-700 text-sm flex justify-center items-center shadow-lg"
                                     >
                                       Confirm Order
                                     </button>
@@ -1916,7 +1916,7 @@ export default function Admin() {
                                       onClick={() =>
                                         updateOrderStatus(order.id, "picked_up")
                                       }
-                                      className="flex-1 min-w-[140px] bg-purple-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-purple-700 text-sm flex justify-center items-center shadow-lg"
+                                      className="flex-1 min-w-[140px] bg-purple-600 text-foreground font-bold px-4 py-3 rounded-xl hover:bg-purple-700 text-sm flex justify-center items-center shadow-lg"
                                     >
                                       Mark Picked Up
                                     </button>
@@ -1926,7 +1926,7 @@ export default function Admin() {
                                       onClick={() =>
                                         updateOrderStatus(order.id, "in_transit")
                                       }
-                                      className="flex-1 min-w-[140px] bg-orange-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-orange-700 text-sm flex justify-center items-center shadow-lg"
+                                      className="flex-1 min-w-[140px] bg-orange-600 text-foreground font-bold px-4 py-3 rounded-xl hover:bg-orange-700 text-sm flex justify-center items-center shadow-lg"
                                     >
                                       In Transit
                                     </button>
@@ -1936,7 +1936,7 @@ export default function Admin() {
                                       onClick={() =>
                                         updateOrderStatus(order.id, "delivered")
                                       }
-                                      className="flex-1 min-w-[140px] bg-green-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-green-700 text-sm flex justify-center items-center shadow-lg"
+                                      className="flex-1 min-w-[140px] bg-green-600 text-foreground font-bold px-4 py-3 rounded-xl hover:bg-green-700 text-sm flex justify-center items-center shadow-lg"
                                     >
                                       Mark Delivered
                                     </button>
@@ -1950,24 +1950,24 @@ export default function Admin() {
                     </div>
 
                     {/* Pagination Controls */}
-                    <div className="mt-10 bg-[#112417] p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
+                    <div className="mt-10 bg-card p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
                       <div className="flex items-center justify-between px-4 py-2">
-                        <p className="text-sm font-bold text-[#8b9d93]">
-                          Showing page <span className="text-white">{currentPage}</span> of{' '}
-                          <span className="text-white">{totalPages}</span>
+                        <p className="text-sm font-bold text-muted-foreground">
+                          Showing page <span className="text-foreground">{currentPage}</span> of{' '}
+                          <span className="text-foreground">{totalPages}</span>
                         </p>
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => fetchOrders(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-secondary hover:bg-card/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchOrders(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-secondary hover:bg-card/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
@@ -1983,17 +1983,17 @@ export default function Admin() {
                 <AnimatedPage>
                   <div className="space-y-8">
                     {/* Search */}
-                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
-                      <div className="absolute top-0 left-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
+                    <div className="bg-card p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
+                      <div className="absolute top-0 left-0 w-64 h-64 bg-secondary/5 blur-[100px] rounded-full pointer-events-none" />
 
                       <div className="relative w-full sm:w-2/3">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary" />
                         <input
                           type="text"
                           placeholder="Search messages by name, subject or email..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-12 w-full bg-[#0a110d] border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-white placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                          className="pl-12 w-full bg-background border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-foreground placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
                         />
                       </div>
 
@@ -2007,7 +2007,7 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-[#eab308] text-black font-bold px-6 py-4 rounded-[16px] shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all hover:bg-[#ca8a04] disabled:opacity-50 relative z-10"
+                        className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-secondary text-black font-bold px-6 py-4 rounded-[16px] shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all hover:bg-[#ca8a04] disabled:opacity-50 relative z-10"
                       >
                         {isLoading ? (
                           <RefreshCw className="w-5 h-5 animate-spin" />
@@ -2023,16 +2023,16 @@ export default function Admin() {
                       {isLoading ? (
                         <CardSkeleton />
                       ) : filteredMessages.length === 0 ? (
-                        <div className="bg-[#112417] rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
+                        <div className="bg-card rounded-[24px] border border-transparent p-12 text-center shadow-lg relative overflow-hidden">
                           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-500/5 blur-[80px] rounded-full pointer-events-none" />
 
                           <div className="w-24 h-24 bg-green-500/10 rounded-[24px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(34,197,94,0.1)] relative z-10 border-4 border-[#112417] outline outline-1 outline-green-500/20">
                             <MessageSquare className="w-12 h-12 text-green-400" />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                          <h3 className="text-2xl font-bold text-foreground mb-3 relative z-10">
                             No messages found
                           </h3>
-                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-8 relative z-10 text-sm">
+                          <p className="text-muted-foreground max-w-xs mx-auto mb-8 relative z-10 text-sm">
                             You're all caught up! No new messages from customers matching your search.
                           </p>
                         </div>
@@ -2040,15 +2040,15 @@ export default function Admin() {
                         filteredMessages.map((message) => (
                           <div
                             key={message.id}
-                            className="bg-[#112417] rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                            className="bg-card rounded-[20px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
                           >
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
                               <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 rounded-full bg-[#0a110d] border border-[#eab308]/20 flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)] text-[#eab308] font-bold text-lg">
+                                <div className="w-12 h-12 rounded-full bg-background border border-border/20 flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)] text-secondary font-bold text-lg">
                                   {message.name.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                  <h4 className="text-xl font-bold text-white">
+                                  <h4 className="text-xl font-bold text-foreground">
                                     {message.name}
                                   </h4>
                                   <div className="flex items-center text-xs text-[#596960] mt-1 font-mono">
@@ -2061,38 +2061,38 @@ export default function Admin() {
                                 <span
                                   className={`px-4 py-1.5 text-xs font-bold rounded-full border tracking-wide uppercase ${message.status === "new" ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
                                     message.status === "replied" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                                      "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
+                                      "bg-background0/10 text-gray-400 border-gray-500/20"
                                     }`}
                                 >
                                   {message.status}
                                 </span>
                                 <button
                                   onClick={() => deleteMessage(message.id)}
-                                  className="p-2.5 text-red-500/70 hover:text-red-400 bg-[#0a110d] rounded-lg border border-[#ffffff05] hover:bg-[#112417]/5 transition-colors"
+                                  className="p-2.5 text-red-500/70 hover:text-red-400 bg-background rounded-lg border border-[#ffffff05] hover:bg-card/5 transition-colors"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-[#0a110d]/50 rounded-xl border border-[#ffffff05]">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-background/50 rounded-xl border border-[#ffffff05]">
                               <div className="flex items-center text-sm">
-                                <Mail className="w-4 h-4 text-[#8b9d93] mr-3" />
-                                <span className="text-white font-medium">{message.email}</span>
+                                <Mail className="w-4 h-4 text-muted-foreground mr-3" />
+                                <span className="text-foreground font-medium">{message.email}</span>
                               </div>
                               {message.phone && (
                                 <div className="flex items-center text-sm">
-                                  <Phone className="w-4 h-4 text-[#8b9d93] mr-3" />
-                                  <span className="text-white font-medium">{message.phone}</span>
+                                  <Phone className="w-4 h-4 text-muted-foreground mr-3" />
+                                  <span className="text-foreground font-medium">{message.phone}</span>
                                 </div>
                               )}
                             </div>
 
                             <div className="mb-6">
-                              <h5 className="font-bold text-[#eab308] mb-3 text-lg">
+                              <h5 className="font-bold text-secondary mb-3 text-lg">
                                 {message.subject}
                               </h5>
-                              <div className="p-5 bg-[#112417]/5 rounded-xl border border-white/5 text-gray-300 leading-relaxed text-sm">
+                              <div className="p-5 bg-card/5 rounded-xl border border-border text-gray-300 leading-relaxed text-sm">
                                 {message.message}
                               </div>
                             </div>
@@ -2101,7 +2101,7 @@ export default function Admin() {
                               {message.status === "new" && (
                                 <button
                                   onClick={() => markAsRead(message.id)}
-                                  className="flex items-center space-x-2 bg-[#2a3c31] hover:bg-[#344a3d] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors border border-white/5"
+                                  className="flex items-center space-x-2 bg-[#2a3c31] hover:bg-[#344a3d] text-foreground px-5 py-2.5 rounded-xl text-sm font-bold transition-colors border border-border"
                                 >
                                   <Eye className="w-4 h-4" />
                                   <span>Mark as Read</span>
@@ -2110,7 +2110,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => setReplyingTo(replyingTo === message.id ? null : message.id)}
-                                className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                                className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                               >
                                 <Edit className="w-4 h-4" />
                                 <span>{replyingTo === message.id ? 'Cancel Reply' : 'Reply Here'}</span>
@@ -2127,29 +2127,29 @@ export default function Admin() {
 
                             {/* Reply Form */}
                             {replyingTo === message.id && (
-                              <div className="mt-6 p-6 bg-[#0a110d] rounded-xl border border-[#ffffff10] relative overflow-hidden">
-                                <div className="absolute right-0 bottom-0 w-32 h-32 bg-[#eab308]/5 blur-xl pointer-events-none" />
-                                <h6 className="font-bold text-[#eab308] mb-4 flex items-center tracking-wide">
+                              <div className="mt-6 p-6 bg-background rounded-xl border border-[#ffffff10] relative overflow-hidden">
+                                <div className="absolute right-0 bottom-0 w-32 h-32 bg-secondary/5 blur-xl pointer-events-none" />
+                                <h6 className="font-bold text-secondary mb-4 flex items-center tracking-wide">
                                   <Edit className="w-4 h-4 mr-2" /> Reply to {message.name}
                                 </h6>
                                 <textarea
                                   value={replyText}
                                   onChange={(e) => setReplyText(e.target.value)}
                                   rows={5}
-                                  className="w-full px-4 py-3 bg-[#112417] text-white border border-[#ffffff15] rounded-xl focus:outline-none focus:border-[#eab308] resize-none mb-4"
+                                  className="w-full px-4 py-3 bg-card text-foreground border border-[#ffffff15] rounded-xl focus:outline-none focus:border-[#eab308] resize-none mb-4"
                                   placeholder="Type your official reply here..."
                                 />
                                 <div className="flex justify-end space-x-3">
                                   <button
                                     onClick={() => setReplyingTo(null)}
-                                    className="bg-[#112417]/5 hover:bg-[#112417]/10 text-[#8b9d93] hover:text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                                    className="bg-card/5 hover:bg-card/10 text-muted-foreground hover:text-foreground px-5 py-2.5 rounded-xl text-sm font-bold transition-colors"
                                   >
                                     Cancel
                                   </button>
                                   <button
                                     onClick={() => sendReply(message.id)}
                                     disabled={!replyText.trim()}
-                                    className="bg-[#eab308] hover:bg-[#ca8a04] text-black px-6 py-2.5 rounded-xl text-sm font-bold transition-colors disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                                    className="bg-secondary hover:bg-[#ca8a04] text-black px-6 py-2.5 rounded-xl text-sm font-bold transition-colors disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                                   >
                                     Send Reply
                                   </button>
@@ -2162,24 +2162,24 @@ export default function Admin() {
                     </div>
 
                     {/* Pagination Controls */}
-                    <div className="mt-10 bg-[#112417] p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
+                    <div className="mt-10 bg-card p-2 rounded-2xl border border-[#ffffff05] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
                       <div className="flex items-center justify-between px-4 py-2">
-                        <p className="text-sm font-bold text-[#8b9d93]">
-                          Showing page <span className="text-white">{currentPage}</span> of{' '}
-                          <span className="text-white">{totalPages}</span>
+                        <p className="text-sm font-bold text-muted-foreground">
+                          Showing page <span className="text-foreground">{currentPage}</span> of{' '}
+                          <span className="text-foreground">{totalPages}</span>
                         </p>
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => fetchMessages(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-secondary hover:bg-card/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => fetchMessages(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 border border-[#ffffff10] rounded-xl text-[#eab308] hover:bg-[#112417]/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
+                            className="p-2 border border-[#ffffff10] rounded-xl text-secondary hover:bg-card/5 hover:border-[#eab308]/50 disabled:opacity-30 transition-all flex items-center justify-center cursor-pointer"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
@@ -2195,35 +2195,35 @@ export default function Admin() {
                 <AnimatedPage>
                   <div className="space-y-8">
                     {/* Search Header */}
-                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#eab308]/5 blur-[100px] rounded-full pointer-events-none" />
+                    <div className="bg-card p-6 lg:p-8 rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-[#ffffff05] relative overflow-hidden flex flex-col sm:flex-row gap-4 items-center justify-between">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/5 blur-[100px] rounded-full pointer-events-none" />
 
                       <div className="relative w-full sm:w-2/3">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#eab308]" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary" />
                         <input
                           type="text"
                           placeholder="Search users by name, email or phone..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-12 w-full bg-[#0a110d] border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-white placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
+                          className="pl-12 w-full bg-background border border-[#eab308]/30 rounded-[16px] px-4 py-4 text-foreground placeholder:text-[#3a4f41] focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] transition-all"
                         />
                       </div>
 
                       <div className="flex space-x-3 w-full sm:w-auto">
-                        <button className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-[#0a110d] text-white border border-[#ffffff10] font-bold px-6 py-4 rounded-[16px] hover:bg-[#112417]/5 transition-all">
-                          <Filter className="w-5 h-5 text-[#eab308]" />
+                        <button className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-background text-foreground border border-[#ffffff10] font-bold px-6 py-4 rounded-[16px] hover:bg-card/5 transition-all">
+                          <Filter className="w-5 h-5 text-secondary" />
                           <span>Filter</span>
                         </button>
                       </div>
                     </div>
 
                     {/* Users List */}
-                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                    <div className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
                       <div className="px-8 py-6 border-b border-[#ffffff0a] flex justify-between items-center bg-[#152a1d]">
-                        <h3 className="text-lg font-bold text-white tracking-wide flex items-center">
-                          <Users className="w-5 h-5 text-[#eab308] mr-3" /> Customer Directory
+                        <h3 className="text-lg font-bold text-foreground tracking-wide flex items-center">
+                          <Users className="w-5 h-5 text-secondary mr-3" /> Customer Directory
                         </h3>
-                        <span className="bg-[#0a110d] text-[#eab308] font-mono text-xs px-3 py-1 rounded-full border border-[#eab308]/20">
+                        <span className="bg-background text-secondary font-mono text-xs px-3 py-1 rounded-full border border-border/20">
                           Total: {filteredUsers.length}
                         </span>
                       </div>
@@ -2232,20 +2232,20 @@ export default function Admin() {
                         <div className="p-8"><TableSkeleton /></div>
                       ) : filteredUsers.length === 0 ? (
                         <div className="p-12 text-center">
-                          <div className="w-20 h-20 bg-[#0a110d] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#ffffff0a]">
+                          <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mx-auto mb-6 border border-[#ffffff0a]">
                             <Users className="w-10 h-10 text-[#3a4f41]" />
                           </div>
-                          <h3 className="text-xl font-bold text-white mb-2">
+                          <h3 className="text-xl font-bold text-foreground mb-2">
                             No users found
                           </h3>
-                          <p className="text-[#8b9d93] text-sm max-w-sm mx-auto">
+                          <p className="text-muted-foreground text-sm max-w-sm mx-auto">
                             No customer profiles match your current search criteria.
                           </p>
                         </div>
                       ) : (
                         <div className="overflow-x-auto custom-scrollbar">
                           <table className="min-w-full divide-y divide-[#ffffff0a]">
-                            <thead className="bg-[#0a110d]/50">
+                            <thead className="bg-background/50">
                               <tr>
                                 <th className="px-8 py-5 text-left text-xs font-bold text-[#596960] uppercase tracking-widest pl-10">
                                   Customer Profile
@@ -2269,14 +2269,14 @@ export default function Admin() {
                             </thead>
                             <tbody className="divide-y divide-[#ffffff0a]">
                               {filteredUsers.map((user) => (
-                                <tr key={user.id} className="hover:bg-[#0a110d]/40 transition-colors group">
+                                <tr key={user.id} className="hover:bg-background/40 transition-colors group">
                                   <td className="px-8 py-5 whitespace-nowrap pl-10">
                                     <div className="flex items-center space-x-4">
-                                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2b20] to-[#0a110d] border border-[#eab308]/20 flex items-center justify-center text-[#eab308] font-bold shadow-inner">
+                                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2b20] to-[#0a110d] border border-border/20 flex items-center justify-center text-secondary font-bold shadow-inner">
                                         {user.name.charAt(0).toUpperCase()}
                                       </div>
                                       <div>
-                                        <div className="text-sm font-bold text-white group-hover:text-[#eab308] transition-colors">
+                                        <div className="text-sm font-bold text-foreground group-hover:text-secondary transition-colors">
                                           {user.name}
                                         </div>
                                         <div className="text-xs text-[#596960] mt-1 font-mono">
@@ -2286,22 +2286,22 @@ export default function Admin() {
                                     </div>
                                   </td>
                                   <td className="px-8 py-5 whitespace-nowrap">
-                                    <div className="flex items-center text-sm text-[#8b9d93] mb-1">
+                                    <div className="flex items-center text-sm text-muted-foreground mb-1">
                                       <Mail className="w-3.5 h-3.5 mr-2 text-[#596960]" />
                                       {user.email}
                                     </div>
-                                    <div className="flex items-center text-sm text-[#8b9d93]">
+                                    <div className="flex items-center text-sm text-muted-foreground">
                                       <Phone className="w-3.5 h-3.5 mr-2 text-[#596960]" />
                                       {user.phone}
                                     </div>
                                   </td>
                                   <td className="px-8 py-5 whitespace-nowrap text-center">
-                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#0a110d] border border-[#ffffff0a] group-hover:border-[#eab308]/30 transition-colors">
-                                      <span className="text-sm font-bold text-white">{user.totalOrders}</span>
+                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-background border border-[#ffffff0a] group-hover:border-[#eab308]/30 transition-colors">
+                                      <span className="text-sm font-bold text-foreground">{user.totalOrders}</span>
                                     </div>
                                   </td>
                                   <td className="px-8 py-5 whitespace-nowrap text-right">
-                                    <span className="text-sm font-bold text-[#eab308]">
+                                    <span className="text-sm font-bold text-secondary">
                                       KES {user.totalSpent.toLocaleString()}
                                     </span>
                                   </td>
@@ -2319,8 +2319,8 @@ export default function Admin() {
                                     <button
                                       onClick={() => toggleUserStatus(user.id)}
                                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${user.status === "active"
-                                        ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
-                                        : "bg-[#0a110d] text-green-400 hover:bg-green-500/10 border-green-500/20"
+                                        ? "bg-background text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                        : "bg-background text-green-400 hover:bg-green-500/10 border-green-500/20"
                                         }`}
                                     >
                                       {user.status === "active"
@@ -2345,11 +2345,11 @@ export default function Admin() {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
                       <div>
-                        <div className="flex items-center space-x-2 text-[#eab308] font-bold text-xs tracking-wider uppercase mb-1">
+                        <div className="flex items-center space-x-2 text-secondary font-bold text-xs tracking-wider uppercase mb-1">
                           <Shield className="w-4 h-4" />
                           <span>Admin Dashboard</span>
                         </div>
-                        <h2 className="text-3xl font-bold text-white tracking-tight">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight">
                           Rider Management
                         </h2>
                       </div>
@@ -2363,7 +2363,7 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                        className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
                         <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                         <span>Refresh</span>
@@ -2372,41 +2372,41 @@ export default function Admin() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
-                          <ClipboardList className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-background p-2 rounded-xl border border-[#ffffff05] group-hover:border-border/20 transition-all">
+                          <ClipboardList className="w-5 h-5 text-[#3a4f41] group-hover:text-secondary/70" />
                         </div>
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {riders.filter((r) => r.status === "pending").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Pending</div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
-                          <UserCheck className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-background p-2 rounded-xl border border-[#ffffff05] group-hover:border-border/20 transition-all">
+                          <UserCheck className="w-5 h-5 text-[#3a4f41] group-hover:text-secondary/70" />
                         </div>
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {riders.filter((r) => r.status === "approved").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Approved</div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
-                          <UserX className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-background p-2 rounded-xl border border-[#ffffff05] group-hover:border-border/20 transition-all">
+                          <UserX className="w-5 h-5 text-[#3a4f41] group-hover:text-secondary/70" />
                         </div>
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {riders.filter((r) => r.status === "rejected").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Rejected</div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-[#0a110d] p-2 rounded-xl border border-[#ffffff05] group-hover:border-[#eab308]/20 transition-all">
-                          <Bike className="w-5 h-5 text-[#3a4f41] group-hover:text-[#eab308]/70" />
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all relative overflow-hidden group">
+                        <div className="absolute top-4 right-4 bg-background p-2 rounded-xl border border-[#ffffff05] group-hover:border-border/20 transition-all">
+                          <Bike className="w-5 h-5 text-[#3a4f41] group-hover:text-secondary/70" />
                         </div>
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {riders.filter((r) => r.isActive).length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Active</div>
@@ -2418,17 +2418,17 @@ export default function Admin() {
                       {isLoading ? (
                         <CardSkeleton />
                       ) : riders.length === 0 ? (
-                        <div className="bg-[#0a110d] border border-[#ffffff05] rounded-[32px] p-16 text-center shadow-lg relative overflow-hidden my-8">
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
-                          <Bike className="w-20 h-20 text-[#eab308] mx-auto mb-6 relative z-10 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
-                          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">
+                        <div className="bg-background border border-[#ffffff05] rounded-[32px] p-16 text-center shadow-lg relative overflow-hidden my-8">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-secondary/5 blur-[80px] rounded-full pointer-events-none" />
+                          <Bike className="w-20 h-20 text-secondary mx-auto mb-6 relative z-10 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+                          <h3 className="text-2xl font-bold text-foreground mb-3 relative z-10">
                             No riders found
                           </h3>
-                          <p className="text-[#8b9d93] max-w-xs mx-auto mb-10 relative z-10">
+                          <p className="text-muted-foreground max-w-xs mx-auto mb-10 relative z-10">
                             No rider applications have been submitted yet.
                           </p>
                           <div className="flex justify-center items-center space-x-2 relative z-10">
-                            <div className="w-6 h-2 bg-[#eab308] rounded-full"></div>
+                            <div className="w-6 h-2 bg-secondary rounded-full"></div>
                             <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
                             <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
                             <div className="w-2 h-2 bg-[#3a4f41] rounded-full"></div>
@@ -2439,24 +2439,24 @@ export default function Admin() {
                         riders.map((rider) => (
                           <div
                             key={rider.id}
-                            className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                            className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
                           >
                             <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
                               <div className="flex items-center space-x-4">
-                                <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-                                  <Bike className="w-6 h-6 text-[#eab308]" />
+                                <div className="w-14 h-14 bg-background border border-border/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                  <Bike className="w-6 h-6 text-secondary" />
                                 </div>
                                 <div>
-                                  <h3 className="text-xl font-bold text-white">
+                                  <h3 className="text-xl font-bold text-foreground">
                                     {rider.fullName}
                                   </h3>
-                                  <p className="text-[#8b9d93] text-sm mt-1 font-mono">
-                                    {rider.id} • <span className="text-[#eab308]">{rider.area}</span>
+                                  <p className="text-muted-foreground text-sm mt-1 font-mono">
+                                    {rider.id} • <span className="text-secondary">{rider.area}</span>
                                   </p>
                                   {rider.rating > 0 && (
                                     <div className="flex items-center space-x-1 mt-2">
-                                      <Star className="w-4 h-4 text-[#eab308] fill-current" />
-                                      <span className="text-sm font-bold text-white">
+                                      <Star className="w-4 h-4 text-secondary fill-current" />
+                                      <span className="text-sm font-bold text-foreground">
                                         {rider.rating} <span className="text-[#596960] font-normal">({rider.totalDeliveries} deliveries)</span>
                                       </span>
                                     </div>
@@ -2480,7 +2480,7 @@ export default function Admin() {
                                   <span
                                     className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${rider.isActive
                                       ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                      : "bg-[#0a110d]0/10 text-gray-400 border-gray-500/20"
+                                      : "bg-background0/10 text-gray-400 border-gray-500/20"
                                       }`}
                                   >
                                     {rider.isActive ? "Active" : "Inactive"}
@@ -2489,17 +2489,17 @@ export default function Admin() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 p-5 bg-background/50 rounded-[16px] border border-[#ffffff05]">
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                   Contact
                                 </p>
-                                <div className="flex items-center text-sm text-white mb-1.5">
-                                  <Mail className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                <div className="flex items-center text-sm text-foreground mb-1.5">
+                                  <Mail className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                                   {rider.email}
                                 </div>
-                                <div className="flex items-center text-sm text-white">
-                                  <Phone className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                <div className="flex items-center text-sm text-foreground">
+                                  <Phone className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                                   {rider.phone}
                                 </div>
                               </div>
@@ -2507,19 +2507,19 @@ export default function Admin() {
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                   Motorcycle Info
                                 </p>
-                                <p className="text-sm text-white font-medium mb-1.5">
+                                <p className="text-sm text-foreground font-medium mb-1.5">
                                   {rider.motorcycle}
                                 </p>
-                                <p className="text-sm text-[#8b9d93]">
-                                  Exp: <span className="text-white">{rider.experience}</span>
+                                <p className="text-sm text-muted-foreground">
+                                  Exp: <span className="text-foreground">{rider.experience}</span>
                                 </p>
                               </div>
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                   Dates
                                 </p>
-                                <p className="text-sm text-white font-mono mb-1.5 flex items-center">
-                                  <Clock className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                <p className="text-sm text-foreground font-mono mb-1.5 flex items-center">
+                                  <Clock className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                                   {formatDate(rider.joinedAt)}
                                 </p>
                                 {rider.updatedAt && (
@@ -2532,8 +2532,8 @@ export default function Admin() {
                             </div>
 
                             {rider.motivation && (
-                              <div className="mb-6 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05]">
-                                <p className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-2 flex items-center">
+                              <div className="mb-6 p-5 bg-background rounded-[16px] border border-[#ffffff05]">
+                                <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-2 flex items-center">
                                   <Star className="w-3.5 h-3.5 mr-1.5" /> Motivation
                                 </p>
                                 <p className="text-sm text-gray-300 italic leading-relaxed">
@@ -2574,7 +2574,7 @@ export default function Admin() {
                                       toggleRiderActive(rider.id, !rider.isActive)
                                     }
                                     className={`px-5 py-2 rounded-xl text-sm font-bold transition-all border ${rider.isActive
-                                      ? "bg-[#0a110d] text-red-400 hover:bg-red-500/10 border-red-500/20"
+                                      ? "bg-background text-red-400 hover:bg-red-500/10 border-red-500/20"
                                       : "bg-green-500/10 text-green-400 hover:bg-green-500/20 border-green-500/20"
                                       }`}
                                   >
@@ -2585,7 +2585,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => deleteRider(rider.id)}
-                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-[#112417]/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                className="flex items-center space-x-2 bg-background text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-card/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                               >
                                 <Trash2 className="w-4 h-4" />
                                 <span>Delete</span>
@@ -2605,10 +2605,10 @@ export default function Admin() {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
                       <div>
-                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight mb-1">
                           Partnership Requests
                         </h2>
-                        <div className="text-[#8b9d93] text-sm">
+                        <div className="text-muted-foreground text-sm">
                           Nairobi Admin Panel
                         </div>
                       </div>
@@ -2622,7 +2622,7 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                        className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
                         <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                         <span>Refresh</span>
@@ -2631,22 +2631,22 @@ export default function Admin() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-3 gap-4 sm:gap-6">
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {partnershipRequests.filter((r) => r.status === "pending").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Pending</div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {partnershipRequests.filter((r) => r.status === "approved").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Approved</div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
-                        <div className="text-4xl font-black text-[#eab308] mb-2">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-4xl font-black text-secondary mb-2">
                           {partnershipRequests.filter((r) => r.status === "rejected").length}
                         </div>
                         <div className="text-xs font-bold text-[#596960] uppercase tracking-widest">Rejected</div>
@@ -2658,20 +2658,20 @@ export default function Admin() {
                       {isLoading ? (
                         <CardSkeleton />
                       ) : partnershipRequests.length === 0 ? (
-                        <div className="bg-[#0a110d] rounded-[32px] p-16 text-center border border-dashed border-[#ffffff15] relative overflow-hidden my-8">
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#eab308]/5 blur-[80px] rounded-full pointer-events-none" />
+                        <div className="bg-background rounded-[32px] p-16 text-center border border-dashed border-[#ffffff15] relative overflow-hidden my-8">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-secondary/5 blur-[80px] rounded-full pointer-events-none" />
 
-                          <div className="w-24 h-24 bg-[#eab308]/10 rounded-full flex items-center justify-center mx-auto mb-8 relative z-10 border border-[#eab308]/20">
-                            <Handshake className="w-10 h-10 text-[#eab308]" />
+                          <div className="w-24 h-24 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-8 relative z-10 border border-border/20">
+                            <Handshake className="w-10 h-10 text-secondary" />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-4 relative z-10">
+                          <h3 className="text-2xl font-bold text-foreground mb-4 relative z-10">
                             No partnership requests found
                           </h3>
-                          <p className="text-[#8b9d93] max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
+                          <p className="text-muted-foreground max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
                             New applications from motorcycle delivery partners will appear here for review.
                           </p>
 
-                          <button className="bg-[#112417] hover:bg-[#152a1d] text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10">
+                          <button className="bg-card hover:bg-[#152a1d] text-foreground border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10">
                             View Archives
                           </button>
                         </div>
@@ -2679,19 +2679,19 @@ export default function Admin() {
                         partnershipRequests.map((request) => (
                           <div
                             key={request.id}
-                            className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
+                            className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8"
                           >
                             <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
                               <div className="flex items-center space-x-4">
-                                <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-                                  <Building2 className="w-6 h-6 text-[#eab308]" />
+                                <div className="w-14 h-14 bg-background border border-border/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                  <Building2 className="w-6 h-6 text-secondary" />
                                 </div>
                                 <div>
-                                  <h3 className="text-xl font-bold text-white">
+                                  <h3 className="text-xl font-bold text-foreground">
                                     {request.companyName}
                                   </h3>
-                                  <p className="text-[#8b9d93] text-sm mt-1 font-mono">
-                                    {request.id} • <span className="text-[#eab308]">{request.businessCategory}</span>
+                                  <p className="text-muted-foreground text-sm mt-1 font-mono">
+                                    {request.id} • <span className="text-secondary">{request.businessCategory}</span>
                                   </p>
                                   <p className="text-xs text-[#596960] mt-2 font-mono flex items-center">
                                     <Clock className="w-3 h-3 mr-1.5" />
@@ -2714,18 +2714,18 @@ export default function Admin() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-5 bg-background/50 rounded-[16px] border border-[#ffffff05]">
                               <div>
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                   Contact Details
                                 </p>
-                                <p className="text-sm font-bold text-white mb-2">{request.contactPerson}</p>
-                                <div className="flex items-center text-sm text-white mb-1.5">
-                                  <Mail className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                <p className="text-sm font-bold text-foreground mb-2">{request.contactPerson}</p>
+                                <div className="flex items-center text-sm text-foreground mb-1.5">
+                                  <Mail className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                                   {request.email}
                                 </div>
-                                <div className="flex items-center text-sm text-white">
-                                  <Phone className="w-3.5 h-3.5 mr-2 text-[#8b9d93]" />
+                                <div className="flex items-center text-sm text-foreground">
+                                  <Phone className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                                   {request.phone}
                                 </div>
                               </div>
@@ -2733,11 +2733,11 @@ export default function Admin() {
                                 <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                   Business Context
                                 </p>
-                                <p className="text-sm text-[#8b9d93] mb-1.5">
-                                  Category: <span className="text-white">{request.businessCategory}</span>
+                                <p className="text-sm text-muted-foreground mb-1.5">
+                                  Category: <span className="text-foreground">{request.businessCategory}</span>
                                 </p>
-                                <p className="text-sm text-[#8b9d93] mb-2">
-                                  Volume: <span className="text-white">{request.deliveryVolume}</span>
+                                <p className="text-sm text-muted-foreground mb-2">
+                                  Volume: <span className="text-foreground">{request.deliveryVolume}</span>
                                 </p>
                                 {request.updatedAt && (
                                   <p className="text-xs text-[#596960] font-mono flex items-center pt-2 border-t border-[#ffffff0a]">
@@ -2749,8 +2749,8 @@ export default function Admin() {
                             </div>
 
                             {request.message && (
-                              <div className="mb-6 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05]">
-                                <p className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-2 flex items-center">
+                              <div className="mb-6 p-5 bg-background rounded-[16px] border border-[#ffffff05]">
+                                <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-2 flex items-center">
                                   <MessageSquare className="w-3.5 h-3.5 mr-1.5" /> Request Message
                                 </p>
                                 <p className="text-sm text-gray-300 italic leading-relaxed">
@@ -2764,7 +2764,7 @@ export default function Admin() {
                                 <p className="text-xs font-bold text-green-400 uppercase tracking-wider mb-2 flex items-center">
                                   <FileText className="w-3.5 h-3.5 mr-1.5" /> Admin Notes
                                 </p>
-                                <p className="text-sm text-white/90">
+                                <p className="text-sm text-foreground/90">
                                   {request.adminNotes}
                                 </p>
                               </div>
@@ -2803,7 +2803,7 @@ export default function Admin() {
                                 )}
 
                                 {request.status !== "pending" && (
-                                  <span className="text-sm text-[#596960] font-mono px-2 py-1 bg-[#0a110d] rounded-lg border border-[#ffffff05]">
+                                  <span className="text-sm text-[#596960] font-mono px-2 py-1 bg-background rounded-lg border border-[#ffffff05]">
                                     Request {request.status} on{" "}
                                     {request.updatedAt
                                       ? formatDate(request.updatedAt)
@@ -2814,7 +2814,7 @@ export default function Admin() {
 
                               <button
                                 onClick={() => deletePartnershipRequest(request.id)}
-                                className="flex items-center space-x-2 bg-[#0a110d] text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-[#112417]/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                                className="flex items-center space-x-2 bg-background text-red-500/70 border border-[#ffffff05] hover:text-red-400 hover:bg-card/5 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                               >
                                 <Trash2 className="w-4 h-4" />
                                 <span>Delete</span>
@@ -2834,7 +2834,7 @@ export default function Admin() {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
                       <div>
-                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight mb-1">
                           Rider Earnings <br />Management
                         </h2>
                       </div>
@@ -2848,7 +2848,7 @@ export default function Admin() {
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                        className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
                         <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                         <span>Refresh Data</span>
@@ -2857,9 +2857,9 @@ export default function Admin() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
-                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Pending</div>
-                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Total Pending</div>
+                        <div className="text-2xl sm:text-3xl font-black text-secondary">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
@@ -2868,9 +2868,9 @@ export default function Admin() {
                         </div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
-                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Earnings</div>
-                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Total Earnings</div>
+                        <div className="text-2xl sm:text-3xl font-black text-secondary">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
@@ -2879,9 +2879,9 @@ export default function Admin() {
                         </div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
-                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Total Paid Out</div>
-                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Total Paid Out</div>
+                        <div className="text-2xl sm:text-3xl font-black text-secondary">
                           KES{" "}
                           {riders
                             .filter((r) => r.status === "approved")
@@ -2890,9 +2890,9 @@ export default function Admin() {
                         </div>
                       </div>
 
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
-                        <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-widest mb-2">Riders w/ Bal</div>
-                        <div className="text-2xl sm:text-3xl font-black text-[#eab308]">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all relative overflow-hidden group">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Riders w/ Bal</div>
+                        <div className="text-2xl sm:text-3xl font-black text-secondary">
                           {
                             riders.filter(
                               (r) =>
@@ -2910,22 +2910,22 @@ export default function Admin() {
                         <CardSkeleton />
                       ) : riders.filter((r) => r.status === "approved").length ===
                         0 ? (
-                        <div className="bg-[#112417] rounded-[32px] p-12 sm:p-16 text-center shadow-lg relative overflow-hidden my-8">
+                        <div className="bg-card rounded-[32px] p-12 sm:p-16 text-center shadow-lg relative overflow-hidden my-8">
                           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-green-500/5 blur-[80px] rounded-full pointer-events-none" />
 
                           <div className="w-20 h-20 bg-[#162d1d] rounded-[24px] flex items-center justify-center mx-auto mb-8 relative z-10 border border-[#1a3522]">
-                            <DollarSign className="w-10 h-10 text-[#eab308]" />
+                            <DollarSign className="w-10 h-10 text-secondary" />
                           </div>
-                          <h3 className="text-2xl font-bold text-white mb-4 relative z-10">
+                          <h3 className="text-2xl font-bold text-foreground mb-4 relative z-10">
                             No approved riders found
                           </h3>
-                          <p className="text-[#8b9d93] max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
+                          <p className="text-muted-foreground max-w-sm mx-auto mb-10 relative z-10 leading-relaxed text-sm">
                             Approve riders first from the management panel to start managing their earnings and payouts.
                           </p>
 
                           <button
                             onClick={() => setActiveTab('riders')}
-                            className="bg-[#0a110d] hover:bg-[#112417]/5 text-white border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10 group"
+                            className="bg-background hover:bg-card/5 text-foreground border border-[#ffffff10] px-6 py-3 rounded-xl font-bold text-sm transition-all relative z-10 group"
                           >
                             View Pending Riders <span className="ml-1 group-hover:translate-x-1 inline-block transition-transform">-&gt;</span>
                           </button>
@@ -2937,42 +2937,42 @@ export default function Admin() {
                             .map((rider) => (
                               <div
                                 key={rider.id}
-                                className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8 relative overflow-hidden"
+                                className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] p-6 lg:p-8 relative overflow-hidden"
                               >
-                                <div className="absolute right-0 top-0 w-64 h-64 bg-[#eab308]/5 blur-3xl pointer-events-none rounded-full" />
+                                <div className="absolute right-0 top-0 w-64 h-64 bg-secondary/5 blur-3xl pointer-events-none rounded-full" />
 
                                 <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
                                   <div className="flex items-center space-x-4">
-                                    <div className="w-14 h-14 bg-[#0a110d] border border-[#eab308]/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-                                      <DollarSign className="w-6 h-6 text-[#eab308]" />
+                                    <div className="w-14 h-14 bg-background border border-border/20 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                                      <DollarSign className="w-6 h-6 text-secondary" />
                                     </div>
                                     <div>
-                                      <h3 className="text-xl font-bold text-white">
+                                      <h3 className="text-xl font-bold text-foreground">
                                         {rider.fullName}
                                       </h3>
-                                      <p className="text-[#8b9d93] text-sm mt-1 font-mono">
-                                        {rider.id} • <span className="text-white">{rider.area}</span>
+                                      <p className="text-muted-foreground text-sm mt-1 font-mono">
+                                        {rider.id} • <span className="text-foreground">{rider.area}</span>
                                       </p>
                                       <div className="flex items-center space-x-1 mt-2">
-                                        <Star className="w-4 h-4 text-[#eab308] fill-current" />
-                                        <span className="text-sm font-bold text-white">
+                                        <Star className="w-4 h-4 text-secondary fill-current" />
+                                        <span className="text-sm font-bold text-foreground">
                                           {rider.rating} <span className="text-[#596960] font-normal">({rider.totalDeliveries} deliveries)</span>
                                         </span>
                                       </div>
                                     </div>
                                   </div>
 
-                                  <div className="sm:text-right bg-[#0a110d]/50 p-4 rounded-2xl border border-[#ffffff05]">
+                                  <div className="sm:text-right bg-background/50 p-4 rounded-2xl border border-[#ffffff05]">
                                     <div className="text-xl sm:text-2xl font-black text-green-400 mb-1">
                                       KES {(rider.currentBalance || 0).toLocaleString()}
                                     </div>
-                                    <div className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider">
+                                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                                       Current Balance
                                     </div>
                                   </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-5 bg-[#0a110d]/50 rounded-[16px] border border-[#ffffff05]">
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-5 bg-background/50 rounded-[16px] border border-[#ffffff05]">
                                   <div>
                                     <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                       Total Earnings
@@ -2993,7 +2993,7 @@ export default function Admin() {
                                     <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                       Last Withdrawal
                                     </p>
-                                    <p className="text-sm text-white font-mono">
+                                    <p className="text-sm text-foreground font-mono">
                                       {rider.lastWithdrawal
                                         ? formatDate(rider.lastWithdrawal)
                                         : "Never"}
@@ -3003,10 +3003,10 @@ export default function Admin() {
                                     <p className="text-xs font-bold text-[#596960] uppercase tracking-wider mb-2">
                                       Contact
                                     </p>
-                                    <p className="text-sm text-white mb-1">
+                                    <p className="text-sm text-foreground mb-1">
                                       {rider.email}
                                     </p>
-                                    <p className="text-sm text-white">
+                                    <p className="text-sm text-foreground">
                                       {rider.phone}
                                     </p>
                                   </div>
@@ -3015,10 +3015,10 @@ export default function Admin() {
                                 {/* Recent Earnings */}
                                 {rider.earnings && rider.earnings.length > 0 && (
                                   <div className="mb-6">
-                                    <h4 className="text-xs font-bold text-[#eab308] uppercase tracking-wider mb-3 flex items-center">
+                                    <h4 className="text-xs font-bold text-secondary uppercase tracking-wider mb-3 flex items-center">
                                       <Clock className="w-3.5 h-3.5 mr-1.5" /> Recent Earnings
                                     </h4>
-                                    <div className="bg-[#0a110d] rounded-[16px] p-4 max-h-40 overflow-y-auto custom-scrollbar border border-[#ffffff05]">
+                                    <div className="bg-background rounded-[16px] p-4 max-h-40 overflow-y-auto custom-scrollbar border border-[#ffffff05]">
                                       {rider.earnings
                                         .slice(-3)
                                         .map((earning, index) => (
@@ -3027,7 +3027,7 @@ export default function Admin() {
                                             className="flex justify-between items-center py-2.5 border-b border-[#ffffff0a] last:border-b-0"
                                           >
                                             <div>
-                                              <span className="text-sm font-mono text-white">
+                                              <span className="text-sm font-mono text-foreground">
                                                 {earning.orderId}
                                               </span>
                                               <span className="text-xs text-[#596960] font-mono ml-3">
@@ -3052,15 +3052,15 @@ export default function Admin() {
                                 {/* Payment Actions */}
                                 <div className="border-t border-[#ffffff0a] pt-5">
                                   {selectedRiderForEarnings === rider.id ? (
-                                    <div className="bg-[#0a110d] p-5 sm:p-6 rounded-[20px] border border-[#eab308]/20 shadow-[0_0_20px_rgba(234,179,8,0.05)]">
-                                      <h4 className="font-bold text-[#eab308] mb-4 text-sm flex items-center tracking-wider uppercase">
+                                    <div className="bg-background p-5 sm:p-6 rounded-[20px] border border-border/20 shadow-[0_0_20px_rgba(234,179,8,0.05)]">
+                                      <h4 className="font-bold text-secondary mb-4 text-sm flex items-center tracking-wider uppercase">
                                         <CreditCard className="w-4 h-4 mr-2" />
                                         Process Payment to {rider.fullName}
                                       </h4>
 
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
                                         <div>
-                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                                             Amount (KES)
                                           </label>
                                           <input
@@ -3071,7 +3071,7 @@ export default function Admin() {
                                             }
                                             max={rider.currentBalance || 0}
                                             min="1"
-                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                            className="w-full bg-card text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
                                             placeholder="Enter amount"
                                           />
                                           <p className="text-xs text-[#596960] mt-2 font-mono flex items-center">
@@ -3082,7 +3082,7 @@ export default function Admin() {
                                           </p>
                                         </div>
                                         <div>
-                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                                             Payment Method
                                           </label>
                                           <select
@@ -3090,7 +3090,7 @@ export default function Admin() {
                                             onChange={(e) =>
                                               setPaymentMethod(e.target.value)
                                             }
-                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                            className="w-full bg-card text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
                                           >
                                             <option value="mpesa">M-Pesa</option>
                                             <option value="bank">Bank Transfer</option>
@@ -3098,7 +3098,7 @@ export default function Admin() {
                                           </select>
                                         </div>
                                         <div>
-                                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                                             Notes (Optional)
                                           </label>
                                           <input
@@ -3107,7 +3107,7 @@ export default function Admin() {
                                             onChange={(e) =>
                                               setPaymentNotes(e.target.value)
                                             }
-                                            className="w-full bg-[#112417] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
+                                            className="w-full bg-card text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]"
                                             placeholder="Payment notes"
                                           />
                                         </div>
@@ -3122,7 +3122,7 @@ export default function Admin() {
                                             parseFloat(paymentAmount) >
                                             (rider.currentBalance || 0)
                                           }
-                                          className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center space-x-2"
+                                          className="bg-green-600 hover:bg-green-500 text-foreground px-6 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center space-x-2"
                                         >
                                           <CreditCard className="w-4 h-4" />
                                           <span>Confirm Payment</span>
@@ -3133,7 +3133,7 @@ export default function Admin() {
                                             setPaymentAmount("");
                                             setPaymentNotes("");
                                           }}
-                                          className="bg-[#112417] text-[#8b9d93] hover:text-white border border-[#ffffff10] px-6 py-2.5 rounded-xl transition-all text-sm font-bold"
+                                          className="bg-card text-muted-foreground hover:text-foreground border border-[#ffffff10] px-6 py-2.5 rounded-xl transition-all text-sm font-bold"
                                         >
                                           Cancel
                                         </button>
@@ -3195,7 +3195,7 @@ ${earnings.earnings
                                             alert(details);
                                           }
                                         }}
-                                        className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-[#112417]/5 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
+                                        className="bg-background text-foreground border border-[#ffffff10] hover:bg-card/5 px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2"
                                       >
                                         <Eye className="w-4 h-4" />
                                         <span>View Statement</span>
@@ -3218,11 +3218,11 @@ ${earnings.earnings
                     {/* Header */}
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-4 px-2">
                       <div className="flex items-center space-x-4">
-                        <h2 className="text-3xl font-bold text-white tracking-tight">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight">
                           Rider Activity Log
                         </h2>
-                        <div className="w-10 h-10 bg-[#eab308]/10 rounded-full flex items-center justify-center border border-[#eab308]/20 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
-                          <ArrowDown className="w-5 h-5 text-[#eab308]" />
+                        <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center border border-border/20 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                          <ArrowDown className="w-5 h-5 text-secondary" />
                         </div>
                       </div>
 
@@ -3238,7 +3238,7 @@ ${earnings.earnings
                             } finally { setIsLoading(false); }
                           }}
                           disabled={isLoading}
-                          className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                          className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                         >
                           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                           <span>Refresh</span>
@@ -3246,7 +3246,7 @@ ${earnings.earnings
 
                         <button
                           onClick={() => handleExport('json')}
-                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                          className="flex items-center space-x-2 bg-transparent text-foreground border border-[#ffffff15] hover:bg-card/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <Download className="w-4 h-4" />
                           <span>JSON</span>
@@ -3254,13 +3254,13 @@ ${earnings.earnings
 
                         <button
                           onClick={() => handleExport('csv')}
-                          className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+                          className="flex items-center space-x-2 bg-transparent text-foreground border border-[#ffffff15] hover:bg-card/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
                         >
                           <FileDown className="w-4 h-4" />
                           <span>CSV</span>
                         </button>
 
-                        <label className="flex items-center space-x-2 bg-transparent text-white border border-[#ffffff15] hover:bg-[#112417]/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer">
+                        <label className="flex items-center space-x-2 bg-transparent text-foreground border border-[#ffffff15] hover:bg-card/5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer">
                           <Upload className="w-4 h-4" />
                           <span>Import</span>
                           <input
@@ -3294,7 +3294,7 @@ ${earnings.earnings
 
                         <button
                           onClick={() => setShowAdd(a => !a)}
-                          className={`flex items-center justify-center w-11 h-11 rounded-xl transition-all ${showAdd ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-[#eab308]/10 text-[#eab308] border border-[#eab308]/20 hover:bg-[#eab308]/20'}`}
+                          className={`flex items-center justify-center w-11 h-11 rounded-xl transition-all ${showAdd ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-secondary/10 text-secondary border border-border/20 hover:bg-secondary/20'}`}
                         >
                           {showAdd ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                         </button>
@@ -3302,8 +3302,8 @@ ${earnings.earnings
                     </div>
 
                     {showAdd && (
-                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-lg mb-8">
-                        <h3 className="text-lg font-bold text-white mb-4">Add Manual Activity</h3>
+                      <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] shadow-lg mb-8">
+                        <h3 className="text-lg font-bold text-foreground mb-4">Add Manual Activity</h3>
                         <form
                           onSubmit={async (e) => {
                             e.preventDefault();
@@ -3344,19 +3344,19 @@ ${earnings.earnings
                               value={newActivity.riderId}
                               onChange={(e) => setNewActivity((s) => ({ ...s, riderId: e.target.value }))}
                               placeholder="Rider ID (e.g. RD-001)"
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               required
                               value={newActivity.riderName}
                               onChange={(e) => setNewActivity((s) => ({ ...s, riderName: e.target.value }))}
                               placeholder="Rider Name"
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <select
                               value={newActivity.type}
                               onChange={(e) => setNewActivity((s) => ({ ...s, type: e.target.value }))}
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             >
                               <option value="order_assigned">Order Assigned</option>
                               <option value="pickup_completed">Pickup Completed</option>
@@ -3374,27 +3374,27 @@ ${earnings.earnings
                               value={newActivity.orderId}
                               onChange={(e) => setNewActivity((s) => ({ ...s, orderId: e.target.value }))}
                               placeholder="Order ID (optional)"
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               required
                               value={newActivity.description}
                               onChange={(e) => setNewActivity((s) => ({ ...s, description: e.target.value }))}
                               placeholder="Description"
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                             <input
                               type="number"
                               value={newActivity.amount || ''}
                               onChange={(e) => setNewActivity((s) => ({ ...s, amount: Number(e.target.value) }))}
                               placeholder="Amount (optional)"
-                              className="bg-[#0a110d] border border-[#ffffff15] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="bg-background border border-[#ffffff15] text-foreground rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                           </div>
 
                           <div className="mt-6 flex flex-wrap gap-3">
-                            <button type="submit" className="bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all">Add Activity</button>
-                            <button type="button" onClick={() => setShowAdd(false)} className="bg-[#0a110d] text-white border border-[#ffffff10] hover:bg-[#112417]/5 px-6 py-2.5 rounded-xl transition-all font-bold text-sm">Cancel</button>
+                            <button type="submit" className="bg-secondary hover:bg-[#ca8a04] text-black font-bold px-6 py-2.5 rounded-xl transition-all">Add Activity</button>
+                            <button type="button" onClick={() => setShowAdd(false)} className="bg-background text-foreground border border-[#ffffff10] hover:bg-card/5 px-6 py-2.5 rounded-xl transition-all font-bold text-sm">Cancel</button>
                           </div>
                         </form>
                       </div>
@@ -3402,31 +3402,31 @@ ${earnings.earnings
 
                     {/* Activity Stats */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-orange-500/20 transition-all text-center">
-                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Today's</div>
+                      <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-orange-500/20 transition-all text-center">
+                        <div className="text-sm font-bold text-muted-foreground mb-2">Today's</div>
                         <div className="text-4xl sm:text-5xl font-black text-orange-400 mb-2">47</div>
                         <div className="text-xs font-bold text-[#596960] tracking-widest uppercase">Activities</div>
                       </div>
-                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
-                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Deliveries</div>
+                      <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/20 transition-all text-center">
+                        <div className="text-sm font-bold text-muted-foreground mb-2">Deliveries</div>
                         <div className="text-4xl sm:text-5xl font-black text-green-400 mb-2">23</div>
                         <div className="text-xs font-bold text-green-500/70 tracking-widest uppercase">Completed</div>
                       </div>
-                      <div className="bg-[#112417] p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/20 transition-all text-center">
-                        <div className="text-sm font-bold text-[#8b9d93] mb-2">Payments</div>
-                        <div className="text-4xl sm:text-5xl font-black text-[#eab308] mb-2">KSh 5k</div>
+                      <div className="bg-card p-6 rounded-[24px] border border-[#ffffff05] shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-border/20 transition-all text-center">
+                        <div className="text-sm font-bold text-muted-foreground mb-2">Payments</div>
+                        <div className="text-4xl sm:text-5xl font-black text-secondary mb-2">KSh 5k</div>
                         <div className="text-xs font-bold text-[#596960] tracking-widest uppercase">Settled</div>
                       </div>
                     </div>
 
                     {/* Filters */}
-                    <div className="bg-[#112417] p-6 rounded-[24px] shadow-lg border border-[#ffffff05]">
+                    <div className="bg-card p-6 rounded-[24px] shadow-lg border border-[#ffffff05]">
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                             Filter by Rider
                           </label>
-                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                          <select className="w-full bg-background text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
                             <option value="">All Riders</option>
                             <option value="RD-001">John Mwangi</option>
                             <option value="RD-002">Peter Kimani</option>
@@ -3434,10 +3434,10 @@ ${earnings.earnings
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                             Activity Type
                           </label>
-                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                          <select className="w-full bg-background text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
                             <option value="">All Types</option>
                             <option value="delivery_completed">
                               Deliveries Completed
@@ -3452,10 +3452,10 @@ ${earnings.earnings
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                             Date Range
                           </label>
-                          <select className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
+                          <select className="w-full bg-background text-foreground border border-[#ffffff15] rounded-xl px-4 py-3 focus:outline-none focus:border-[#eab308]">
                             <option value="today">Today</option>
                             <option value="week">This Week</option>
                             <option value="month">This Month</option>
@@ -3463,7 +3463,7 @@ ${earnings.earnings
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-[#8b9d93] uppercase tracking-wider mb-2">
+                          <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                             Search Order ID
                           </label>
                           <div className="relative">
@@ -3471,7 +3471,7 @@ ${earnings.earnings
                             <input
                               type="text"
                               placeholder="e.g. RC-2024-001"
-                              className="w-full bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-[#eab308]"
+                              className="w-full bg-background text-foreground border border-[#ffffff15] rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-[#eab308]"
                             />
                           </div>
                         </div>
@@ -3479,13 +3479,13 @@ ${earnings.earnings
                     </div>
 
                     {/* Activity Timeline */}
-                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                    <div className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
                       <div className="px-6 py-5 border-b border-[#ffffff0a] flex items-center justify-between">
                         <div>
-                          <h3 className="text-xl font-bold text-white mb-1">
+                          <h3 className="text-xl font-bold text-foreground mb-1">
                             Live Activity Timeline
                           </h3>
-                          <p className="text-sm text-[#8b9d93]">
+                          <p className="text-sm text-muted-foreground">
                             Real-time tracking of all rider activities and earnings
                           </p>
                         </div>
@@ -3500,14 +3500,14 @@ ${earnings.earnings
                           {isLoading ? (
                             <CardSkeleton />
                           ) : activities.length === 0 ? (
-                            <div className="bg-[#0a110d] rounded-[24px] border border-dashed border-[#ffffff15] p-12 text-center my-8">
-                              <div className="w-16 h-16 bg-[#112417] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#eab308]/20">
-                                <RefreshCw className="w-8 h-8 text-[#eab308]" />
+                            <div className="bg-background rounded-[24px] border border-dashed border-[#ffffff15] p-12 text-center my-8">
+                              <div className="w-16 h-16 bg-card rounded-full flex items-center justify-center mx-auto mb-6 border border-border/20">
+                                <RefreshCw className="w-8 h-8 text-secondary" />
                               </div>
-                              <h3 className="text-lg font-bold text-white mb-2">
+                              <h3 className="text-lg font-bold text-foreground mb-2">
                                 No activities yet
                               </h3>
-                              <p className="text-[#8b9d93] text-sm">
+                              <p className="text-muted-foreground text-sm">
                                 Waiting for rider logs to sync...
                               </p>
                             </div>
@@ -3515,13 +3515,13 @@ ${earnings.earnings
                             activities.map((activity) => (
                               <div
                                 key={activity.id}
-                                className="flex items-start space-x-4 p-5 bg-[#0a110d] rounded-[16px] border border-[#ffffff05] hover:border-[#ffffff15] transition-all"
+                                className="flex items-start space-x-4 p-5 bg-background rounded-[16px] border border-[#ffffff05] hover:border-[#ffffff15] transition-all"
                               >
                                 <div
-                                  className={`w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg ${activity.type === 'delivery_completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                  className={`w-12 h-12 rounded-full flex items-center justify-center text-foreground shrink-0 shadow-lg ${activity.type === 'delivery_completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                                     activity.type === 'pickup_completed' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
                                       activity.type === 'payment_received' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-                                        activity.type === 'order_assigned' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[#0a110d]0/20 text-gray-400 border border-gray-500/30'
+                                        activity.type === 'order_assigned' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-background0/20 text-gray-400 border border-gray-500/30'
                                     }`}
                                 >
                                   <span className="text-xl">
@@ -3531,10 +3531,10 @@ ${earnings.earnings
 
                                 <div className="flex-1 min-w-0">
                                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
-                                    <h4 className="text-base font-bold text-white">
+                                    <h4 className="text-base font-bold text-foreground">
                                       {activity.riderName || activity.metadata?.riderName || activity.riderId}
                                     </h4>
-                                    <span className="text-xs text-[#8b9d93] font-mono whitespace-nowrap">
+                                    <span className="text-xs text-muted-foreground font-mono whitespace-nowrap">
                                       {new Date(activity.timestamp).toLocaleString()}
                                     </span>
                                   </div>
@@ -3544,13 +3544,13 @@ ${earnings.earnings
                                   </p>
 
                                   {activity.netEarning && (
-                                    <div className="bg-[#112417] rounded-xl p-4 border border-[#ffffff0a]">
+                                    <div className="bg-card rounded-xl p-4 border border-[#ffffff0a]">
                                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                                         <div>
                                           <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1">
                                             Order Amount
                                           </span>
-                                          <div className="font-bold text-white">
+                                          <div className="font-bold text-foreground">
                                             KES {activity.amount?.toLocaleString?.()}
                                           </div>
                                         </div>
@@ -3575,7 +3575,7 @@ ${earnings.earnings
                                   )}
 
                                   {activity.amount && !activity.netEarning && (
-                                    <div className="bg-[#112417] rounded-xl p-4 border border-[#ffffff0a] inline-block mt-1">
+                                    <div className="bg-card rounded-xl p-4 border border-[#ffffff0a] inline-block mt-1">
                                       <span className="text-[#596960] font-bold uppercase tracking-wider block mb-1 text-xs">
                                         Payment Amount
                                       </span>
@@ -3591,7 +3591,7 @@ ${earnings.earnings
                                     className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${activity.type === 'delivery_completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                                       activity.type === 'pickup_completed' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
                                         activity.type === 'payment_received' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-                                          activity.type === 'order_assigned' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-[#0a110d]0/10 text-gray-400 border-gray-500/20'
+                                          activity.type === 'order_assigned' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-background0/10 text-gray-400 border-gray-500/20'
                                       }`}
                                   >
                                     {activity.type.replace('_', ' ')}
@@ -3618,7 +3618,7 @@ ${earnings.earnings
                                           alert('Failed to delete activity');
                                         }
                                       }}
-                                      className="flex items-center space-x-1 text-red-500/70 hover:text-red-400 text-sm transition-colors py-1 px-2 rounded hover:bg-[#112417]/5"
+                                      className="flex items-center space-x-1 text-red-500/70 hover:text-red-400 text-sm transition-colors py-1 px-2 rounded hover:bg-card/5"
                                     >
                                       <Trash2 className="w-3.5 h-3.5" />
                                       <span>Delete</span>
@@ -3632,7 +3632,7 @@ ${earnings.earnings
                         {/* Load More Button */}
                         {!isLoading && activities.length > 0 && (
                           <div className="text-center mt-8">
-                            <button className="bg-transparent hover:bg-[#112417]/5 text-white border border-[#ffffff15] px-6 py-2.5 rounded-xl transition-all font-bold text-sm">
+                            <button className="bg-transparent hover:bg-card/5 text-foreground border border-[#ffffff15] px-6 py-2.5 rounded-xl transition-all font-bold text-sm">
                               Load More Activities
                             </button>
                           </div>
@@ -3649,10 +3649,10 @@ ${earnings.earnings
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 px-2">
                       <div>
-                        <h2 className="text-3xl font-bold text-white tracking-tight mb-1">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight mb-1">
                           Withdrawal Requests
                         </h2>
-                        <div className="text-[#8b9d93] text-sm">
+                        <div className="text-muted-foreground text-sm">
                           Manage and process rider withdrawal requests.
                         </div>
                       </div>
@@ -3677,7 +3677,7 @@ ${earnings.earnings
                           }
                         }}
                         disabled={isLoading}
-                        className="flex items-center space-x-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                        className="flex items-center space-x-2 bg-secondary hover:bg-[#ca8a04] text-black font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_0_15px_rgba(234,179,8,0.2)]"
                       >
                         <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                         <span>Refresh Requests</span>
@@ -3686,21 +3686,21 @@ ${earnings.earnings
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-[#eab308]/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/40 transition-all text-center">
-                        <div className="text-4xl font-black text-[#eab308] mb-2">3</div>
-                        <div className="text-xs font-bold text-[#eab308]/70 tracking-widest uppercase">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-border/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-[#eab308]/40 transition-all text-center">
+                        <div className="text-4xl font-black text-secondary mb-2">3</div>
+                        <div className="text-xs font-bold text-secondary/70 tracking-widest uppercase">
                           Pending Requests
                         </div>
                       </div>
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all text-center">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-green-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-green-500/40 transition-all text-center">
                         <div className="text-4xl font-black text-green-500 mb-2">12</div>
                         <div className="text-xs font-bold text-green-500/70 tracking-widest uppercase">Approved Today</div>
                       </div>
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-red-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-red-500/40 transition-all text-center">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-red-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-red-500/40 transition-all text-center">
                         <div className="text-4xl font-black text-red-500 mb-2">2</div>
                         <div className="text-xs font-bold text-red-500/70 tracking-widest uppercase">Rejected</div>
                       </div>
-                      <div className="bg-[#112417] p-5 sm:p-6 rounded-[24px] border border-blue-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-blue-500/40 transition-all text-center">
+                      <div className="bg-card p-5 sm:p-6 rounded-[24px] border border-blue-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:border-blue-500/40 transition-all text-center">
                         <div className="text-3xl font-black text-blue-400 mb-2 whitespace-nowrap">
                           KES 25,480
                         </div>
@@ -3709,12 +3709,12 @@ ${earnings.earnings
                     </div>
 
                     {/* Fee Calculator */}
-                    <div className="bg-[#112417] p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#ffffff05]">
-                      <h3 className="text-lg font-bold text-white mb-6 flex items-center">
-                        <span className="w-8 h-8 rounded-full bg-[#0a110d] flex items-center justify-center mr-3 border border-[#ffffff10]">🧮</span>
+                    <div className="bg-card p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#ffffff05]">
+                      <h3 className="text-lg font-bold text-foreground mb-6 flex items-center">
+                        <span className="w-8 h-8 rounded-full bg-background flex items-center justify-center mr-3 border border-[#ffffff10]">🧮</span>
                         Withdrawal Fee Calculator
                       </h3>
-                      <div className="bg-[#0a110d] p-6 rounded-2xl border border-blue-500/20">
+                      <div className="bg-background p-6 rounded-2xl border border-blue-500/20">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div>
                             <h4 className="font-bold text-blue-400 mb-4 text-sm tracking-wider uppercase">
@@ -3723,13 +3723,13 @@ ${earnings.earnings
                             <ul className="text-sm text-gray-300 space-y-3">
                               <li className="flex items-center">
                                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
-                                Below KES 1,000: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 20 fee</strong>
+                                Below KES 1,000: <strong className="text-foreground ml-2 bg-card px-2 py-0.5 rounded border border-[#ffffff10]">KES 20 fee</strong>
                               </li>
                               <li className="flex items-center">
                                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-3"></span>
-                                KES 1,000 and above: <strong className="text-white ml-2 bg-[#112417] px-2 py-0.5 rounded border border-[#ffffff10]">KES 50 fee</strong>
+                                KES 1,000 and above: <strong className="text-foreground ml-2 bg-card px-2 py-0.5 rounded border border-[#ffffff10]">KES 50 fee</strong>
                               </li>
-                              <li className="flex items-center text-[#8b9d93]">
+                              <li className="flex items-center text-muted-foreground">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#596960] mr-3"></span>
                                 Fees are deducted from withdrawal amount
                               </li>
@@ -3740,15 +3740,15 @@ ${earnings.earnings
                               Examples
                             </h4>
                             <ul className="text-sm text-gray-300 space-y-3">
-                              <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
-                                <div className="flex-1">Request <span className="text-white font-bold">KES 800</span></div>
-                                <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
-                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 780</span> <span className="text-[#8b9d93] text-xs block">(KES 20 fee)</span></div>
+                              <li className="flex items-center bg-card p-3 rounded-xl border border-[#ffffff05]">
+                                <div className="flex-1">Request <span className="text-foreground font-bold">KES 800</span></div>
+                                <ArrowRight className="w-4 h-4 text-muted-foreground mx-2" />
+                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 780</span> <span className="text-muted-foreground text-xs block">(KES 20 fee)</span></div>
                               </li>
-                              <li className="flex items-center bg-[#112417] p-3 rounded-xl border border-[#ffffff05]">
-                                <div className="flex-1">Request <span className="text-white font-bold">KES 1,500</span></div>
-                                <ArrowRight className="w-4 h-4 text-[#8b9d93] mx-2" />
-                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 1,450</span> <span className="text-[#8b9d93] text-xs block">(KES 50 fee)</span></div>
+                              <li className="flex items-center bg-card p-3 rounded-xl border border-[#ffffff05]">
+                                <div className="flex-1">Request <span className="text-foreground font-bold">KES 1,500</span></div>
+                                <ArrowRight className="w-4 h-4 text-muted-foreground mx-2" />
+                                <div className="flex-1 text-right">Get <span className="text-green-400 font-bold">KES 1,450</span> <span className="text-muted-foreground text-xs block">(KES 50 fee)</span></div>
                               </li>
                             </ul>
                           </div>
@@ -3757,15 +3757,15 @@ ${earnings.earnings
                     </div>
 
                     {/* Withdrawal Requests List */}
-                    <div className="bg-[#112417] rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
+                    <div className="bg-card rounded-[24px] shadow-lg border border-[#ffffff05] overflow-hidden">
                       <div className="px-6 py-5 border-b border-[#ffffff0a]">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                          <h3 className="text-lg font-bold text-white">
+                          <h3 className="text-lg font-bold text-foreground">
                             Recent Withdrawal Requests
                           </h3>
                           <div className="flex items-center">
-                            <label className="text-xs font-bold text-[#8b9d93] uppercase tracking-wider mr-3 hidden sm:block">Status</label>
-                            <select className="bg-[#0a110d] text-white border border-[#ffffff15] rounded-xl px-4 py-2 focus:outline-none focus:border-[#eab308] text-sm">
+                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mr-3 hidden sm:block">Status</label>
+                            <select className="bg-background text-foreground border border-[#ffffff15] rounded-xl px-4 py-2 focus:outline-none focus:border-[#eab308] text-sm">
                               <option value="all">All Status</option>
                               <option value="pending">Pending</option>
                               <option value="approved">Approved</option>
@@ -3808,15 +3808,15 @@ ${earnings.earnings
                             ].map((request) => (
                               <div
                                 key={request.id}
-                                className="bg-[#0a110d] border border-[#ffffff05] rounded-[20px] p-6 hover:border-[#ffffff15] transition-all relative overflow-hidden"
+                                className="bg-background border border-[#ffffff05] rounded-[20px] p-6 hover:border-[#ffffff15] transition-all relative overflow-hidden"
                               >
                                 {request.status === 'pending' && (
                                   <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 blur-3xl pointer-events-none rounded-full" />
                                 )}
                                 <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
                                   <div className="flex items-center space-x-4">
-                                    <div className="w-12 h-12 bg-[#112417] border border-[#ffffff10] rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-lg">
+                                    <div className="w-12 h-12 bg-card border border-[#ffffff10] rounded-full flex items-center justify-center">
+                                      <span className="text-foreground font-bold text-lg">
                                         {request.rider
                                           .split(" ")
                                           .map((n) => n[0])
@@ -3824,11 +3824,11 @@ ${earnings.earnings
                                       </span>
                                     </div>
                                     <div>
-                                      <h4 className="font-bold text-white text-lg">
+                                      <h4 className="font-bold text-foreground text-lg">
                                         {request.rider}
                                       </h4>
-                                      <p className="text-sm text-[#8b9d93] font-mono mt-0.5">
-                                        {request.riderId} • <span className="text-white">{request.phone}</span>
+                                      <p className="text-sm text-muted-foreground font-mono mt-0.5">
+                                        {request.riderId} • <span className="text-foreground">{request.phone}</span>
                                       </p>
                                       <p className="text-xs text-[#596960] flex items-center mt-1.5 font-mono">
                                         <Clock className="w-3.5 h-3.5 mr-1" />
@@ -3849,13 +3849,13 @@ ${earnings.earnings
                                 </div>
 
                                 {/* Amount Breakdown */}
-                                <div className="bg-[#112417] rounded-2xl p-4 sm:p-5 mb-5 border border-[#ffffff0a]">
+                                <div className="bg-card rounded-2xl p-4 sm:p-5 mb-5 border border-[#ffffff0a]">
                                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                     <div>
                                       <span className="text-xs font-bold text-[#596960] uppercase tracking-wider block mb-2">
                                         Requested Amount
                                       </span>
-                                      <div className="text-lg font-bold text-white">
+                                      <div className="text-lg font-bold text-foreground">
                                         KES {request.amount.toLocaleString()}
                                       </div>
                                     </div>
@@ -3867,8 +3867,8 @@ ${earnings.earnings
                                         -KES {request.fee}
                                       </div>
                                     </div>
-                                    <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6 bg-[#0a110d] sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none">
-                                      <span className="text-xs font-bold text-[#eab308] uppercase tracking-wider block mb-1 sm:mb-2">Net Amount</span>
+                                    <div className="relative sm:after:absolute sm:after:left-0 sm:after:top-2 sm:after:bottom-2 sm:after:w-px sm:after:bg-[#ffffff0a] sm:pl-6 bg-background sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none">
+                                      <span className="text-xs font-bold text-secondary uppercase tracking-wider block mb-1 sm:mb-2">Net Amount</span>
                                       <div className="text-2xl font-black text-green-400">
                                         KES {request.netAmount.toLocaleString()}
                                       </div>
@@ -3877,7 +3877,7 @@ ${earnings.earnings
                                 </div>
 
                                 {request.notes && (
-                                  <div className="mb-6 p-4 bg-[#112417] rounded-2xl border border-blue-500/20 inline-flex items-start max-w-full">
+                                  <div className="mb-6 p-4 bg-card rounded-2xl border border-blue-500/20 inline-flex items-start max-w-full">
                                     <MessageSquare className="w-4 h-4 text-blue-400 mr-3 mt-0.5 shrink-0" />
                                     <div>
                                       <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block mb-1">
@@ -3905,7 +3905,7 @@ ${earnings.earnings
                                           );
                                         }
                                       }}
-                                      className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg flex items-center space-x-2"
+                                      className="bg-green-600 hover:bg-green-500 text-foreground px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg flex items-center space-x-2"
                                     >
                                       <CheckCircle className="w-4 h-4" />
                                       <span>Approve</span>
@@ -3939,9 +3939,9 @@ ${earnings.earnings
                 <AnimatedPage>
                   <div className="space-y-6">
                     {/* Header */}
-                    <div className="bg-[#112417] p-6 rounded-lg shadow border border-white/5">
+                    <div className="bg-card p-6 rounded-lg shadow border border-border">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-white">
+                        <h2 className="text-xl font-semibold text-foreground">
                           Automated Payment System
                         </h2>
                         <div className="flex space-x-2">
@@ -3955,12 +3955,12 @@ ${earnings.earnings
                                 alert("🚀 Automated payments triggered manually!");
                               }
                             }}
-                            className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+                            className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-foreground px-4 py-2 rounded-lg transition-colors"
                           >
                             <Zap className="w-4 h-4" />
                             <span>Trigger Now</span>
                           </button>
-                          <button className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-white px-4 py-2 rounded-lg transition-colors">
+                          <button className="flex items-center space-x-2 bg-rocs-green hover:bg-rocs-green-dark text-foreground px-4 py-2 rounded-lg transition-colors">
                             <TrendingUp className="w-4 h-4" />
                             <span>View Reports</span>
                           </button>
@@ -4034,9 +4034,9 @@ ${earnings.earnings
 
                       {/* Payment History Stats */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                        <div className="bg-[#0a110d] p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-[#8b9d93]">156</div>
-                          <div className="text-sm text-[#8b9d93]">Total Payments</div>
+                        <div className="bg-background p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-muted-foreground">156</div>
+                          <div className="text-sm text-muted-foreground">Total Payments</div>
                         </div>
                         <div className="bg-green-50 p-4 rounded-lg">
                           <div className="text-2xl font-bold text-green-600">
@@ -4058,12 +4058,12 @@ ${earnings.earnings
                     </div>
 
                     {/* Recent Automated Payments */}
-                    <div className="bg-[#112417] rounded-lg shadow border border-white/5">
-                      <div className="px-6 py-4 border-b border-white/5">
-                        <h3 className="text-lg font-medium text-white">
+                    <div className="bg-card rounded-lg shadow border border-border">
+                      <div className="px-6 py-4 border-b border-border">
+                        <h3 className="text-lg font-medium text-foreground">
                           Recent Automated Payments
                         </h3>
-                        <p className="text-sm text-[#8b9d93]">
+                        <p className="text-sm text-muted-foreground">
                           Payments processed automatically at 23:00 daily
                         </p>
                       </div>
@@ -4104,7 +4104,7 @@ ${earnings.earnings
                             ].map((payment) => (
                               <div
                                 key={payment.id}
-                                className="border border-white/5 rounded-lg p-4 hover:bg-[#0a110d] transition-colors"
+                                className="border border-border rounded-lg p-4 hover:bg-background transition-colors"
                               >
                                 <div className="flex justify-between items-start">
                                   <div className="flex items-center space-x-4">
@@ -4114,24 +4114,24 @@ ${earnings.earnings
                                         : "bg-red-500"
                                         }`}
                                     >
-                                      <span className="text-white text-lg">
+                                      <span className="text-foreground text-lg">
                                         {payment.status === "success" ? "✅" : "❌"}
                                       </span>
                                     </div>
                                     <div>
-                                      <h4 className="font-semibold text-white">
+                                      <h4 className="font-semibold text-foreground">
                                         {payment.rider}
                                       </h4>
-                                      <p className="text-sm text-[#8b9d93]">
+                                      <p className="text-sm text-muted-foreground">
                                         {payment.phone}
                                       </p>
-                                      <p className="text-xs text-[#8b9d93]">
+                                      <p className="text-xs text-muted-foreground">
                                         {payment.processedAt}
                                       </p>
                                     </div>
                                   </div>
                                   <div className="text-right">
-                                    <div className="text-lg font-bold text-white">
+                                    <div className="text-lg font-bold text-foreground">
                                       KES {payment.amount.toLocaleString()}
                                     </div>
                                     <span

@@ -55,36 +55,36 @@ export default function SupportChat() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a110d] flex flex-col font-outfit relative overflow-hidden">
+        <div className="min-h-screen bg-background flex flex-col font-outfit relative overflow-hidden transition-colors duration-300">
             {/* Background Glow */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rocs-green/5 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
             {/* Header */}
-            <div className="bg-[#112417]/80 backdrop-blur-xl border-b border-white/5 px-4 py-4 md:px-8 sticky top-0 z-20 flex items-center justify-between">
+            <div className="bg-card/80 backdrop-blur-xl border-b border-border px-4 py-4 md:px-8 sticky top-0 z-20 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Link to="/dashboard">
-                        <Button variant="ghost" size="icon" className="text-white/70 hover:text-[#eab308] hover:bg-white/5 rounded-full">
+                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary hover:bg-muted rounded-full">
                             <ChevronLeft className="w-6 h-6" />
                         </Button>
                     </Link>
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-rocs-green to-[#065f46] rounded-2xl flex items-center justify-center border border-white/10">
-                                <User className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-gradient-to-br from-primary to-rocs-green-dark rounded-2xl flex items-center justify-center border border-border/50">
+                                <User className="w-6 h-6 text-primary-foreground" />
                             </div>
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-rocs-green border-2 border-[#112417] rounded-full" />
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary border-2 border-background rounded-full" />
                         </div>
                         <div>
-                            <h2 className="text-white font-bold tracking-tight">Customer Support</h2>
-                            <p className="text-rocs-green text-xs font-bold uppercase tracking-widest">Agent Sarah • Online</p>
+                            <h2 className="text-foreground font-bold tracking-tight">Customer Support</h2>
+                            <p className="text-primary text-xs font-bold uppercase tracking-widest">Agent Sarah • Online</p>
                         </div>
                     </div>
                 </div>
                 <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" className="text-white/70 hover:text-[#eab308] rounded-full">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full">
                         <Search className="w-5 h-5" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-white/70 hover:text-[#eab308] rounded-full">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full">
                         <MoreVertical className="w-5 h-5" />
                     </Button>
                 </div>
@@ -93,7 +93,7 @@ export default function SupportChat() {
             {/* Chat Messages */}
             <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 relative z-10 scrollbar-hide">
                 <div className="text-center py-4">
-                    <span className="text-[10px] font-bold text-[#8b9d93] uppercase tracking-[0.2em] bg-white/5 py-1.5 px-4 rounded-full border border-white/5">Today</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted py-1.5 px-4 rounded-full border border-border">Today</span>
                 </div>
 
                 {messages.map((msg) => (
@@ -104,15 +104,15 @@ export default function SupportChat() {
                         <div className={`max-w-[80%] md:max-w-[60%] space-y-1`}>
                             <div
                                 className={`p-4 md:p-5 rounded-3xl text-sm leading-relaxed shadow-lg ${msg.sender === 'user'
-                                        ? 'bg-gradient-to-br from-[#eab308] to-[#ca8a04] text-black font-medium rounded-tr-none'
-                                        : 'bg-[#112417] text-white border border-white/5 rounded-tl-none'
+                                    ? 'bg-gradient-to-br from-primary to-rocs-green-dark text-primary-foreground font-medium rounded-tr-none'
+                                    : 'bg-card text-foreground border border-border rounded-tl-none'
                                     }`}
                             >
                                 {msg.text}
                             </div>
                             <div className={`flex items-center gap-2 px-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <span className="text-[10px] text-[#8b9d93] font-medium tracking-wider">{msg.timestamp}</span>
-                                {msg.sender === 'user' && <CheckCheck className="w-3 h-3 text-[#eab308]" />}
+                                <span className="text-[10px] text-muted-foreground font-medium tracking-wider">{msg.timestamp}</span>
+                                {msg.sender === 'user' && <CheckCheck className="w-3 h-3 text-primary" />}
                             </div>
                         </div>
                     </div>
@@ -121,13 +121,13 @@ export default function SupportChat() {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 md:p-8 bg-[#0a110d] border-t border-white/5 relative z-20">
+            <div className="p-4 md:p-8 bg-background border-t border-border relative z-20">
                 <form onSubmit={handleSendMessage} className="max-w-4xl mx-auto flex items-center gap-3">
                     <div className="flex gap-1 mr-2">
-                        <Button type="button" variant="ghost" size="icon" className="text-[#8b9d93] hover:text-[#eab308] rounded-full">
+                        <Button type="button" variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full">
                             <Paperclip className="w-5 h-5" />
                         </Button>
-                        <Button type="button" variant="ghost" size="icon" className="text-[#8b9d93] hover:text-[#eab308] rounded-full">
+                        <Button type="button" variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full">
                             <Image className="w-5 h-5" />
                         </Button>
                     </div>
@@ -135,14 +135,14 @@ export default function SupportChat() {
                         value={inputText}
                         onChange={(e) => setInputText(e.target.value)}
                         placeholder="Type your message..."
-                        className="flex-1 h-14 bg-[#112417] border-white/10 text-white placeholder:text-[#8b9d93] rounded-2xl focus:ring-[#eab308] focus:border-[#eab308] transition-all"
+                        className="flex-1 h-14 bg-muted border-border text-foreground placeholder:text-muted-foreground rounded-2xl focus:ring-primary focus:border-primary transition-all"
                     />
                     <Button
                         type="submit"
                         size="icon"
-                        className="w-14 h-14 bg-gradient-to-r from-rocs-green to-[#065f46] rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg"
+                        className="w-14 h-14 bg-gradient-to-r from-primary to-rocs-green-dark rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg"
                     >
-                        <Send className="w-6 h-6 text-white" />
+                        <Send className="w-6 h-6 text-primary-foreground" />
                     </Button>
                 </form>
             </div>

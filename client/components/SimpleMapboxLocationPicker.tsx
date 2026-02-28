@@ -2273,8 +2273,8 @@ export default function SimpleMapboxLocationPicker({
   }, [pickupLocation, dropoffLocation, calculateRoute, onLocationSelect]);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+    <div className="bg-card rounded-lg border border-border p-6">
+      <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center">
         <MapPin className="w-5 h-5 mr-2 text-rocs-green" />
         Select Pickup & Drop-off Locations
       </h3>
@@ -2283,12 +2283,12 @@ export default function SimpleMapboxLocationPicker({
       <div className="space-y-6 mb-6">
         {/* Pickup Location */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Pickup Location *
           </label>
           <div className="flex">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <input
                 type="text"
                 value={pickupQuery}
@@ -2300,12 +2300,12 @@ export default function SimpleMapboxLocationPicker({
                   setTimeout(() => setShowPickupResults(false), 200)
                 }
                 placeholder="Pickup Location"
-                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-gray-900 placeholder:text-gray-500 text-sm h-12"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-foreground placeholder:text-muted-foreground text-sm h-12"
               />
               {pickupQuery && (
                 <button
                   onClick={clearPickupLocation}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2321,9 +2321,9 @@ export default function SimpleMapboxLocationPicker({
 
           {/* Pickup Search Results & Saved Addresses */}
           {showPickupResults && (
-            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
               {isSearchingPickup ? (
-                <div className="p-3 text-center text-gray-500 text-sm">Searching...</div>
+                <div className="p-3 text-center text-muted-foreground text-sm">Searching...</div>
               ) : pickupResults.length > 0 ? (
                 pickupResults.map((result) => (
                   <button
@@ -2331,15 +2331,15 @@ export default function SimpleMapboxLocationPicker({
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => selectPickupLocation(result)}
-                    className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                    className="w-full text-left p-3 hover:bg-background border-b border-gray-100 last:border-b-0 transition-colors"
                   >
-                    <div className="font-medium text-gray-800 text-sm">{result.text}</div>
-                    <div className="text-xs text-gray-600">{result.place_name}</div>
+                    <div className="font-medium text-foreground text-sm">{result.text}</div>
+                    <div className="text-xs text-muted-foreground">{result.place_name}</div>
                   </button>
                 ))
               ) : savedAddresses.length > 0 && pickupQuery.length === 0 ? (
                 <div>
-                  <div className="p-2 bg-gray-50 text-[10px] uppercase font-bold text-gray-400 tracking-wider px-3">Saved Locations</div>
+                  <div className="p-2 bg-background text-[10px] uppercase font-bold text-muted-foreground tracking-wider px-3">Saved Locations</div>
                   {savedAddresses.map((addr, idx) => (
                     <button
                       key={`saved-p-${idx}`}
@@ -2354,10 +2354,10 @@ export default function SimpleMapboxLocationPicker({
                           center: [addr.lng || 36.8, addr.lat || -1.2] // Use defaults if missing
                         });
                       }}
-                      className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                      className="w-full text-left p-3 hover:bg-background border-b border-gray-100 last:border-b-0 transition-colors"
                     >
-                      <div className="font-medium text-gray-800 text-sm">{addr.name}</div>
-                      <div className="text-xs text-gray-600">{addr.address}</div>
+                      <div className="font-medium text-foreground text-sm">{addr.name}</div>
+                      <div className="text-xs text-muted-foreground">{addr.address}</div>
                     </button>
                   ))}
                 </div>
@@ -2371,11 +2371,11 @@ export default function SimpleMapboxLocationPicker({
         {/* Dropoff Location */}
         <div className="relative">
           <label className="block text-sm text-white mb-1.5 mt-4">
-            Drop-off Location <span className="text-[#eab308]">*</span>
+            Drop-off Location <span className="text-primary">*</span>
           </label>
           <div className="flex">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <input
                 type="text"
                 value={dropoffQuery}
@@ -2387,12 +2387,12 @@ export default function SimpleMapboxLocationPicker({
                   setTimeout(() => setShowDropoffResults(false), 200)
                 }
                 placeholder="Drop-off Location"
-                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-gray-900 placeholder:text-gray-500 text-sm h-12"
+                className="w-full pl-10 pr-10 py-3 bg-transparent border border-[#eab308] rounded-l-full focus:ring-1 focus:ring-[#eab308] focus:border-[#eab308] text-foreground placeholder:text-muted-foreground text-sm h-12"
               />
               {dropoffQuery && (
                 <button
                   onClick={clearDropoffLocation}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2408,9 +2408,9 @@ export default function SimpleMapboxLocationPicker({
 
           {/* Dropoff Search Results & Saved Addresses */}
           {showDropoffResults && (
-            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
               {isSearchingDropoff ? (
-                <div className="p-3 text-center text-gray-500 text-sm">Searching...</div>
+                <div className="p-3 text-center text-muted-foreground text-sm">Searching...</div>
               ) : dropoffResults.length > 0 ? (
                 dropoffResults.map((result) => (
                   <button
@@ -2418,15 +2418,15 @@ export default function SimpleMapboxLocationPicker({
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => selectDropoffLocation(result)}
-                    className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                    className="w-full text-left p-3 hover:bg-background border-b border-gray-100 last:border-b-0 transition-colors"
                   >
-                    <div className="font-medium text-gray-800 text-sm">{result.text}</div>
-                    <div className="text-xs text-gray-600">{result.place_name}</div>
+                    <div className="font-medium text-foreground text-sm">{result.text}</div>
+                    <div className="text-xs text-muted-foreground">{result.place_name}</div>
                   </button>
                 ))
               ) : savedAddresses.length > 0 && dropoffQuery.length === 0 ? (
                 <div>
-                  <div className="p-2 bg-gray-50 text-[10px] uppercase font-bold text-gray-400 tracking-wider px-3">Saved Locations</div>
+                  <div className="p-2 bg-background text-[10px] uppercase font-bold text-muted-foreground tracking-wider px-3">Saved Locations</div>
                   {savedAddresses.map((addr, idx) => (
                     <button
                       key={`saved-d-${idx}`}
@@ -2440,10 +2440,10 @@ export default function SimpleMapboxLocationPicker({
                           center: [addr.lng || 36.8, addr.lat || -1.2]
                         });
                       }}
-                      className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                      className="w-full text-left p-3 hover:bg-background border-b border-gray-100 last:border-b-0 transition-colors"
                     >
-                      <div className="font-medium text-gray-800 text-sm">{addr.name}</div>
-                      <div className="text-xs text-gray-600">{addr.address}</div>
+                      <div className="font-medium text-foreground text-sm">{addr.name}</div>
+                      <div className="text-xs text-muted-foreground">{addr.address}</div>
                     </button>
                   ))}
                 </div>
@@ -2514,7 +2514,7 @@ export default function SimpleMapboxLocationPicker({
         {/* Map Status Overlay */}
         {!pickupLocation && !dropoffLocation && (
           <div className="absolute inset-0 bg-transparent flex items-center justify-center rounded-xl pointer-events-none p-4">
-            <div className="text-center text-[#eab308] bg-[#112417]/80 backdrop-blur-md px-6 py-3 rounded-2xl pointer-events-none mx-8 border border-[#eab308]/30">
+            <div className="text-center text-primary bg-card/80 backdrop-blur-md px-6 py-3 rounded-2xl pointer-events-none mx-8 border border-primary/30">
               <div className="text-sm font-bold leading-tight">
                 Select pickup and dropoff locations to see them on the map with route
               </div>
@@ -2523,12 +2523,12 @@ export default function SimpleMapboxLocationPicker({
         )}
 
         {pickupLocation && dropoffLocation && (
-          <div className="absolute bottom-4 right-4 bg-[#112417]/90 px-3 py-2 rounded-lg border border-[#eab308]/30 shadow-lg text-sm">
-            <div className="font-bold text-[#eab308] text-xs">
+          <div className="absolute bottom-4 right-4 bg-card/90 px-3 py-2 rounded-lg border border-primary/30 shadow-lg text-sm">
+            <div className="font-bold text-primary text-xs">
               {pickupLocation.name} → {dropoffLocation.name}
             </div>
             {distance && (
-              <div className="text-[#8b9d93] text-[10px]">
+              <div className="text-muted-foreground text-[10px]">
                 {distance.toFixed(1)} km • ~{Math.round(duration || 0)} min
               </div>
             )}

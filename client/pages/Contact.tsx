@@ -9,6 +9,8 @@ import {
   Upload,
   Camera,
   FileText,
+  CheckCircle2,
+  Clock
 } from "lucide-react";
 import { useToast } from "../hooks/use-toast";
 import { Button } from "../components/ui/button";
@@ -84,27 +86,26 @@ export default function Contact() {
 
   if (submitted) {
     return (
-      <section className="min-h-screen bg-[#0a110d] flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Background Glows */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rocs-green/5 blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#eab308]/5 blur-[120px] rounded-full pointer-events-none" />
+      <section className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-md w-full relative z-10 text-center">
-          <div className="bg-[#112417] rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-10 backdrop-blur-sm">
-            <div className="w-20 h-20 bg-gradient-to-br from-rocs-green to-rocs-green-dark rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(33,197,94,0.3)]">
-              <Send className="w-10 h-10 text-white" />
+          <div className="bg-card rounded-[3rem] shadow-2xl border border-border p-12 backdrop-blur-xl">
+            <div className="w-24 h-24 bg-gradient-to-br from-primary to-rocs-green-dark rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl rotate-3">
+              <Send className="w-12 h-12 text-primary-foreground -rotate-3" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4 tracking-tight">
+            <h2 className="text-3xl font-black text-foreground mb-4 tracking-tight font-outfit">
               Message Sent!
             </h2>
-            <p className="text-[#8b9d93] text-lg mb-10 leading-relaxed font-outfit">
+            <p className="text-muted-foreground text-lg mb-10 leading-relaxed font-medium">
               Thank you for reaching out. Our team will get back to you within 24 hours.
             </p>
             <Button
               onClick={() => setSubmitted(false)}
-              className="w-full h-14 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] transition-all active:scale-[0.98]"
+              className="w-full h-16 bg-gradient-to-r from-primary to-rocs-green-dark hover:brightness-110 text-primary-foreground font-black text-xl rounded-2xl shadow-xl transition-all active:scale-[0.98] uppercase tracking-widest"
             >
-              Send Another Message
+              Send Another
             </Button>
           </div>
         </div>
@@ -113,208 +114,165 @@ export default function Contact() {
   }
 
   return (
-    <section className="py-16 bg-[#0a110d] min-h-screen relative overflow-hidden">
-      {/* Central glow effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-rocs-green/10 blur-[120px] rounded-full pointer-events-none" />
+    <section className="py-24 bg-background min-h-screen relative overflow-hidden transition-colors duration-300">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              Get In Touch
-            </h1>
-            <p className="text-sm md:text-base text-[#8b9d93] mb-8 max-w-xs mx-auto">
-              Have questions about our delivery services? We're here to help!
-            </p>
+      <div className="container mx-auto px-4 relative z-10 max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
-            {/* Rider Signup Button */}
-            <div className="mb-10">
-              <Button
-                onClick={() => setShowRiderSignup(!showRiderSignup)}
-                className="bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold h-12 px-8 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all"
-              >
-                <Upload className="w-5 h-5 mr-2" />
-                {showRiderSignup ? "Hide Rider Signup" : "Join Our Riders Team"}
-              </Button>
+          {/* Left Column: Info & Signup */}
+          <div className="flex flex-col">
+            <div className="mb-12">
+              <h1 className="text-5xl md:text-6xl font-black text-foreground mb-6 font-outfit tracking-tight leading-none">
+                Get In <span className="text-primary italic">Touch</span>
+              </h1>
+              <p className="text-xl text-muted-foreground font-medium max-w-lg leading-relaxed">
+                Have questions about our delivery services? Our team is available 24/7 to assist you.
+              </p>
             </div>
-          </div>
 
-          {/* Rider Signup Form */}
-          {showRiderSignup && (
-            <div className="mb-12 border border-[#eab308]/30 rounded-3xl p-6 bg-[#0a110d]">
-              <RiderSignupForm />
-            </div>
-          )}
-
-          <div className="flex flex-col gap-4 mb-10">
-            {/* Contact Information Vertical Stack */}
-
-            {/* Phone */}
-            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
-              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
-                <Phone className="w-5 h-5 text-[#eab308]" />
-              </div>
-              <div>
-                <a href="tel:+254700898950" className="text-white font-semibold block mb-0.5 hover:text-[#eab308] transition-colors">+254 700 898 950</a>
-                <p className="text-sm text-[#8b9d93]">
-                  Available 24/7 for emergency deliveries
+            {/* Rider Recruitment Card */}
+            <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-[2.5rem] p-8 mb-12 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary/20 transition-colors" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
+                    <UserPlus className="w-8 h-8 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-foreground font-outfit">Join Our Team</h3>
+                    <p className="text-sm text-muted-foreground font-medium">Become a Rocs Crew Rider</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground mb-8 font-medium leading-relaxed">
+                  Looking for a flexible way to earn? Join the most reliable motorcycle delivery platform in Nairobi.
                 </p>
+                <Button
+                  onClick={() => setShowRiderSignup(!showRiderSignup)}
+                  className="w-full bg-primary hover:brightness-110 text-primary-foreground font-black h-14 rounded-2xl shadow-xl transition-all uppercase tracking-widest"
+                >
+                  {showRiderSignup ? "Close Signup Form" : "Apply Now"}
+                </Button>
               </div>
             </div>
 
-            {/* Email */}
-            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
-              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
-                <Mail className="w-5 h-5 text-[#eab308]" />
+            {/* Contact Details Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-card border border-border/50 p-6 rounded-[2rem] hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Phone className="w-6 h-6 text-primary" />
+                </div>
+                <h4 className="font-black text-foreground mb-1 font-outfit">Call Us</h4>
+                <a href="tel:+254700898950" className="text-muted-foreground font-bold hover:text-primary transition-colors">+254 700 898 950</a>
               </div>
-              <div>
-                <a href="mailto:Kuriajoe85@gmail.com" className="text-white font-semibold block mb-0.5 hover:text-[#eab308] transition-colors">Kuriajoe85@gmail.com</a>
-                <p className="text-sm text-[#8b9d93]">
-                  We'll respond within 24 hours
-                </p>
-              </div>
-            </div>
 
-            {/* Area */}
-            <div className="border border-[#eab308]/50 rounded-2xl p-4 md:p-5 flex items-center space-x-4 bg-transparent hover:bg-white/5 transition-colors">
-              <div className="border border-[#eab308] rounded-full p-3 shrink-0">
-                <MapPin className="w-5 h-5 text-[#eab308]" />
+              <div className="bg-card border border-border/50 p-6 rounded-[2rem] hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Mail className="w-6 h-6 text-primary" />
+                </div>
+                <h4 className="font-black text-foreground mb-1 font-outfit">Email Us</h4>
+                <a href="mailto:Kuriajoe85@gmail.com" className="text-muted-foreground font-bold hover:text-primary transition-colors break-all">Kuriajoe85@gmail.com</a>
               </div>
-              <div>
-                <span className="text-white font-semibold block mb-0.5">Nairobi & Surrounding Areas</span>
-                <p className="text-sm text-[#8b9d93]">
-                  Same-day delivery available
-                </p>
-              </div>
-            </div>
 
-            {/* Business Hours */}
-            <div className="border border-white/5 rounded-3xl p-6 md:p-8 bg-[#112417] shadow-[0_0_30px_rgba(0,0,0,0.3)] relative group overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#eab308]/5 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-[#eab308]/10 transition-colors" />
-              <h4 className="font-bold text-white text-center mb-6 text-xl tracking-tight">
-                Business Hours
-              </h4>
-              <div className="space-y-4 text-sm max-w-[280px] mx-auto font-outfit">
-                <div className="flex justify-between items-center border-b border-white/5 pb-3">
-                  <span className="text-[#8b9d93]">Mon - Fri</span>
-                  <span className="text-white font-bold">6:00 AM - 10:00 PM</span>
+              <div className="bg-card border border-border/50 p-6 rounded-[2rem] hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <MapPin className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex justify-between items-center border-b border-white/5 pb-3">
-                  <span className="text-[#eab308]/80 font-medium">Saturday</span>
-                  <span className="text-white font-bold">7:00 AM - 9:00 PM</span>
+                <h4 className="font-black text-foreground mb-1 font-outfit">Coverage</h4>
+                <p className="text-muted-foreground font-bold">Nairobi & Suburbs</p>
+              </div>
+
+              <div className="bg-card border border-border/50 p-6 rounded-[2rem] hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Clock className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex justify-between items-center pb-1">
-                  <span className="text-[#eab308]/80 font-medium">Sunday</span>
-                  <span className="text-white font-bold">8:00 AM - 8:00 PM</span>
-                </div>
-                <div className="pt-6 mt-2 border-t border-white/5 text-center text-[#8b9d93] text-xs italic">
-                  Emergency deliveries available 24/7
-                </div>
+                <h4 className="font-black text-foreground mb-1 font-outfit">Hours</h4>
+                <p className="text-muted-foreground font-bold">24/7 Availability</p>
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-rocs-green/20 rounded-xl flex items-center justify-center">
-                <Send className="w-5 h-5 text-rocs-green" />
+          {/* Right Column: Form */}
+          <div className="relative">
+            {showRiderSignup ? (
+              <div className="animate-in fade-in slide-in-from-right-10 duration-500">
+                <RiderSignupForm />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">
-                Send Us a Message
-              </h3>
-            </div>
+            ) : (
+              <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[3rem] p-10 md:p-12 shadow-2xl animate-in fade-in slide-in-from-left-10 duration-500">
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
+                    <Send className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-3xl font-black text-foreground font-outfit tracking-tight">Send a Message</h3>
+                </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Full Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Email Address</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                    placeholder="john@example.com"
-                  />
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <Label htmlFor="name" className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Full Name</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="email" className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Email</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="subject" className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Subject</Label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6"
+                      placeholder="How can we help?"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="message" className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Message</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      required
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={6}
+                      className="bg-muted/50 border-none rounded-[2rem] focus-visible:ring-1 focus-visible:ring-primary p-6 resize-none"
+                      placeholder="Type your message here..."
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full h-16 bg-gradient-to-r from-primary to-rocs-green-dark hover:brightness-110 text-primary-foreground font-black text-xl rounded-2xl shadow-xl transition-all active:scale-[0.98] uppercase tracking-[0.2em] mt-8"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </Button>
+                </form>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                    placeholder="+254 700 000 000"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Subject</Label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    required
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                    placeholder="How can we help?"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">Your Message</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  required
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={5}
-                  className="bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-3xl resize-none py-4 px-5 transition-all"
-                  placeholder="Type your message here..."
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-14 bg-gradient-to-r from-rocs-green to-rocs-green-dark hover:from-rocs-green-dark hover:to-[#065f46] text-white font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(33,197,94,0.2)] transition-all active:scale-[0.98] mt-4"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                    Sending...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center space-x-2">
-                    <Send className="w-5 h-5" />
-                    <span>Send Message</span>
-                  </span>
-                )}
-              </Button>
-            </form>
+            )}
           </div>
         </div>
       </div>
@@ -325,6 +283,7 @@ export default function Contact() {
 // Rider Signup Form Component
 function RiderSignupForm() {
   const { toast } = useToast();
+  const [step, setStep] = useState(1);
   const [riderData, setRiderData] = useState({
     fullName: "",
     email: "",
@@ -380,54 +339,16 @@ function RiderSignupForm() {
     }
   };
 
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (riderData.password !== riderData.confirmPassword) {
       toast({
         title: "Password Mismatch",
-        description: "Passwords do not match. Please check and try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate required files
-    const requiredFiles = [
-      "passportPhoto",
-      "motorcyclePhoto",
-      "idCardFront",
-      "idCardBack",
-      "drivingLicense",
-      "goodConductCertificate",
-      "motorcycleInsurance",
-    ];
-    const missingFiles = requiredFiles.filter(
-      (field) => !fileUploads[field as keyof typeof fileUploads],
-    );
-
-    if (missingFiles.length > 0) {
-      toast({
-        title: "Missing Documents",
-        description: `Please upload the following required documents: ${missingFiles.join(", ")}`,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const requiredDates = [
-      "drivingLicenseExpiry",
-      "goodConductExpiry",
-      "motorcycleInsuranceExpiry",
-    ];
-    const missingDates = requiredDates.filter(
-      (field) => !riderData[field as keyof typeof riderData],
-    );
-
-    if (missingDates.length > 0) {
-      toast({
-        title: "Missing Information",
-        description: `Please provide expiry dates for: ${missingDates.join(", ")}`,
+        description: "Passwords do not match.",
         variant: "destructive",
       });
       return;
@@ -436,22 +357,10 @@ function RiderSignupForm() {
     setIsSubmitting(true);
 
     try {
-      // Create FormData for file uploads
       const submitData = new FormData();
-
-      // Add text fields
-      Object.entries(riderData).forEach(([key, value]) => {
-        submitData.append(key, value);
-      });
-
-      submitData.append("timestamp", new Date().toISOString());
-      submitData.append("status", "pending");
-
-      // Add files
+      Object.entries(riderData).forEach(([key, value]) => submitData.append(key, value));
       Object.entries(fileUploads).forEach(([key, file]) => {
-        if (file) {
-          submitData.append(key, file);
-        }
+        if (file) submitData.append(key, file);
       });
 
       const csrfRes = await fetch(`${API_BASE_URL}/api/csrf-token`);
@@ -459,10 +368,8 @@ function RiderSignupForm() {
 
       const response = await fetch(`${API_BASE_URL}/api/riders/signup`, {
         method: "POST",
-        headers: {
-          "x-csrf-token": csrfToken,
-        },
-        body: submitData, // Don't set Content-Type header, let browser set it for FormData
+        headers: { "x-csrf-token": csrfToken },
+        body: submitData,
       });
 
       if (response.ok) {
@@ -481,52 +388,35 @@ function RiderSignupForm() {
     }
   };
 
-  const FileUpload = ({
+  const FileUploadItem = ({
     label,
     name,
     accept,
     icon: Icon = Upload,
-    description,
   }: {
     label: string;
     name: string;
     accept: string;
-    required?: boolean;
     icon?: any;
-    description?: string;
   }) => (
-    <div className="space-y-3">
-      <Label
-        htmlFor={name}
-        className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1 flex items-center gap-2"
-      >
-        <Icon className="w-4 h-4 text-[#eab308]" />
+    <div className="space-y-4">
+      <Label htmlFor={name} className="text-foreground font-black text-xs uppercase tracking-widest ml-2 flex items-center gap-2">
+        <Icon className="w-4 h-4 text-primary" />
         {label}
       </Label>
-      {description && (
-        <p className="text-xs text-[#8b9d93] ml-1">{description}</p>
-      )}
-      <div className="relative group">
+      <div className="relative">
         <input
           id={name}
-          name={name}
           type="file"
           accept={accept}
           onChange={(e) => handleFileChange(e, name)}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
         />
-        <div className={`border-2 border-dashed ${fileUploads[name as keyof typeof fileUploads] ? 'border-rocs-green bg-rocs-green/5' : 'border-white/10 bg-[#0a110d]/50'} rounded-2xl p-6 text-center group-hover:border-[#eab308]/50 transition-all duration-300`}>
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ${fileUploads[name as keyof typeof fileUploads] ? 'bg-rocs-green/20' : 'bg-[#eab308]/10'}`}>
-            <Icon className={`w-6 h-6 ${fileUploads[name as keyof typeof fileUploads] ? 'text-rocs-green' : 'text-[#eab308]'}`} />
-          </div>
-          <p className={`text-sm font-medium ${fileUploads[name as keyof typeof fileUploads] ? 'text-white' : 'text-[#8b9d93]'}`}>
-            {fileUploads[name as keyof typeof fileUploads]
-              ? fileUploads[name as keyof typeof fileUploads]?.name
-              : `Upload ${label}`}
+        <div className={`border-2 border-dashed ${fileUploads[name as keyof typeof fileUploads] ? 'border-primary bg-primary/5' : 'border-border bg-muted/30'} rounded-2xl p-6 text-center transition-all`}>
+          <Upload className={`w-8 h-8 mx-auto mb-2 ${fileUploads[name as keyof typeof fileUploads] ? 'text-primary' : 'text-muted-foreground'}`} />
+          <p className="text-sm font-bold truncate">
+            {fileUploads[name as keyof typeof fileUploads] ? fileUploads[name as keyof typeof fileUploads]?.name : "Choose File"}
           </p>
-          {!fileUploads[name as keyof typeof fileUploads] && (
-            <p className="text-[10px] text-[#8b9d93]/50 mt-1 uppercase tracking-tighter">Click or drag and drop</p>
-          )}
         </div>
       </div>
     </div>
@@ -534,412 +424,126 @@ function RiderSignupForm() {
 
   if (submitted) {
     return (
-      <div className="bg-[#112417] rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-10 backdrop-blur-sm animate-in fade-in zoom-in duration-500 text-center">
-        <div className="w-20 h-20 bg-gradient-to-br from-rocs-green to-rocs-green-dark rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(33,197,94,0.3)]">
-          <CheckCircle2 className="w-10 h-10 text-white" />
+      <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[3rem] p-12 text-center shadow-2xl animate-in zoom-in duration-500">
+        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+          <CheckCircle2 className="w-12 h-12 text-primary" />
         </div>
-        <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">
-          Application Received!
-        </h3>
-        <p className="text-[#8b9d93] text-lg leading-relaxed font-outfit">
-          Thank you for your interest in joining Rocs Crew. Our team will review your application and documents and get back to you within 48 hours.
+        <h3 className="text-3xl font-black text-foreground mb-4 font-outfit">Application Received!</h3>
+        <p className="text-muted-foreground font-medium text-lg leading-relaxed">
+          Our team will review your application and get back to you within 48 hours.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#112417] rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5 p-10 backdrop-blur-sm">
-      <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-[#eab308]/20 rounded-2xl flex items-center justify-center border border-[#eab308]/20">
-          <UserPlus className="w-6 h-6 text-[#eab308]" />
-        </div>
-        <div>
-          <h3 className="text-2xl font-bold text-white tracking-tight">
-            Join Our Riders Team
-          </h3>
-          <p className="text-[#8b9d93] text-sm font-outfit">Become a partner and start earning today.</p>
-        </div>
-      </div>
+    <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[3rem] p-10 md:p-12 shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 blur-[80px] rounded-full -mr-24 -mt-24" />
 
-      <p className="text-[#8b9d93] mb-10 text-sm leading-relaxed max-w-2xl font-outfit">
-        Become a part of Rocs Crew and start earning money delivering packages
-        across Nairobi. Please fill out all fields and upload required
-        documents.
-      </p>
-
-      <form onSubmit={handleSubmit} className="space-y-12">
-        {/* Basic Information */}
-        <div className="space-y-6">
-          <h4 className="text-sm font-bold text-[#eab308] uppercase tracking-[0.2em] border-b border-white/5 pb-3">
-            Basic Information
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="fullName" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Full Name
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                type="text"
-                required
-                value={riderData.fullName}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="Full Name"
-              />
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
+              <UserPlus className="w-6 h-6 text-primary" />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Email Address
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={riderData.email}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="name@example.com"
-              />
-            </div>
+            <h3 className="text-3xl font-black text-foreground font-outfit tracking-tight">Rider Signup</h3>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="phone" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Phone Number
-              </Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                required
-                value={riderData.phone}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="+254 7XX XXX XXX"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="nationalId" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                National ID Number
-              </Label>
-              <Input
-                id="nationalId"
-                name="nationalId"
-                type="text"
-                required
-                value={riderData.nationalId}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="ID Number"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Password
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={riderData.password}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="confirmPassword"
-                className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-              >
-                Confirm Password
-              </Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={riderData.confirmPassword}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
+          <div className="text-primary font-black text-xs uppercase tracking-[0.3em] bg-primary/10 px-4 py-2 rounded-full">Step {step}/3</div>
         </div>
 
-        {/* Motorcycle Information */}
-        <div className="space-y-6">
-          <h4 className="text-sm font-bold text-[#eab308] uppercase tracking-[0.2em] border-b border-white/5 pb-3">
-            Motorcycle Information
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label
-                htmlFor="motorcycleColor"
-                className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-              >
-                Motorcycle Color
-              </Label>
-              <Input
-                id="motorcycleColor"
-                name="motorcycleColor"
-                type="text"
-                required
-                value={riderData.motorcycleColor}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="e.g., Black"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="motorcycleModel"
-                className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-              >
-                Motorcycle Model
-              </Label>
-              <Input
-                id="motorcycleModel"
-                name="motorcycleModel"
-                type="text"
-                required
-                value={riderData.motorcycleModel}
-                onChange={handleInputChange}
-                className="h-14 bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl transition-all"
-                placeholder="e.g., TVS Star HLX"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="experience" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Riding Experience
-              </Label>
-              <select
-                id="experience"
-                name="experience"
-                required
-                value={riderData.experience}
-                onChange={handleInputChange}
-                className="h-14 w-full bg-[#0a110d]/50 border border-white/10 text-white rounded-2xl px-4 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] outline-none transition-all appearance-none cursor-pointer"
-              >
-                <option value="" className="bg-[#112417]">Select experience</option>
-                <option value="1-2 years" className="bg-[#112417]">1-2 years</option>
-                <option value="3-5 years" className="bg-[#112417]">3-5 years</option>
-                <option value="5+ years" className="bg-[#112417]">5+ years</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="area" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-                Preferred Working Area
-              </Label>
-              <select
-                id="area"
-                name="area"
-                required
-                value={riderData.area}
-                onChange={handleInputChange}
-                className="h-14 w-full bg-[#0a110d]/50 border border-white/10 text-white rounded-2xl px-4 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] outline-none transition-all appearance-none cursor-pointer"
-              >
-                <option value="" className="bg-[#112417]">Select area</option>
-                <option value="CBD" className="bg-[#112417]">CBD</option>
-                <option value="Westlands" className="bg-[#112417]">Westlands</option>
-                <option value="Karen" className="bg-[#112417]">Karen</option>
-                <option value="Eastleigh" className="bg-[#112417]">Eastleigh</option>
-                <option value="Kasarani" className="bg-[#112417]">Kasarani</option>
-                <option value="Embakasi" className="bg-[#112417]">Embakasi</option>
-                <option value="All areas" className="bg-[#112417]">All areas</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Document Uploads */}
-        <div className="space-y-6">
-          <h4 className="text-sm font-bold text-[#eab308] uppercase tracking-[0.2em] border-b border-white/5 pb-3">
-            Identity Documents
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <FileUpload
-              label="Passport Photo"
-              name="passportPhoto"
-              accept="image/*"
-              icon={Camera}
-              description="Clear passport-size photo"
-            />
-
-            <FileUpload
-              label="Motorcycle Photo"
-              name="motorcyclePhoto"
-              accept="image/*"
-              icon={Camera}
-              description="Photo showing number plates clearly"
-            />
-
-            <FileUpload
-              label="ID Card (Front)"
-              name="idCardFront"
-              accept="image/*"
-              icon={FileText}
-              description="Front side of your national ID"
-            />
-
-            <FileUpload
-              label="ID Card (Back)"
-              name="idCardBack"
-              accept="image/*"
-              icon={FileText}
-              description="Back side of your national ID"
-            />
-          </div>
-        </div>
-
-        {/* Licenses and Certificates */}
-        <div className="space-y-6">
-          <h4 className="text-sm font-bold text-[#eab308] uppercase tracking-[0.2em] border-b border-white/5 pb-3">
-            Licenses and Certificates
-          </h4>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <FileUpload
-                label="Driving License"
-                name="drivingLicense"
-                accept="image/*,application/pdf"
-                icon={FileText}
-                description="Valid motorcycle driving license"
-              />
-              <div className="space-y-2">
-                <Label
-                  htmlFor="drivingLicenseExpiry"
-                  className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-                >
-                  Driving License Expiry
-                </Label>
-                <Input
-                  id="drivingLicenseExpiry"
-                  name="drivingLicenseExpiry"
-                  type="date"
-                  required
-                  value={riderData.drivingLicenseExpiry}
-                  onChange={handleInputChange}
-                  className="h-14 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl"
-                />
+        <form onSubmit={step === 3 ? handleSubmit : (e) => e.preventDefault()} className="space-y-8">
+          {step === 1 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-right-5">
+              <h4 className="text-xs font-black text-primary uppercase tracking-widest mb-2">1. Personal Information</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Full Name</Label>
+                  <Input name="fullName" required value={riderData.fullName} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="John Doe" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Email</Label>
+                  <Input name="email" type="email" required value={riderData.email} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="john@example.com" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Phone</Label>
+                  <Input name="phone" required value={riderData.phone} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="+254 700 000 000" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">National ID</Label>
+                  <Input name="nationalId" required value={riderData.nationalId} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="12345678" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Password</Label>
+                  <Input name="password" type="password" required value={riderData.password} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="••••••••" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Confirm Password</Label>
+                  <Input name="confirmPassword" type="password" required value={riderData.confirmPassword} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="••••••••" />
+                </div>
               </div>
+              <Button onClick={nextStep} className="w-full h-16 bg-primary text-primary-foreground font-black rounded-2xl mt-6 uppercase tracking-widest">Next Step</Button>
             </div>
-
-            <div className="space-y-4">
-              <FileUpload
-                label="Good Conduct Certificate"
-                name="goodConductCertificate"
-                accept="image/*,application/pdf"
-                icon={FileText}
-                description="Certificate from DCI"
-              />
-              <div className="space-y-2">
-                <Label
-                  htmlFor="goodConductExpiry"
-                  className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-                >
-                  Good Conduct Expiry
-                </Label>
-                <Input
-                  id="goodConductExpiry"
-                  name="goodConductExpiry"
-                  type="date"
-                  required
-                  value={riderData.goodConductExpiry}
-                  onChange={handleInputChange}
-                  className="h-14 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <FileUpload
-                label="Motorcycle Insurance"
-                name="motorcycleInsurance"
-                accept="image/*,application/pdf"
-                icon={FileText}
-                description="Valid insurance certificate"
-              />
-              <div className="space-y-2">
-                <Label
-                  htmlFor="motorcycleInsuranceExpiry"
-                  className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1"
-                >
-                  Insurance Expiry Date
-                </Label>
-                <Input
-                  id="motorcycleInsuranceExpiry"
-                  name="motorcycleInsuranceExpiry"
-                  type="date"
-                  required
-                  value={riderData.motorcycleInsuranceExpiry}
-                  onChange={handleInputChange}
-                  className="h-14 bg-[#0a110d]/50 border-white/10 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-2xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Personal Statement */}
-        <div className="space-y-6">
-          <h4 className="text-sm font-bold text-[#eab308] uppercase tracking-[0.2em] border-b border-white/5 pb-3">
-            Personal Statement
-          </h4>
-          <div className="space-y-2">
-            <Label htmlFor="motivation" className="text-white/80 text-xs font-medium uppercase tracking-wider ml-1">
-              Why do you want to join Rocs Crew?
-            </Label>
-            <Textarea
-              id="motivation"
-              name="motivation"
-              required
-              value={riderData.motivation}
-              onChange={handleInputChange}
-              rows={5}
-              className="bg-[#0a110d]/50 border-white/10 text-white placeholder:text-white/20 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] rounded-3xl resize-none py-4 px-5 transition-all"
-              placeholder="Tell us about yourself and your experience..."
-            />
-          </div>
-        </div>
-
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full h-16 bg-gradient-to-r from-[#eab308] to-[#ca8a04] hover:from-[#ca8a04] hover:to-[#a16207] text-black font-bold text-xl rounded-2xl shadow-[0_0_20px_rgba(234,179,8,0.2)] hover:shadow-[0_0_30px_rgba(234,179,8,0.4)] transition-all active:scale-[0.98]"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-black mr-3"></div>
-              Submitting Application...
-            </span>
-          ) : (
-            <span className="flex items-center justify-center gap-3">
-              <UserPlus className="w-6 h-6" />
-              <span>SUBMIT COMPLETE APPLICATION</span>
-            </span>
           )}
-        </Button>
-      </form>
+
+          {step === 2 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-right-5">
+              <h4 className="text-xs font-black text-primary uppercase tracking-widest mb-2">2. Motorcycle Details</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Motorcycle Model</Label>
+                  <Input name="motorcycleModel" required value={riderData.motorcycleModel} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="e.g. TVS Star HLX" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Color</Label>
+                  <Input name="motorcycleColor" required value={riderData.motorcycleColor} onChange={handleInputChange} className="h-14 bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary pl-6" placeholder="e.g. Black" />
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Working Area</Label>
+                  <select name="area" required value={riderData.area} onChange={handleInputChange} className="h-14 w-full bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary px-6 outline-none">
+                    <option value="">Select Area</option>
+                    <option value="CBD">CBD</option>
+                    <option value="Westlands">Westlands</option>
+                    <option value="Karen">Karen</option>
+                    <option value="All">All Nairobi</option>
+                  </select>
+                </div>
+                <div className="space-y-3">
+                  <Label className="text-foreground font-black text-xs uppercase tracking-widest ml-2">Experience</Label>
+                  <select name="experience" required value={riderData.experience} onChange={handleInputChange} className="h-14 w-full bg-muted/50 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-primary px-6 outline-none">
+                    <option value="">Select Exp</option>
+                    <option value="1-2">1-2 Years</option>
+                    <option value="3-5">3-5 Years</option>
+                    <option value="5+">5+ Years</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-6">
+                <Button onClick={prevStep} variant="outline" className="flex-1 h-16 border-2 font-black rounded-2xl uppercase tracking-widest">Back</Button>
+                <Button onClick={nextStep} className="flex-1 h-16 bg-primary text-primary-foreground font-black rounded-2xl uppercase tracking-widest">Next Step</Button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-right-5">
+              <h4 className="text-xs font-black text-primary uppercase tracking-widest mb-2">3. Document Verification</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FileUploadItem label="Passport Photo" name="passportPhoto" accept="image/*" icon={Camera} />
+                <FileUploadItem label="Motorcycle Photo" name="motorcyclePhoto" accept="image/*" icon={Camera} />
+                <FileUploadItem label="ID Front" name="idCardFront" accept="image/*" icon={FileText} />
+                <FileUploadItem label="License" name="drivingLicense" accept="image/*" icon={FileText} />
+              </div>
+              <div className="flex gap-4 mt-8">
+                <Button onClick={prevStep} variant="outline" className="flex-1 h-16 border-2 font-black rounded-2xl uppercase tracking-widest">Back</Button>
+                <Button onClick={handleSubmit} disabled={isSubmitting} className="flex-1 h-16 bg-primary text-primary-foreground font-black rounded-2xl shadow-xl uppercase tracking-widest">
+                  {isSubmitting ? "Submitting..." : "Finish Signup"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
+
