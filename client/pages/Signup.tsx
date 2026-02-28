@@ -153,11 +153,19 @@ export default function Signup() {
     }
 
     setIsSubmitting(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout for file uploads
 
     try {
       const csrfRes = await apiFetch(`${API_BASE_URL}/api/csrf-token`, {
-        credentials: 'include'
+        credentials: 'include',
+        signal: controller.signal
       });
+
+      if (!csrfRes.ok) {
+        throw new Error("Server connection failed. Ensure you are connected to the internet and the server is reachable.");
+      }
+
       const { token: csrfToken } = await csrfRes.json();
 
       const endpoint =
@@ -190,7 +198,8 @@ export default function Signup() {
             'x-csrf-token': csrfToken
           },
           body: submitData,
-          credentials: 'include'
+          credentials: 'include',
+          signal: controller.signal
         });
       } else {
         // Send JSON for customer signup
@@ -207,9 +216,12 @@ export default function Signup() {
             'x-csrf-token': csrfToken
           },
           body: JSON.stringify(jsonData),
-          credentials: 'include'
+          credentials: 'include',
+          signal: controller.signal
         });
       }
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const result = await response.json();
@@ -241,11 +253,12 @@ export default function Signup() {
         throw new Error(error.error || "Failed to create account");
       }
     } catch (error) {
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Error creating account. Please try again.",
-      );
+      clearTimeout(timeoutId);
+      let errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      if (error instanceof Error && error.name === 'AbortError') {
+        errorMessage = "Connection timed out. If you are uploading large files, please try with smaller images or check your connection.";
+      }
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

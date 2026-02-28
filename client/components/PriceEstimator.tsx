@@ -4,8 +4,9 @@ import { ChevronLeft, MapPin, Loader2, Navigation, Package, Zap } from "lucide-r
 import MapboxMap from "./MapboxMap";
 import { Input } from "./ui/input";
 
-const PRICE_PER_KM = 30;
-const MINIMUM_PRICE = 200;
+const PRICE_PER_KM = 35;
+const BASE_FARE = 100;
+const MINIMUM_PRICE = 150;
 const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 const KENYAN_LANDMARKS = [
@@ -81,7 +82,8 @@ export default function PriceEstimator() {
       const dist = await calculateRouteDistance(pCoords, dCoords);
       if (!dist) throw new Error("Could not calculate distance.");
 
-      const finalPrice = Math.max(Math.round(dist * PRICE_PER_KM / 10) * 10, MINIMUM_PRICE);
+      const rawPrice = BASE_FARE + (dist * PRICE_PER_KM);
+      const finalPrice = Math.max(Math.round(rawPrice / 10) * 10, MINIMUM_PRICE);
       setDistance(Math.round(dist * 10) / 10);
       setEstimatedPrice(finalPrice);
     } catch (e: any) {
@@ -180,8 +182,8 @@ export default function PriceEstimator() {
             <div
               onClick={() => setSelectedPlan("standard")}
               className={`relative cursor-pointer transition-all duration-300 rounded-2xl p-4 flex items-center justify-between border-2 ${selectedPlan === "standard"
-                  ? "border-[#eab308] bg-[#1a2e20]/50"
-                  : "border-transparent bg-[#0a110d] hover:border-white/10"
+                ? "border-[#eab308] bg-[#1a2e20]/50"
+                : "border-transparent bg-[#0a110d] hover:border-white/10"
                 }`}
             >
               <div className="flex items-center gap-4">
@@ -205,8 +207,8 @@ export default function PriceEstimator() {
             <div
               onClick={() => setSelectedPlan("express")}
               className={`relative cursor-pointer transition-all duration-300 rounded-2xl p-4 flex items-center justify-between border-2 ${selectedPlan === "express"
-                  ? "border-[#eab308] bg-[#1a2e20]/50"
-                  : "border-transparent bg-[#0a110d] hover:border-white/10"
+                ? "border-[#eab308] bg-[#1a2e20]/50"
+                : "border-transparent bg-[#0a110d] hover:border-white/10"
                 }`}
             >
               <div className="flex items-center gap-4">

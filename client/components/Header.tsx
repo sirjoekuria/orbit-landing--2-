@@ -53,6 +53,9 @@ export default function Header() {
               <Link to="/contact" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
                 Contact
               </Link>
+              <Link to="/admin" className="text-white/70 hover:text-[#eab308] transition-colors text-sm font-medium uppercase tracking-wider">
+                Admin
+              </Link>
             </nav>
 
             {/* Contact Info & CTA */}
