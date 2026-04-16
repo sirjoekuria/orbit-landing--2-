@@ -5,7 +5,8 @@ const config: CapacitorConfig = {
   appName: 'Orbit Landing',
   webDir: 'dist/spa',
   server: {
-    androidScheme: 'http',
+    androidScheme: 'https',
+    url: 'https://rocscrewdelivery.netlify.app',
     cleartext: true
   },
   plugins: {
